@@ -1,0 +1,24 @@
+{
+    "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+    "mcpServers": {
+        "awslabs.redshift-mcp-server": {
+            "type": "stdio",
+            "command": "uvx",
+            "args": [
+                "awslabs.redshift-mcp-server@latest"
+            ],
+            "env": {
+                "AWS_PROFILE": "redshift-mcp",
+                "FASTMCP_LOG_LEVEL": "ERROR"
+            }
+        },
+        "context7": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@upstash/context7-mcp"
+            ]
+        }
+    }
+}
