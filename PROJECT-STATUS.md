@@ -4,15 +4,19 @@
 - **Updated:** `2026-10-05`
 - **Owner:** Adam Wieczorkiewicz
 - **Objective:** Prepare the first `v0.1.0` release of a private, reusable GitHub Copilot plugin.
-- **Current:** `develop` is the authoring branch, tracks `origin/develop`, and starts from the single root commit `91f2eff`; `main` remains the remote default branch and holds only the empty root commit `a856fa8` until the first package snapshot; obsolete local and remote tags are removed, a verified bundle of the previous history and tags exists at `~/backups/copilot-workbench-pre-v0.1.0-2026-10-05.bundle`, and branch protection is intentionally disabled; the worktree contains 10 plugin skills, 12 agents, three scoped rules, and two Model Context Protocol (MCP) servers; the database skills use user-provided targets and their static checks and isolated runner checks passed, without live database verification; root documentation is consolidated and `docs/` is removed; repository instructions are rewritten with retained owner guidance, current package conventions, and verified root-document links; the open-issues instruction links task state to the `task-context` skill under owner authorization limited to that file; the manifest description no longer claims workspace scaffolding; `database-explorer` loads the database skills and holds a terminal tool and SQL-file scope for the Redshift fallback, verified statically without a live Copilot delegation; the manifest declares `0.1.0`; package validation on the current worktree passed for the manifest and MCP schemas, skill names, agent and rule frontmatter, subagent and skill references, 29 relative links inside the 41-file distribution allowlist, the README inventory, and a scan for machine-specific paths; the owner replaced the previous history of `develop` and `main` with new root commits after the history bundle and approved running the unchanged publication skill next, pushing through the existing GitHub CLI credential helper; publication has not been performed.
-- **Next:** Run the unchanged publication skill to publish the package-only `main` snapshot, the `v0.1.0` tag, and the GitHub Release with owner-approved notes, then update the project records from verified release evidence.
+- **Current:** `develop` holds the validated package with manifest version `0.1.0` on root commit `91f2eff`; `main` holds only the empty root commit `a856fa8`, and nothing is published; before release, the owner requires plugin pillars in the repository instructions, a seven-batch audit of the plugin and `.github/` customizations, and repository hygiene, followed by revalidation and publication; the protection of `.github/instructions/` and `.github/skills/` is withdrawn, while its rule remains in the repository instructions until their rewrite; the Redshift fallback in `database-explorer` is verified statically, without a live Copilot delegation; the previous history and tags are kept in a verified bundle at `~/backups/copilot-workbench-pre-v0.1.0-2026-10-05.bundle`.
+- **Next:** Interview the owner on the plugin pillars, using current external guidance for the latest models, such as the GPT-6 family guide in the local `2026-10-03-plugin-migration` task folder.
 
 ## Roadmap
 
 - `complete` Establish authoring branches and remove obsolete tags while preserving commits and uncommitted work.
 - `complete` Make Redshift and SQL Server skills use user-provided targets and keep connection values outside their bundled resources.
 - `complete` Consolidate root documentation and rewrite repository instructions for the agreed first-release state.
-- `active` Validate the package, replace the history with new root commits, and publish an owner-approved `v0.1.0` snapshot to package-only `main`.
+- `complete` Validate the package and replace the history of `develop` and `main` with new root commits.
+- `active` Rewrite the repository instructions and the local `CLAUDE.md` around plugin pillars agreed in an owner interview and grounded in current external guidance for the latest models.
+- `planned` Audit and polish the plugin and `.github/` customizations in seven batches, with owner-approved findings before each fix.
+- `planned` Clean up stale record statements, `.gitignore`, the local setup, and the structure of the root records and their instructions.
+- `planned` Revalidate the package and publish an owner-approved `v0.1.0` snapshot to package-only `main`.
 - `paused` Reconsider deferred capability candidates after the first-release work; agree on their priority and write new specifications before implementation.
 
 The following candidates retain only their intended outcomes.
@@ -36,4 +40,14 @@ No previous specifications, implementation files, or workspace links are migrati
 
 ## Planned Tasks
 
-1. [ ] Run the unchanged publication skill to publish the package-only `main` snapshot, the `v0.1.0` tag, and the GitHub Release with owner-approved notes, then update the project records from verified release evidence.
+1. [ ] Interview the owner on the plugin pillars, using current external guidance for the latest models, such as the GPT-6 family guide in the local `2026-10-03-plugin-migration` task folder.
+2. [ ] Rewrite `.github/copilot-instructions.md` with the agreed pillars, remove the withdrawn folder-protection rule, link the pillars from [ARCHITECTURE.md](ARCHITECTURE.md) in place of its design-principles sentence, and polish the untracked local `CLAUDE.md`.
+3. [ ] Agree on the audit scope with the owner.
+4. [ ] Audit batch 1: `copilot-customization`, `build-skill`, `build-worker-agent`, and `build-entry-agent`.
+5. [ ] Audit batch 2: the `.github/instructions/` files and the `.github/skills/` skills.
+6. [ ] Audit batch 3: the entry agents `software-lead`, `data-lead`, and `discuss`.
+7. [ ] Audit batches 4 and 5: the nine worker agents, including the missing output format in `database-explorer`.
+8. [ ] Audit batch 6: `brief-subagent`, `task-context`, `interview-me`, and `run-python`.
+9. [ ] Audit batch 7: the `redshift` and `sql-server` skills and the three scoped rules.
+10. [ ] Agree on and complete the repository hygiene: stale record statements, `.gitignore`, `CLAUDE.md` and the local setup, and the root record structure.
+11. [ ] Revalidate the package, run the unchanged publication skill for the package-only `main` snapshot, the `v0.1.0` tag, and the GitHub Release with owner-approved notes, and update the project records from the release evidence.

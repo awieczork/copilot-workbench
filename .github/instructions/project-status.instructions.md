@@ -45,7 +45,7 @@ Status establishment is complete only when each required field and section has s
 - Use `- No roadmap agreed.` only when the project owner confirms that no roadmap exists.
 - Use `- None identified.` under `Open Questions` only when `OPEN-ISSUES.md` has no rows.
 - Keep at least one planned task for `active`, `blocked`, and `paused` states.
-- Write each non-empty planned task as an ordered Markdown task-list item using `1. [ ]` or `1. [x]`.
+- Write each non-empty planned task as a sequentially numbered Markdown task-list item, such as `1. [ ]`, `2. [ ]`, or `3. [x]`, and renumber the list after adding or removing a task.
 - Make the first planned task the action that resolves a block or resumes work when the state is `blocked` or `paused`.
 - Use `- None remaining.` under `Planned Tasks` only when the state is `complete`; in that state, set `Next` to `None remaining.`.
 
