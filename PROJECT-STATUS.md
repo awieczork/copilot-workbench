@@ -5,7 +5,7 @@
 - **Owner:** Adam Wieczorkiewicz
 - **Objective:** Prepare the first `v0.1.0` release of a private, reusable GitHub Copilot plugin.
 - **Current:** `develop` holds the validated package with manifest version `0.1.0` on root commit `91f2eff`; `main` holds only the empty root commit `a856fa8`, and nothing is published; before release, the owner requires plugin pillars in the repository instructions, a seven-batch audit of the plugin and `.github/` customizations, and repository hygiene, followed by revalidation and publication; the protection of `.github/instructions/` and `.github/skills/` is withdrawn, while its rule remains in the repository instructions until their rewrite; the Redshift fallback in `database-explorer` is verified statically, without a live Copilot delegation; the previous history and tags are kept in a verified bundle at `~/backups/copilot-workbench-pre-v0.1.0-2026-10-05.bundle`.
-- **Next:** Interview the owner on the plugin pillars, using current external guidance for the latest models, such as the GPT-6 family guide in the local `2026-10-03-plugin-migration` task folder.
+- **Next:** Interview the owner on the plugin pillars, using current external guidance for the latest models, such as the local copy of the GPT-6 family guide at `.github/context/openai-gpt-6-family-model-guide-2026-10-02.md`.
 
 ## Roadmap
 
@@ -40,7 +40,7 @@ No previous specifications, implementation files, or workspace links are migrati
 
 ## Planned Tasks
 
-1. [ ] Interview the owner on the plugin pillars, using current external guidance for the latest models, such as the GPT-6 family guide in the local `2026-10-03-plugin-migration` task folder.
+1. [ ] Interview the owner on the plugin pillars, using current external guidance for the latest models, such as the local copy of the GPT-6 family guide at `.github/context/openai-gpt-6-family-model-guide-2026-10-02.md`.
 2. [ ] Rewrite `.github/copilot-instructions.md` with the agreed pillars, remove the withdrawn folder-protection rule, link the pillars from [ARCHITECTURE.md](ARCHITECTURE.md) in place of its design-principles sentence, and polish the untracked local `CLAUDE.md`.
 3. [ ] Agree on the audit scope with the owner.
 4. [ ] Audit batch 1: `copilot-customization`, `build-skill`, `build-worker-agent`, and `build-entry-agent`.
