@@ -24,13 +24,15 @@ Primary sources:
 - [VS Code subagents](https://code.visualstudio.com/docs/agents/run/subagents)
 - [VS Code tools reference](https://code.visualstudio.com/docs/agents/reference/tools-reference)
 - [Agent Skills specification](https://agentskills.io/specification)
+- [microsoft/vscode repository](https://github.com/microsoft/vscode), for behavior the docs do not cover
 
 Structure and writing inspiration:
 
 - [VS Code built-in `agent-customization` skill](https://github.com/microsoft/vscode/tree/main/extensions/copilot/assets/prompts/skills/agent-customization)
 - [Agent Skills best practices](https://agentskills.io/skill-creation/best-practices), [optimizing descriptions](https://agentskills.io/skill-creation/optimizing-descriptions), and [using scripts](https://agentskills.io/skill-creation/using-scripts)
 - [Matt Pocock `writing-for-agents`](https://github.com/mattpocock/skills/blob/main/skills/productivity/writing-for-agents/SKILL.md)
-- [Awesome Copilot Learning Hub: creating effective skills](https://awesome-copilot.github.com/learning-hub/creating-effective-skills/)
+- [Anthropic `skill-creator`](https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md) and [Claude skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
+- [Awesome Copilot Learning Hub: creating effective skills](https://awesome-copilot.github.com/learning-hub/creating-effective-skills/), [defining custom instructions](https://awesome-copilot.github.com/learning-hub/defining-custom-instructions/), and [building custom agents](https://awesome-copilot.github.com/learning-hub/building-custom-agents/)
 - [OpenAI: A model guide for the GPT-6 family](https://openai.com/index/practical-guide-building-gpt-6/), [Rethinking skills and prompts for GPT-6 Astra](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra), and [Using GPT-6](https://developers.openai.com/api/docs/guides/latest-model)
 - [Claude prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices) and [Best practices for prompt engineering](https://claude.com/blog/best-practices-for-prompt-engineering)
 
@@ -41,6 +43,9 @@ Read sources in full rather than through a summarizing fetch, because summaries 
 - For a VS Code page, fetch `https://raw.githubusercontent.com/microsoft/vscode-docs/main/docs/<path>.md`, where `<path>` follows `/docs/` in the page URL.
 - For an agentskills.io page, append `.md` to the page URL.
 - For a GitHub repository file, fetch it from `raw.githubusercontent.com`.
+- For a platform.claude.com or developers.openai.com page, append `.md` to the page URL.
+- For an Awesome Copilot Learning Hub page, fetch `https://raw.githubusercontent.com/github/awesome-copilot/main/website/src/content/docs/learning-hub/<page>.md`, where `<page>` follows `/learning-hub/` in the page URL.
+- For an openai.com page, which blocks automated fetches, ask the owner for a local copy.
 
 ## Refresh the skill
 
