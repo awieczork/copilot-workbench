@@ -4,7 +4,7 @@
 - **Updated:** `2026-10-07`
 - **Owner:** Adam Wieczorkiewicz
 - **Objective:** Prepare the first `v0.1.0` release of a private, reusable GitHub Copilot plugin.
-- **Focus:** Audit the plugin and `.github/` customizations against the pillars before release, one artifact at a time, measured against the reviewed `copilot-customization` and, for agents and skills, the team contracts in the `build-*` skills.
+- **Focus:** Batch 3 of the pre-release audit is next: the coordination and execution skills `brief-subagent`, `task-context`, `interview-me`, and `run-python`, measured against the reviewed `copilot-customization` and the skill contract; nothing blocks it.
 
 ## Roadmap
 
