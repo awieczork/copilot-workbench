@@ -29,14 +29,14 @@ When a field or behavior is not covered here, read the official documentation li
 2. Check it against [Writing guidance](references/writing.md) and the validation list of its type reference.
 3. Flag conflicts: two loaded files that give different instructions for the same case, or that disagree on what to deliver, what the agent may do without asking, or what counts as done.
 4. Flag silent gaps: a case the artifact must handle that no loaded file covers.
-5. Flag over-constraint for current models: blanket "always ask" rules, required reading before every task, required or repeated testing regardless of the change, forceful emphasis, and step-by-step recipes where a goal and a reason would do.
+5. Flag over-constraint for current models: blanket "always ask" rules, required reading before every task, required or repeated testing regardless of the change, forceful emphasis, step-by-step recipes where a goal and a reason would do, and caps, refusals, or completion conditions that no observed failure called for.
 6. Report the findings in the format below, and change files only when the user asks for fixes.
 
 The review is done when every loaded file was read and every finding names its file and quotes its line.
 
 ```markdown
 ## Findings
-- `{path}` — "{quoted line}": {conflict | gap | over-constraint | checklist failure}: {issue}; fix: {proposed change}
+- `{path}` — "{quoted line}": {conflict | gap | broken promise | over-constraint | checklist failure}: {issue}; fix: {proposed change}
 
 ## Checked
 - `{path}`
