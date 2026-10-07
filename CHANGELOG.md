@@ -26,9 +26,9 @@
 ### Customization
 
 - Added the `copilot-customization` skill for writing and reviewing portable Copilot instructions, agents, and skills.
-- Added the `build-entry-agent` skill for interviewing the user and building a lead or chat agent connected to its workers.
-- Added the `build-worker-agent` skill for interviewing the user and building a specialized worker connected to its callers.
-- Added the `build-skill` skill for creating project-specific capabilities connected to project instructions.
+- Added the `build-entry-agent` skill for building a lead or chat agent in a project that delegates to project and plugin workers.
+- Added the `build-worker-agent` skill for building a worker in a project that a project entry agent delegates to.
+- Added the `build-skill` skill for building a skill in a project that plugin agents load through project instructions.
 
 ### Coordination
 

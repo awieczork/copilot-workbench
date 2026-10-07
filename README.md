@@ -31,9 +31,9 @@ For a released package, the installed version must match [plugin.json](plugin.js
 | Skill | Purpose |
 | --- | --- |
 | `brief-subagent` | Supplies self-contained briefs for one-shot delegation. |
-| `build-entry-agent` | Interviews the user and builds a lead or chat agent connected to its workers. |
-| `build-skill` | Interviews the user and builds a project-specific skill connected to project instructions. |
-| `build-worker-agent` | Interviews the user and builds a specialized worker connected to its delegating agents. |
+| `build-entry-agent` | Builds a lead or chat agent in a project that delegates to project and plugin workers. |
+| `build-skill` | Builds a skill in a project that plugin agents load through project instructions. |
+| `build-worker-agent` | Builds a worker in a project that a project entry agent delegates to. |
 | `copilot-customization` | Guides writing and reviewing Copilot instructions, skills, and agents. |
 | `interview-me` | Clarifies the user's intent before work continues; only the user invokes it. |
 | `redshift` | Runs read-only queries against user-provided Redshift targets, with an MCP-first workflow and a bounded Python fallback. |
