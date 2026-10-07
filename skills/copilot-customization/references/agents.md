@@ -90,16 +90,11 @@ You are {role}: you {own X}; you do not {Y}.
 
 - {Hard limit or action that needs approval}, because {reason}.
 
-Proceeds without asking: {local, reversible actions and named safe workflows, such as running the local tests}.
-
 ## Workflow
 
-### 1. {Phase}
+{The goal and the approach, as numbered steps only when their order matters.}
 
-{Procedure of the phase.}
-{Phase} is done when {condition}.
-
-Stop when {success condition}; after {N} failed attempts, report what was tried and what blocks progress.
+{Work} is done when {condition}.
 
 ## Output format
 
@@ -108,13 +103,12 @@ Stop when {success condition}; after {N} failed attempts, report what was tried 
 ```
 ````
 
-- Open the body with the role line, naming what the agent owns and the nearest work it leaves to others; leave out seniority, personal names, and praise such as `senior` or `world-class`.
-- Match the role line to the `description`, because delegation reads the description and behavior follows the body.
-- Put only hard limits in `Constraints`: write boundaries, forbidden actions, scope, and escalation triggers, each with its reason.
-- Close `Constraints` with what the agent does without asking, such as local, reversible edits and named safe workflows, because blanket "ask first" wording makes capable models stop before the work is done.
-- Give every agent a stop rule with a success condition, a retry cap as a count, and a refusal for requests outside its role.
+- Open the body with the role line, naming what the agent owns and the nearest work it leaves to others.
+- Put only hard limits in `Constraints`, each with its reason, and name the safe workflows the agent runs without asking, such as the local tests, because without that permission capable models stop to ask.
+- Let the agent ask only when the answer would change the result, and only after it has prepared a concrete, reviewable result, because an early question or review stop ends the work too soon.
+- Give an agent that holds the `agent` tool a criterion for when to delegate, such as independent work or work that needs an isolated context, because model families differ in how readily they delegate.
+- Add a retry cap, a refusal of out-of-role requests, or a completion condition per phase only where the agent loops, overreaches, or stops early without it.
 - Give an agent that returns a result an `Output format` template, because the caller reads the return by its sections.
-- Add a section outside the template only for a distinct decision, such as a severity scale or a routing table.
 
 ## Principles
 
@@ -122,22 +116,14 @@ Stop when {success condition}; after {N} failed attempts, report what was tried 
 - Grant the smallest tool set the role needs, and enforce limits through `tools` and `agents` rather than prose, because a tool the agent holds is a capability it may use.
 - Treat tool access as capability, not authorization: state in `Constraints` the actions that need the user's approval.
 - Give a subagent everything it needs in its task, and have it return open questions and blockers instead of guessing.
-- Name agents explicitly in `agents` rather than `*`, and leave the agent itself out of its own list, because self-delegation loops without progress.
-- Use `handoffs` for stages the user should review before the next one starts.
-
-## Anti-patterns
-
-- **Swiss-army agent:** many tools and many responsibilities in one file.
-- **Vague description:** "A helpful agent" gives a caller no reason to delegate.
-- **Role confusion:** the description promises a different role than the body performs.
-- **Prose-only limits:** forbidding an action in text while the agent holds the tool and nothing else checks it.
-- **Circular handoffs:** A hands off to B and B back to A with no progress condition.
+- Name agents explicitly in `agents` rather than `*`, and list the agent itself only when recursion is intended, because nesting needs `chat.subagents.allowInvocationsFromSubagents` and stops at five levels.
+- Use `handoffs` for stages the user should review before the next one starts, and give a chain of handoffs a progress condition, so that two agents do not pass work back and forth.
 
 ## Validate
 
 - [ ] The file sits at a documented location with the `.agent.md` suffix.
 - [ ] Frontmatter parses, and `tools`, `agents`, `model` lists, and `handoffs` are arrays where present.
 - [ ] Every tool and agent name is spelled exactly, and `agents` comes with the `agent` tool.
-- [ ] The role line matches the `description`, and the agent has one role and the smallest tool set.
-- [ ] The body has hard limits with reasons, what proceeds without asking, a workflow with a stop rule and retry cap, and an output template when it returns a result.
+- [ ] The agent has one role, the smallest tool set, and hard limits with their reasons.
+- [ ] An agent that returns a result has an output template.
 - [ ] Every handoff target exists and is user-invocable.

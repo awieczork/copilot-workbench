@@ -74,17 +74,9 @@ Add the `Example` section only when a short example shows a shape the rules desc
 
 ## Principles
 
-- Keep one concern in each file, such as testing, styling, or documentation.
-- Group the rules under one heading per concern.
+- Keep one concern in each file, such as testing, styling, or documentation, because `applyTo` attaches the whole file.
 - Test each glob against an intended path, a nested path, and a near-miss path.
-
-## Anti-patterns
-
-- **Vague description:** "Helpful coding tips" never matches a task.
-- **Broad glob:** `applyTo: "**"` for rules that concern one file type.
-- **Mixed concerns:** testing, API design, and styling in one file.
-- **Copied docs:** pasting documentation instead of linking it.
-- **Foreign fields:** Claude `paths` or GitHub.com-only fields, which VS Code does not read for this file type.
+- Leave out Claude `paths` and GitHub.com-only fields, because VS Code does not read them for this file type.
 
 ## Validate
 

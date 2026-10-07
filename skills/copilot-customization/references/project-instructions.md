@@ -41,20 +41,9 @@ Include only the sections the workspace needs:
 
 ## Principles
 
-- Keep only what nearly every task needs, because the file loads on every request.
-- Point to existing documentation instead of copying it, and inline only the gotchas that documentation does not cover.
-- Give each document pointer the condition for reading it, such as "Use `docs/database.md` for schema changes", because required reading before every task spends context on tasks that do not need it.
+- Keep only what nearly every task needs, because the file loads on every request; move rules for one language, framework, or folder into scoped instructions.
+- Point to existing documentation with the condition for reading it, such as "Use `docs/database.md` for schema changes", and leave out what the documentation, linters, or formatters already cover.
 - Permit safe routine workflows explicitly, such as running the local test suite and fixing the failures the change caused, because without that permission capable models stop to ask at each step.
-- Leave out what linters and formatters already enforce.
-- Move rules for one language, framework, or folder into scoped instructions.
-
-## Anti-patterns
-
-- **Both files:** keeping `copilot-instructions.md` and `AGENTS.md` side by side.
-- **Kitchen sink:** collecting every preference instead of what matters for most tasks.
-- **Copied docs:** pasting the README instead of linking it.
-- **Obvious rules:** restating conventions the tooling already enforces.
-- **Forced reading:** "Before every edit, read `architecture.md`, `database.md`, and `deployment.md`" instead of naming when each document applies.
 
 ## Validate
 
