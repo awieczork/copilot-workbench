@@ -46,7 +46,7 @@ Classify the fact as `Missing input` only when that check does not establish it.
 - State a closure condition that another agent can verify from an owner decision or repository evidence.
 - Use `Decision needed` for an unresolved owner decision, `Missing input` for an unavailable working fact, and `Verified limitation` for a confirmed constraint that remains relevant.
 - Update an existing row when later evidence changes its issue, rule, state, or closure condition.
-- Remove a resolved row after recording its effect in `PROJECT-STATUS.md` or the canonical source.
+- Remove a resolved row after recording its effect in the canonical source.
 - When no unresolved issue remains, write `- None identified.` below the `# Open Issues` heading instead of keeping an empty table.
 
 **Completion criterion:** Every active row has one never-reused identifier, one permitted state, one concrete issue, one `Rule until closure`, and one checkable closure condition.
@@ -55,7 +55,7 @@ Classify the fact as `Missing input` only when that check does not establish it.
 
 - Keep all unresolved project-level decisions, missing inputs, and verified limitations in `OPEN-ISSUES.md`.
 - Keep temporary task state under `.github/context/active/` and use the [`task-context`](../../skills/task-context/SKILL.md) skill for that state.
-- Use `PROJECT-STATUS.md` only to index active issue identifiers and summarize the resulting verified project state.
+- Use `PROJECT-STATUS.md` only to link the rows that block an active task.
 - Use `canonical source` for the project file that carries the effect of a resolved decision, established input, or limitation that no longer requires an active row.
 - Do not add a speculative issue, a resolved issue, or an issue whose only evidence is an unverified assumption.
 
