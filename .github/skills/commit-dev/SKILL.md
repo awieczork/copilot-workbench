@@ -56,7 +56,7 @@ Read the [changelog instruction](../../instructions/changelog.instructions.md), 
 
 Update `CHANGELOG.md` with the current user-visible results selected for commit.
 Apply the changelog instruction by updating, merging, or removing existing `## Unreleased` bullets when the selected changes alter the final result they describe.
-Update `PROJECT-STATUS.md` when the selected changes alter the package state, current work, next action, roadmap, open questions, or planned tasks, and refresh its `Updated` date.
+Update `PROJECT-STATUS.md` when the selected changes alter the project state, focus, roadmap, or blockers, and refresh its `Updated` date.
 Update `OPEN-ISSUES.md` when the selected changes add, resolve, or alter a project decision, missing input, or verified limitation.
 Keep `PROJECT-STATUS.md` and `OPEN-ISSUES.md` factual: preserve identifiers and record unresolved behavior with its current rule and closure condition.
 
