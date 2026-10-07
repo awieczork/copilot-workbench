@@ -1,170 +1,85 @@
 # Architecture
 
-This document defines the design of the private `copilot-workbench` Agent Plugins package for GitHub Copilot in VS Code.
-[Project status](PROJECT-STATUS.md) records implementation progress, the roadmap, and the near-term queue.
-[Open issues](OPEN-ISSUES.md) records verified limitations and unresolved decisions.
-The [README](README.md) inventories the components available in the current worktree.
+This document gives the high-level design of `copilot-workbench`, a private [Agent Plugins 1.0](https://agent-plugins.org/) package for GitHub Copilot in VS Code; each artifact defines its own behavior.
+[Project status](PROJECT-STATUS.md) holds planned work, [open issues](OPEN-ISSUES.md) holds verified limitations and unresolved decisions, the [README](README.md) inventories the components, and [references](REFERENCES.md) lists the external sources behind the design.
 
-## Purpose and boundaries
+## Purpose
 
-The package supports the owner's data-science work, scientific exploration, and hobby software projects.
-Python is the owner's general-purpose stack; other technologies depend on the project.
-The reusable package stays independent of project-specific datasets, database targets, credentials, and absolute paths.
+The package supports the owner's data science, scientific exploration, and hobby software projects, with Python as the general-purpose stack and other technologies chosen per project.
+Its design principles are personal use, technology independence, modular components, and project-owned extensions, and the [pillars](.github/copilot-instructions.md#pillars) set the vision for its development.
 
-| Layer | Ownership |
+## Boundaries
+
+| Layer | Holds |
 | --- | --- |
 | Plugin package | Reusable agents, skills, scoped rules, MCP configuration, and bundled resources. |
 | Project repository | Technology-specific extensions, project instructions, source code, and durable project records. |
 | Local environment | Credentials, saved connections, service configuration, and runtime dependencies. |
-| Temporary task state | Session and delegated-work summaries under the layout defined by [task-context](skills/task-context/SKILL.md). |
+| Temporary task state | Session and delegated-work state in the layout of [`task-context`](skills/task-context/SKILL.md). |
 
-The plugin uses root [plugin.json](plugin.json), optional root [mcp.json](mcp.json), immediate `skills/<name>/SKILL.md` files, and Copilot extensions under `com.github.copilot/`.
-The authoring repository's `.github/` customizations maintain this repository and are excluded from distribution.
-Root architecture, status, and issue records are development documentation rather than runtime components.
+The payload is root [plugin.json](plugin.json), optional root [mcp.json](mcp.json), `skills/<name>/SKILL.md` files, and Copilot extensions under `com.github.copilot/`.
+The package holds no project-specific datasets, database targets, credentials, or absolute paths.
+This repository's `.github/` customizations, root records, temporary task state, and source references stay outside the payload.
 
-Design principles are personal use, technology independence, modular components, project-owned extensions, and proportionate model and context costs.
-An extension that introduces workers also supplies an entry agent that lists them, because an agent's allowed worker pool is explicit.
+## Agents
 
-## Agent roles
+The user selects an entry agent, which works directly or delegates bounded assignments to workers; a worker returns evidence, artifacts, or blockers to its caller.
+`discuss` consults `explorer`, `researcher`, and `challenger`, and hands a shaped request to a lead through a handoff the user confirms; both leads may delegate to every worker, `developer` and `ui-developer` call `reviewer`, and `planner` calls `challenger`.
 
-Chat and lead agents are entry agents that the user can select.
-Workers execute one bounded assignment and return evidence, artifacts, or blockers to their caller.
-
-```mermaid
-graph TD
-    User --> Discuss
-    User --> SoftwareLead
-    User --> DataLead
-    Discuss --> SoftwareLead
-    Discuss --> DataLead
-    Discuss --> Helpers
-    SoftwareLead --> Workers
-    DataLead --> Workers
-    Developer --> Reviewer
-    UIDeveloper --> Reviewer
-    Planner --> Challenger
-```
-
-| Entry agent | Responsibility |
-| --- | --- |
-| `discuss` | Clarifies an unfinished request through conversation and bounded exploration, then hands it to a lead or produces a self-contained prompt on request. |
-| `software-lead` | Owns the approach and integration of software changes, working directly or delegating bounded tasks. |
-| `data-lead` | Owns the analytical question, evidence, synthesis, uncertainty, and conclusion. |
-
-Discuss writes only temporary task notes through `task-context`.
-The leads own approval questions and the final result; workers return missing decisions rather than interviewing the user.
-
-| Worker | Responsibility | Boundary |
+| Agent | Kind | Role |
 | --- | --- | --- |
-| `explorer` | Locate workspace evidence for one question. | Read-only; reports locations and findings. |
-| `database-explorer` | Discover and profile database objects and draft queries. | Read-only database work; does not own analytical conclusions. |
-| `data-explorer` | Discover and profile local dataset files. | Preserves source files and reports the code behind profiles. |
-| `researcher` | Gather sourced external evidence. | Reports support, conflicts, and gaps without choosing an action. |
-| `planner` | Produce an executable plan with settled implementation decisions. | Writes no implementation code; may consult Challenger. |
-| `developer` | Implement and check a bounded software change. | Scope and publication rights come from the brief; may consult Reviewer. |
-| `ui-developer` | Implement and visually check interface changes. | Browser checks cover the changed experience; may consult Reviewer. |
-| `reviewer` | Assess a finished result against its goal. | Reports defects and verification limits without repairing the result. |
-| `challenger` | Test one consequential decision or framing. | Returns the strongest objection and the cheapest discriminating check. |
+| [`discuss`](com.github.copilot/agents/discuss.agent.md) | Entry | Clarifies an unfinished request, then hands it to a lead or produces a self-contained prompt. |
+| [`software-lead`](com.github.copilot/agents/software-lead.agent.md) | Entry | Owns the approach and integration of software changes. |
+| [`data-lead`](com.github.copilot/agents/data-lead.agent.md) | Entry | Owns the analytical question, evidence, and conclusion. |
+| [`explorer`](com.github.copilot/agents/explorer.agent.md) | Worker | Locates workspace evidence for one question, read-only. |
+| [`database-explorer`](com.github.copilot/agents/database-explorer.agent.md) | Worker | Discovers and profiles database objects, read-only. |
+| [`data-explorer`](com.github.copilot/agents/data-explorer.agent.md) | Worker | Discovers and profiles local dataset files without changing them. |
+| [`researcher`](com.github.copilot/agents/researcher.agent.md) | Worker | Gathers sourced external evidence. |
+| [`planner`](com.github.copilot/agents/planner.agent.md) | Worker | Produces an executable plan with settled implementation decisions. |
+| [`developer`](com.github.copilot/agents/developer.agent.md) | Worker | Implements and checks a bounded software change. |
+| [`ui-developer`](com.github.copilot/agents/ui-developer.agent.md) | Worker | Implements and visually checks interface changes. |
+| [`reviewer`](com.github.copilot/agents/reviewer.agent.md) | Checker | Assesses a finished result against its goal. |
+| [`challenger`](com.github.copilot/agents/challenger.agent.md) | Checker | Tests one consequential decision or framing. |
 
-Read-only workers with file-creation tools may write only an explicitly assigned task result.
-Read-only behavior enforced by instructions is distinct from tool-level restrictions: query and execution tools can have broader capabilities.
+## Coordination
 
-## Delegation and checking
+Every delegation is one-shot and self-contained, following [`brief-subagent`](skills/brief-subagent/SKILL.md), and the lead treats worker output as evidence while keeping conclusions and integration decisions.
+The lead works directly when a brief would cost more than the change, runs independent work in parallel, and never lets two writers edit overlapping files at once.
+Only entry agents ask the owner; workers return missing decisions, and an open question blocks only the work that depends on it.
+Each role receives only the tools it needs, and read-only roles rest on instructions, because query and execution tools can also write.
+Leads use strong models and workers the tier that fits their role, as defined in the [`build-entry-agent`](skills/build-entry-agent/SKILL.md) and [`build-worker-agent`](skills/build-worker-agent/SKILL.md) model references.
+An extension that adds workers also supplies an entry agent that lists them, because an agent's allowed worker pool is explicit.
 
-Every delegation is one-shot and self-contained, following [brief-subagent](skills/brief-subagent/SKILL.md).
-The caller supplies the question, scope, inputs, constraints, expected result, and any assigned result path.
-The lead keeps analytical conclusions and integration decisions rather than treating worker output as independent proof.
+## Skills and rules
 
-Independent work may run concurrently, but two writers never work on overlapping files at the same time.
-The lead works directly when a brief would cost more than a simple sequential change.
-An open owner question blocks only the work that depends on its answer.
-
-A brief can require review; otherwise a producer decides whether its checker adds value and reports the decision.
-Developer and UI Developer call Reviewer, and Planner calls Challenger.
-Checkers do not delegate, and workers do not call other implementation writers.
-One checker round returns findings with accepted fixes or reasons for leaving them open; unresolved findings return to the lead.
-
-An agent definition states its role, boundaries, workflow, allowed workers, and output.
-Entry agents also carry the shared owner-facing communication style.
-The plugin-specific construction conventions live in the `build-*` skills, while [copilot-customization](skills/copilot-customization/SKILL.md) remains independent of this architecture.
-
-## Tools and models
-
-Tool lists grant only the capabilities needed by each role.
-Database roles receive database tools; UI Developer receives browser tools; Researcher receives web and repository-search tools.
-Producer workers use current documentation before relying on external library or tool APIs.
-Data Explorer uses execution tools to read dataset formats, so its source-preservation boundary is instructional.
-
-Entry-model guidance lives in [build-entry-agent models](skills/build-entry-agent/references/models.md).
-Worker tiers and escalation guidance live in [build-worker-agent model tiers](skills/build-worker-agent/references/model-tiers.md).
-Each agent's frontmatter remains the executable declaration of its available models and tools.
-
-Leads use strong models; workers default to the tier that fits their role and may offer a stronger or faster alternative.
-The caller uses the default unless the assignment needs escalation within the worker's declared model list.
-Missing input and owner decisions are blockers rather than reasons to buy a stronger model.
-Reviewer is at least as strong as the author, and Challenger uses a different model family when that independence is required.
-
-## Skills
-
-| Group | Skills | Responsibility |
+| Group | Components | Responsibility |
 | --- | --- | --- |
-| General customization | `copilot-customization` | Artifact choice, metadata, writing guidance, and review. |
-| Plugin extensions | `build-entry-agent`, `build-worker-agent`, `build-skill` | User-invoked interviews and construction of compatible agents or project skills. |
-| Coordination | `brief-subagent`, `task-context`, `interview-me` | Self-contained assignments, temporary state, and user-invoked intent clarification. |
-| Execution | `run-python`, `redshift`, `sql-server` | Runtime selection and bounded, read-only database workflows. |
+| General customization | [`copilot-customization`](skills/copilot-customization/SKILL.md) | Artifact choice, metadata, writing guidance, and review. |
+| Plugin extensions | [`build-entry-agent`](skills/build-entry-agent/SKILL.md), [`build-worker-agent`](skills/build-worker-agent/SKILL.md), [`build-skill`](skills/build-skill/SKILL.md) | Interviews and construction of compatible agents and project skills. |
+| Coordination | [`brief-subagent`](skills/brief-subagent/SKILL.md), [`task-context`](skills/task-context/SKILL.md), [`interview-me`](skills/interview-me/SKILL.md) | Self-contained assignments, temporary state, and intent clarification. |
+| Execution | [`run-python`](skills/run-python/SKILL.md), [`redshift`](skills/redshift/SKILL.md), [`sql-server`](skills/sql-server/SKILL.md) | Runtime selection and bounded, read-only database work. |
+| Scoped rules | [Markdown](com.github.copilot/rules/markdown.instructions.md), [Python](com.github.copilot/rules/python.instructions.md), [SQL](com.github.copilot/rules/sql.instructions.md) | Conventions for ordinary documents, owner-run task scripts, and read-only query text. |
 
-`build-skill` creates project-specific capabilities in the target project's `.github/skills/`.
-The package's own generic artifacts are maintained in this repository.
-`interview-me` is user-invoked; Discuss performs its own conversational interviewing.
-`task-context` does not replace project documentation or durable analytical artifacts.
-
-## Database access
-
-Both database skills resolve targets from the user's request or explicit answer and return missing target details to the caller when delegated.
-The SQL Server workflow selects a matching saved profile and verifies the active server and database.
-The Redshift workflow prefers MCP and permits its bundled Python fallback only for the documented tool, transport, authentication, or access failures.
-The fallback uses locally populated connection variables and requires confirmation that they identify the same requested target.
-
-One execution contains one read-only query, with the Redshift skill also permitting an execution plan.
-Exploration and quality checks are scoped to unknown facts that can affect the answer.
-The report states provenance, bounds, truncation, and verification limits; samples do not establish population completeness.
-
-The bundled MCP configuration retains the local AWS profile label `redshift-mcp`; local configuration supplies its credentials and region.
-Read-only database permissions reinforce the instructions, because the underlying tools and runner are not restricted SQL authorization engines.
-`database-explorer` loads the skill for each target system and owns the Redshift fallback for delegated exploration; it returns a required configuration confirmation as a blocker, and the delegating agent supplies the confirmation in a new brief.
-
-## Scoped rules
-
-| Rule | Responsibility |
-| --- | --- |
-| Markdown | Ordinary document syntax and prose, excluding customization files and skill resources. |
-| Python | Owner-run task-script conventions, with reusable code governed by its project. |
-| SQL | The text of one read-only SQL Server or Redshift query; execution and connection handling remain in the skills. |
-
-General behavior belongs in agents and skills rather than language rules.
-No Git rule is currently shipped.
+General behavior belongs in agents and skills, not in language rules.
 
 ## Repository lifecycle
 
-`develop` is the authoring branch; `main` is the intended package-only distribution branch and remains the repository default.
-Branch protection is intentionally disabled by owner decision.
-Release readiness and publication are pending; the owner-selected first version is `0.1.0`, while the manifest still has its retained value.
-Temporary task state, source references, and repository-local customizations stay outside the distribution payload.
-The operational roadmap and short descriptions of deferred capabilities live only in [project status](PROJECT-STATUS.md).
+`develop` is the authoring branch, and `main` is the package-only distribution branch and the repository default.
+The operational roadmap lives only in [project status](PROJECT-STATUS.md).
 
-## Design references
+## Capability candidates
 
-The previous design used the following sources as structural inspirations rather than tone or output templates.
-New specifications can consult current sources without depending on archived copies in this repository.
+These capabilities are outside the current design and may join it later.
+Each candidate needs an agreed priority and a new specification before implementation; no earlier specification, implementation file, or workspace link is an input to it.
 
-| Role | Structural inspirations |
+| Candidate | Intended outcome |
 | --- | --- |
-| Entry agents | [Gem Orchestrator](https://github.com/github/awesome-copilot/blob/main/agents/gem-orchestrator.agent.md), [Orchestrator](https://gist.github.com/burkeholland/0e68481f96e94bbb98134fa6efd00436), [RUG](https://github.com/github/awesome-copilot/blob/main/agents/rug-orchestrator.agent.md), and [AI Team Producer](https://github.com/github/awesome-copilot/blob/main/agents/ai-team-producer.agent.md). |
-| Discuss | [Product Manager](https://github.com/github/awesome-copilot/blob/main/agents/se-product-manager-advisor.agent.md), [Idea Generator](https://github.com/github/awesome-copilot/blob/main/agents/simple-app-idea-generator.agent.md), and [VS Code planning](https://code.visualstudio.com/docs/agents/planning). |
-| Explorer and data explorers | [Gem Researcher](https://github.com/github/awesome-copilot/blob/main/agents/gem-researcher.agent.md), [Context Architect](https://github.com/github/awesome-copilot/blob/main/agents/context-architect.agent.md), [Kusto Assistant](https://github.com/github/awesome-copilot/blob/main/agents/kusto-assistant.agent.md), [MongoDB Performance Advisor](https://github.com/github/awesome-copilot/blob/main/agents/mongodb-performance-advisor.agent.md), and [Research Harness Engineer](https://github.com/github/awesome-copilot/blob/main/agents/research-harness-engineer.agent.md). |
-| Researcher | [Context7 Expert](https://github.com/github/awesome-copilot/blob/main/agents/context7-expert.agent.md), [Doublecheck](https://github.com/github/awesome-copilot/blob/main/agents/doublecheck.agent.md), and [Task Researcher](https://github.com/github/awesome-copilot/blob/main/agents/task-researcher.agent.md). |
-| Planner | [Gem Planner](https://github.com/github/awesome-copilot/blob/main/agents/gem-planner.agent.md) and [One-Shot Feature Issue Planner](https://github.com/github/awesome-copilot/blob/main/agents/one-shot-feature-issue-planner.agent.md). |
-| Developer | [Coder](https://gist.github.com/burkeholland/0e68481f96e94bbb98134fa6efd00436), [SWE](https://github.com/github/awesome-copilot/blob/main/agents/swe.agent.md), and [Gem Implementer](https://github.com/github/awesome-copilot/blob/main/agents/gem-implementer.agent.md). |
-| UI Developer | [Gem Designer](https://github.com/github/awesome-copilot/blob/main/agents/gem-designer.agent.md), [Gem Browser Tester](https://github.com/github/awesome-copilot/blob/main/agents/gem-browser-tester.agent.md), and [DevTools Regression Investigator](https://github.com/github/awesome-copilot/blob/main/agents/devtools-regression-investigator.agent.md). |
-| Reviewer | [Gem Reviewer](https://github.com/github/awesome-copilot/blob/main/agents/gem-reviewer.agent.md), [AI Team QA](https://github.com/github/awesome-copilot/blob/main/agents/ai-team-qa.agent.md), and [QA](https://github.com/github/awesome-copilot/blob/main/agents/qa.agent.md). |
-| Challenger | [Critical Thinking](https://github.com/github/awesome-copilot/blob/main/agents/critical-thinking.agent.md), [Devil's Advocate](https://github.com/github/awesome-copilot/blob/main/agents/devils-advocate.agent.md), and [rubber duck](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/rubber-duck). |
+| Quarto rule | Define scoped authoring and validation conventions for Quarto documents. |
+| R rule | Define scoped conventions for R scripts and project code. |
+| Analytical-task skill | Organize one analytical task's durable files and execution record without duplicating temporary task state. |
+| Data-contracts skill | Create and maintain explicit contracts for datasets and their expected properties. |
+| Mermaid skill | Create and validate diagrams from a newly agreed, bounded diagramming workflow. |
+| Reporting skill | Create and maintain analytical reports with traceable evidence and stated limitations. |
+| Project-instruction skill | Interview the owner and produce project-specific root instructions; first assess overlap with existing customization skills. |
+| Scaffold skill | Initialize a new data-science workspace with optional application modules; define the new scope and templates from scratch. |
+| Python MCP server skill | Author, test, and diagnose Python MCP servers for VS Code using documentation for the selected versions. |
