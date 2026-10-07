@@ -68,6 +68,7 @@ Guidance says what is wanted, once, in plain words a capable newcomer reads one 
 - When adding, removing, or renaming a plugin component, update the inventory in [README.md](../README.md).
 - When a change affects plugin users, record its verified effect under `Unreleased` in [CHANGELOG.md](../CHANGELOG.md), without claiming a capability absent from the worktree.
 - When task state must survive a session or pass between agents, follow [task-context](../skills/task-context/SKILL.md), and keep those temporary notes under `.github/context/`, apart from the durable records.
+- Never point a tracked file at content under `.github/context/`, because that folder is untracked and its content is absent from every other clone; move the needed facts into the tracked file instead.
 - When delegating work, pass the decisions already made with it, because a subagent fills unstated decisions with its own guesses.
 
 ## Execution and validation
