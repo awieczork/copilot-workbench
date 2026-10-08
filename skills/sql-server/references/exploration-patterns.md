@@ -1,16 +1,11 @@
 # SQL Server exploration patterns
 
-Use sections 1-4 for targeted discovery or verification of unknown source details. Do not use those discovery patterns when the supplied SQL already identifies every required object and column. Read sections 5-8 when the task explicitly requests a sample or a quality check. Replace `dbo.TableName` and column placeholders with exact schema-qualified objects.
+Read only the section for the unknown item or the requested check.
+Run each pattern through the read-only gate of the [SQL Server skill](../SKILL.md) with the active connection, and replace `dbo.TableName` and the column placeholders with exact names.
 
----
+## 1. Relationships
 
-## 1. Relationship discovery
-
-Run every SQL block in this section through #tool:ms-mssql.mssql/mssql_run_query with the active `connectionId` for the user-provided server and database. Pass the SQL in `query`, classify it with `queryTypes: ["SELECT"]` and any applicable `JOIN` or `CTE`, and use the matching `queryIntent`.
-
-Inspect relationships when a join path or cardinality is unknown. Start with declared foreign keys, then verify an undeclared relationship with key uniqueness and row-count checks.
-
-### Relationships touching one table (both directions)
+### Declared foreign keys touching one table
 
 ```sql
 SELECT
@@ -33,13 +28,11 @@ WHERE fk.parent_object_id = OBJECT_ID(N'dbo.TableName')
 ORDER BY ParentTable, ForeignKeyName, fk_column.constraint_column_id;
 ```
 
-Relationship discovery is complete when declared relationships touching the requested table are reported with their paired columns or no declared relationship is found.
+When no foreign key is declared, find candidate keys with the [column search](#4-column-search), then test each proposed join with the uniqueness check.
 
-Warehouse and enterprise resource planning schemas commonly declare no foreign keys, yet still have join paths. Use the column search below only when the join path is unknown, then verify every proposed join with the key-uniqueness check.
+### Join-key uniqueness
 
-### Join-key uniqueness check
-
-Before joining on a candidate key, confirm which side is unique — a key that silently duplicates fans out the join and inflates every downstream aggregate.
+Check which side of a join is unique, because a duplicated key fans out the join and inflates every aggregate after it.
 
 ```sql
 SELECT TOP 20
@@ -51,19 +44,28 @@ HAVING COUNT(*) > 1
 ORDER BY DuplicateCount DESC;
 ```
 
-Zero rows means the key has no duplicate non-NULL values in the checked population. Any row means the join can multiply rows; state the expected cardinality and check the joined row count.
+Zero rows means no duplicate non-NULL key in the checked population.
+Any row means the join can multiply rows, so state the expected cardinality and check the joined row count.
 
-Join-key verification is complete when uniqueness status, expected cardinality, and any row multiplication are reported.
+### Unmatched keys
 
-Relationship analysis is complete when every requested join path has a declared relationship or a tested cardinality, or the limitation is reported.
+Count the child rows whose key finds no parent, because an `INNER JOIN` drops them without a signal.
+Run it after the uniqueness check confirms the parent key is unique, because a duplicated parent key inflates `ChildRows`.
 
----
+```sql
+SELECT
+    COUNT(*) AS ChildRows,
+    SUM(CASE WHEN parent_table.ParentKey IS NULL THEN 1 ELSE 0 END) AS UnmatchedRows
+FROM dbo.ChildTable AS child_table
+LEFT JOIN dbo.ParentTable AS parent_table
+    ON child_table.ParentKey = parent_table.ParentKey;
+```
 
-## 2. Exact object and column discovery
+Rows with a NULL child key count as unmatched.
 
-Run every SQL block in this section through #tool:ms-mssql.mssql/mssql_run_query with the active `connectionId` for the user-provided server and database. Pass the SQL in `query`, classify it with `queryTypes: ["SELECT"]` and any applicable `JOIN` or `CTE`, and use the matching `queryIntent`.
+## 2. Objects and columns
 
-### Find one known object
+### One named object
 
 ```sql
 SELECT
@@ -80,11 +82,10 @@ WHERE schema_object.[name] = N'dbo'
 ORDER BY source_object.[type_desc];
 ```
 
-Zero rows means the named object is not visible in the active database. More than one row means the name resolves to multiple object classes and requires an explicit type choice.
+Zero rows means the object is not visible in the active database.
+More than one row means the name belongs to several object types, so choose the type explicitly.
 
-Object discovery is complete when one intended object is identified, or zero or multiple matches are reported with the required correction.
-
-### Inspect columns and types for one object
+### Columns and types of one object
 
 ```sql
 SELECT
@@ -102,31 +103,19 @@ WHERE column_object.object_id = OBJECT_ID(N'dbo.ObjectName')
 ORDER BY column_object.column_id;
 ```
 
-Inspection is complete when every column used by the planned query appears with its type and nullability.
+`MaxLength` is in bytes, so an `nvarchar` column shows twice its character length, and `-1` means `(max)`.
 
----
-
-## 3. View definition inspection
-
-Run the SQL block in this section through #tool:ms-mssql.mssql/mssql_run_query with the active `connectionId` for the user-provided server and database. Pass the SQL in `query` with `queryTypes: ["SELECT"]` and `queryIntent: "schema_exploration"`.
-
-Databases can encode business logic in views. Read the definition when hidden filters or joins could affect the requested result, unless the definition is already supplied.
+## 3. View definition
 
 ```sql
 SELECT OBJECT_DEFINITION(OBJECT_ID(N'dbo.ViewName')) AS ViewDefinition;
 ```
 
-Inspection is complete when the definition is available or its unavailability is reported before interpretation.
-
-`OBJECT_DEFINITION` can return `NULL` for an encrypted, non-visible, or otherwise unavailable definition. Treat `NULL` as a verification limit, not as proof that the view has no definition.
-
----
+`NULL` means the definition is encrypted, not visible, or otherwise unavailable, so report the view's filters and joins as unverified.
 
 ## 4. Column search
 
-Run the SQL block in this section through #tool:ms-mssql.mssql/mssql_run_query with the active `connectionId` for the user-provided server and database. Pass the SQL in `query` with `queryTypes: ["SELECT"]` and `queryIntent: "schema_exploration"`.
-
-Find tables containing columns that match a name pattern — also the fallback for join-path guessing when foreign keys are undeclared.
+Find the tables that hold a column matching a name pattern.
 
 ```sql
 SELECT TOP 100
@@ -140,23 +129,12 @@ WHERE column_info.COLUMN_NAME LIKE N'%SearchPattern%'
 ORDER BY column_info.TABLE_SCHEMA, column_info.TABLE_NAME, column_info.COLUMN_NAME;
 ```
 
-Add `AND column_info.DATA_TYPE IN (N'nvarchar', N'varchar')` or another type filter to narrow by kind.
+Narrow by type with a filter such as `AND column_info.DATA_TYPE IN (N'nvarchar', N'varchar')`.
+The search covers the active database only, so repeat it in each database the task spans.
+Zero rows means no visible match in this database, not that the column exists nowhere.
+A full 100 rows means the search may be incomplete, so narrow the pattern, or remove the bound when the task needs every match.
 
-This search covers the active database only. Run it after the target step has established the active database. If the task spans databases, repeat the search in each selected database.
-
-Zero rows mean no visible match in the active database and catalog, not proof that the column is absent from every database or inaccessible object.
-
-The query is bounded at 100 rows. If it returns 100 rows, report the search as potentially incomplete and narrow the pattern or remove the bound only when a complete search is required.
-
-Search is complete when all matching candidates are reported within the bound, or the bound is reached and the search is marked potentially incomplete with its next action.
-
----
-
-## 5. Data sampling
-
-Run the SQL block in this section through #tool:ms-mssql.mssql/mssql_run_query with the active `connectionId` for the user-provided server and database. Pass the SQL in `query` with `queryTypes: ["SELECT"]` and `queryIntent: "data_exploration"`.
-
-### Recent rows (explicit columns, bounded)
+## 5. Sample
 
 ```sql
 SELECT TOP 100
@@ -167,15 +145,13 @@ FROM dbo.TableName AS source_table
 ORDER BY source_table.CreatedDate DESC;
 ```
 
-Sampling is complete when the bound and ordering are stated and the sample is labeled as non-complete.
+Label a sample as incomplete and state its bound and ordering.
 
----
+## 6. Profile
 
-## 6. Data profiling
+Profile only the columns that can change the interpretation, because each `UNION ALL` branch scans the table again.
 
-Run every SQL block in this section through #tool:ms-mssql.mssql/mssql_run_query with the active `connectionId` for the user-provided server and database. Pass each SQL statement in `query` with `queryTypes: ["SELECT"]` and `queryIntent: "data_exploration"`.
-
-### NULL density and distinct count for a single column
+### NULL share and distinct count of one column
 
 ```sql
 SELECT
@@ -190,7 +166,7 @@ SELECT
 FROM dbo.TableName AS source_table;
 ```
 
-### Numeric column statistics
+### Numeric statistics
 
 ```sql
 SELECT
@@ -202,9 +178,7 @@ SELECT
 FROM dbo.TableName AS source_table;
 ```
 
-### Multi-column profile summary
-
-Each UNION ALL branch scans the table again — on large tables profile the columns that matter, not everything.
+### Several columns at once
 
 ```sql
 SELECT
@@ -222,17 +196,7 @@ SELECT
 FROM dbo.TableName AS source_table;
 ```
 
-Profiling is complete when every requested column has the applicable statistics and scan limitations are reported.
-
----
-
-## 7. Value distributions
-
-Run the SQL block in this section through #tool:ms-mssql.mssql/mssql_run_query with the active `connectionId` for the user-provided server and database. Pass the SQL in `query` with `queryTypes: ["SELECT"]` and `queryIntent: "data_exploration"`.
-
-The first question about any categorical column: what values does it take and how often — including how many rows the long tail hides.
-
-### Top-N frequency for a categorical column
+## 7. Value distribution
 
 ```sql
 SELECT TOP 20
@@ -244,19 +208,11 @@ GROUP BY source_table.CategoryColumn
 ORDER BY Frequency DESC;
 ```
 
-NULL appears as its own group when present — its rank in the output is itself a data-quality finding.
-
-Distribution profiling is complete when the requested category values, frequencies, and NULL handling are reported.
-
----
+NULL forms its own group, and its share is a data-quality finding.
 
 ## 8. Temporal coverage
 
-Run every SQL block in this section through #tool:ms-mssql.mssql/mssql_run_query with the active `connectionId` for the user-provided server and database. Pass each SQL statement in `query` with `queryTypes: ["SELECT"]` and `queryIntent: "data_exploration"`.
-
-Date range and per-month density reveal freshness, backfill gaps, and volume shifts before any time-based analysis is built on the table.
-
-### Date range of a table
+Run the date range first, because it shows whether the monthly counts fit on screen.
 
 ```sql
 SELECT
@@ -265,10 +221,6 @@ SELECT
     COUNT(*) AS TotalRows
 FROM dbo.TableName AS source_table;
 ```
-
-### Rows per month
-
-Run the date-range query first. Use the monthly query below as a recent 60-month inspection and report that bound. Remove `TOP 60` only when complete monthly coverage is required and the date range establishes that the output remains practical to inspect.
 
 ```sql
 SELECT TOP 60
@@ -279,8 +231,5 @@ GROUP BY DATEFROMPARTS(YEAR(source_table.EventDate), MONTH(source_table.EventDat
 ORDER BY MonthStart DESC;
 ```
 
-A missing month or a sudden volume drop within the inspected range is a finding to report, not an artifact to skip past.
-
-Temporal inspection is complete when the observed date range, the 60-month bound or its absence, expected period coverage, and missing or sparse periods within the inspected range are reported.
-
----
+The monthly query covers the latest 60 months; state that bound, and remove it only when the task needs full coverage and the date range keeps the output readable.
+Report a missing month or a sudden drop in volume as a finding.

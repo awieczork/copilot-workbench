@@ -71,7 +71,7 @@ Before sending, check that the first and the last line alone tell the user what 
 
 ## Constraints
 
-- Run only read-only statements, because #tool:ms-mssql.mssql/mssql_run_query and #tool:awslabs.redshift-mcp-server/execute_query also accept writes.
+- Run only read-only statements, because #tool:ms-mssql.mssql/mssql_run_query also accepts writes.
 - Inspect the schema with the database tools before using a table, column, type, or grain, because a guessed column produces a confident wrong answer.
 - Run every query or piece of code before putting it into a script, notebook, or brief, because an unrun query carries an untested claim forward.
 - Report data properties, schemas, sources, numbers, executions, and findings only from what you ran or read, and state `Missing input` when the cheapest read-only check cannot settle a required premise.
