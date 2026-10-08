@@ -1,28 +1,28 @@
 ---
 name: "Python"
-description: "Python rules for owner-run task scripts: linear shape, minimal typing, sparse comments, Polars data work, and proportionate validation."
+description: "Use when writing or changing a Python task script that the user runs directly. Supplies its shape, typing, comments, Polars data work, and validation rules. Not for reusable modules, tests, or application code."
 applyTo: "**/*.py"
 ---
 
 # Python
 
-Write Python as a working instrument for the owner, who runs the script today and changes it tomorrow, not as production software.
+Write Python as a working instrument for the user, who runs the script today and changes it tomorrow, not as production software.
 The whole execution path must therefore be visible from top to bottom.
 Prefer the smallest implementation that produces the requested result.
 
-Apply the rules below only to a task script: a file the owner runs directly to answer the current bounded question.
+Apply the rules below only to a task script: a file the user runs directly to answer the current bounded question.
 When the target is imported reusable code, a test, a package initializer, or an application or service module, follow its project conventions instead and do not apply the rules below.
-The `applyTo` glob also matches reusable Python files because VS Code provides no documented exclusion syntax; this task-script boundary relies on model compliance.
 
 Within a task script, follow the naming, structure, and idioms already established in the file.
 When an established convention conflicts with a rule below, report the conflict as `Decision needed` instead of rewriting the file solely for conformance.
 
-Target Python 3.11 as the owner's standard.
+Target Python 3.11 as the user's standard.
 When the target project declares another Python version, report the conflict as `Decision needed` before using version-specific syntax.
 
 ## Shape the script linearly
 
-- Open the file with a one-line module docstring stating the result the script produces.
+- Start the script with an inline script metadata block that declares `requires-python` and its dependencies, because `run-python` runs such a script in its own environment.
+- Follow the block with a one-line module docstring stating the result the script produces.
 - Put paths, thresholds, seeds, and other varying values in one constants block below the imports.
 - Define `main()` and call it from `if __name__ == "__main__":`.
 - Keep the workflow inside `main()` as a top-to-bottom sequence of statements.
@@ -30,21 +30,22 @@ When the target project declares another Python version, report the conflict as 
 - Name intermediate results after their analytical role and keep them as visible variables.
 - Set an explicit seed for every stochastic operation.
 - Name modules, functions, and variables in `snake_case`, and constants in `UPPER_SNAKE_CASE`.
-- Format the finished script with `ruff format`. When `ruff` is unavailable or fails, report the failed check and do not substitute another formatter.
+- Format the finished script with `uvx ruff format`, and when it fails, report the failed check instead of substituting another formatter.
 
 Do not add classes, a command-line interface, configuration objects, plugin registries, dependency injection, or a logging framework to a script.
 These layers cost more to read than the analysis they wrap, and a constant at the top of the file replaces most of them.
 When the task appears to need one, report `Decision needed` with the purpose and the minimum shape, and wait.
 
 Do not write tests for a task script; when it produces a wrong number, fix the script.
-Add a test only when the owner asks for one.
+Add a test only when the user asks for one.
 
 ## Type only the boundaries
 
 - Annotate function parameters and return values whose type cannot be read from the call site or the default value.
 - Do not write `from __future__ import annotations`; Python 3.11 supports `str | None` and `list[str]` at runtime.
 - Leave local variables unannotated.
-- Do not add `TypedDict`, `Protocol`, generics, or `cast()` to a script. When a type checker reports an error in a script, simplify the code or report the finding rather than annotating around it.
+- Do not add `TypedDict`, `Protocol`, generics, or `cast()` to a script.
+- When a type checker reports an error in a script, simplify the code or report the finding rather than annotating around it.
 
 ## Comment what the code cannot say
 
@@ -55,7 +56,7 @@ Add a test only when the owner asks for one.
 ## Work on tabular data with Polars
 
 - Use `polars` for tabular work.
-- Do not use `pandas`. Ask the owner before adding it, and use it only for a named reason the owner accepted.
+- Ask the user before adding `pandas`, and use it only for a named reason they accepted.
 - Express transformations as Polars expressions instead of `iter_rows()`, `map_elements()`, or Python row loops.
 - Read Parquet for a lazy workflow with `pl.scan_parquet()`.
 - End a lazy chain with `sink_parquet()` when the result goes to Parquet, and with `.collect()` when the next step needs the frame in memory.
@@ -66,7 +67,7 @@ Add a test only when the owner asks for one.
 
 ## Keep validation proportionate
 
-Assume the input data is what the owner says it is.
+Assume the input data is what the user says it is.
 A script that breaks on bad input gets fixed in a minute; validation scaffolding that outgrows the analysis costs an hour and hides the analysis forever.
 
 - Add a plain `assert` with a short message only for an assumption whose failure would silently change the result, such as join cardinality that could duplicate rows.
@@ -78,6 +79,10 @@ A script that breaks on bad input gets fixed in a minute; validation scaffolding
 ## Preferred script shape
 
 ```python
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["polars"]
+# ///
 """Summarise daily event volume for the current question."""
 
 from datetime import date
@@ -105,5 +110,3 @@ def main():
 if __name__ == "__main__":
     main()
 ```
-
-The script is complete when it produces the requested result, passes `ruff format`, and every assumption that could silently change that result is checked with a plain `assert` or stated as a deliberate limitation.

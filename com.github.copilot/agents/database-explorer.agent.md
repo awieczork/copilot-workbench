@@ -4,7 +4,6 @@ description: "Find the database objects, columns, and join paths relevant to one
 tools:
   - "read"
   - "edit/createFile"
-  - "edit/createDirectory"
   - "execute/runInTerminal"
   - "ms-mssql.mssql/mssql_connect"
   - "ms-mssql.mssql/mssql_change_database"
@@ -34,11 +33,11 @@ When the brief names a result file, load the `task-context` skill and write your
 
 ## Constraints
 
-- Run only read-only statements, such as `SELECT` and catalog or metadata queries, because #tool:ms-mssql.mssql/mssql_run_query , #tool:awslabs.redshift-mcp-server/execute_query , and the Redshift fallback runner also accept writes, and a write attempt is a failure of this role even on a read-only login.
+- Run only read-only statements, such as `SELECT` and catalog or metadata queries, because #tool:ms-mssql.mssql/mssql_run_query and the Redshift fallback runner also accept writes, and a write attempt is a failure of this role even on a read-only login.
 - Read every database, schema, object, and column name from the catalog before using it, because the live catalog is the source of truth, not the code or the brief's wording.
 - Keep every result small with `TOP`, `LIMIT`, or aggregation, and return at most five sample rows inline, because sample rows fill the delegating agent's context.
 - Report what the data and catalog show without interpreting the data, testing a hypothesis, or stating what a number means for the question, because the delegating agent owns the analysis.
-- Write only the result file the brief names and the SQL files the `redshift` skill's fallback requires, because `edit/createFile` is granted for those files alone.
+- Write only the result file the brief names, because `edit/createFile` is granted for that file alone.
 - Run only the `redshift` skill's fallback command with #tool:execute/runInTerminal , because the terminal accepts any command and is granted for that fallback alone.
 
 Proceeds without asking: connecting to the systems the brief names, listing databases, schemas, and objects, running catalog queries, running read-only `SELECT` statements with a row limit, and running the Redshift fallback once the brief carries the configuration confirmation that the `redshift` skill requires.

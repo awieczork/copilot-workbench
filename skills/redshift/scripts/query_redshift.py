@@ -7,14 +7,14 @@
 # ]
 # ///
 
-"""Execute one Redshift SQL file and emit a bounded JSON result."""
+"""Execute one Redshift SQL statement from standard input and emit a bounded JSON result."""
 
 import argparse
 import csv
 import json
 import os
-import re
 import sys
+import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -27,7 +27,7 @@ RESULT_ROW_LIMIT = 1_000
 
 
 class InputError(Exception):
-    """Raised when the SQL input file is invalid."""
+    """Raised when the SQL input is invalid."""
 
 
 class ConfigurationError(Exception):
@@ -41,24 +41,24 @@ class QueryError(Exception):
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
-        description="Run a Redshift SQL file and return a bounded JSON result."
+        description=(
+            "Run one Redshift SQL statement read from standard input and print a bounded"
+            " JSON result. Connection settings come from .env in the working directory."
+        )
     )
-    parser.add_argument("sql_file", type=Path, help="Path to one .sql file")
     return parser.parse_args()
 
 
-def read_query(sql_file: Path) -> str:
-    """Read a non-empty SQL file."""
-    if sql_file.suffix.lower() != ".sql":
-        raise InputError(f"SQL input must be a .sql file: {sql_file}")
-    if not sql_file.is_file():
-        raise InputError(f"SQL file not found: {sql_file}")
+def read_query() -> str:
+    """Read a non-empty SQL statement from standard input."""
+    if sys.stdin.isatty():
+        raise InputError("Expected one SQL statement on standard input")
     try:
-        query = sql_file.read_text(encoding="utf-8")
-    except OSError as error:
-        raise InputError(f"Cannot read SQL file: {sql_file}") from error
+        query = sys.stdin.buffer.read().decode("utf-8")
+    except UnicodeDecodeError as error:
+        raise InputError("Standard input must be UTF-8 encoded") from error
     if not query.strip():
-        raise InputError(f"SQL file is empty: {sql_file}")
+        raise InputError("Expected one SQL statement on standard input; got none")
     return query
 
 
@@ -125,11 +125,10 @@ def execute_query(
             connection.close()
 
 
-def csv_path_for(sql_file: Path) -> Path:
-    """Create a workspace-relative path for a large result CSV."""
-    safe_stem = re.sub(r"[^A-Za-z0-9_-]+", "-", sql_file.stem).strip("-") or "result"
-    timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
-    return Path(".tmp") / "redshift-results" / f"{safe_stem}-{timestamp}.csv"
+def csv_path_for() -> Path:
+    """Create an absolute path for a large result CSV in the system temporary directory."""
+    timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ")
+    return Path(tempfile.gettempdir()) / "redshift-results" / f"result-{timestamp}.csv"
 
 
 def write_csv(
@@ -144,7 +143,6 @@ def write_csv(
 
 
 def result_payload(
-    sql_file: Path,
     columns: list[dict[str, str]],
     rows: list[tuple[Any, ...]],
     truncated: bool,
@@ -159,7 +157,7 @@ def result_payload(
         payload["rows"] = rows
         return payload
 
-    csv_path = csv_path_for(sql_file)
+    csv_path = csv_path_for()
     write_csv(csv_path, columns, rows)
     payload["csv_path"] = str(csv_path)
     payload["note"] = "Rows are stored in csv_path."
@@ -167,16 +165,12 @@ def result_payload(
 
 
 def main() -> int:
-    """Run the requested SQL file and print exactly one JSON payload on success."""
-    args = parse_args()
+    """Run the SQL statement and print exactly one JSON payload on success."""
+    parse_args()
     try:
-        query = read_query(args.sql_file)
+        query = read_query()
         columns, rows, truncated = execute_query(query, connection_settings())
-        print(
-            json.dumps(
-                result_payload(args.sql_file, columns, rows, truncated), default=str
-            )
-        )
+        print(json.dumps(result_payload(columns, rows, truncated), default=str))
         return 0
     except InputError as error:
         print(f"Input error: {error}", file=sys.stderr)

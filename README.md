@@ -86,7 +86,7 @@ The skills ask for missing target details; delegated workers return missing deta
 Keep credentials in local configuration and never provide them in chat or commit them to the package.
 
 For SQL Server, create a saved connection profile in the SQL Server extension.
-The [SQL Server skill](skills/sql-server/SKILL.md) selects a matching profile, verifies the active target, and disconnects when the task ends or becomes blocked.
+The [SQL Server skill](skills/sql-server/SKILL.md) connects to the saved server, verifies the active target, and disconnects when the task ends or becomes blocked.
 
 The Redshift MCP configuration currently uses the local AWS profile label `redshift-mcp`.
 Configure that profile's credentials and region on the machine that runs the server; no cluster or database target is encoded in the skills.

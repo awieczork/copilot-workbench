@@ -1,18 +1,11 @@
 # Redshift exploration patterns
 
-Use sections 1-4 for targeted discovery or verification of unknown source details. Do not use those discovery patterns when the supplied SQL already identifies every required object and column. Read sections 5-8 when the task explicitly requests a sample or a quality check. Replace schema, table, column, and view placeholders with exact names.
+Read only the section for the unknown item or the requested check.
+Run each pattern through the read-only gate of the [Redshift skill](../SKILL.md) on the active channel, and replace the schema, table, view, and column placeholders with exact names.
 
-Execute each SQL pattern through the active channel selected in [the Redshift workflow](../SKILL.md). When MCP is active, pass the user-provided cluster identifier in `cluster_identifier` and database name in `database_name`. When Python is active, place one pattern in one workspace SQL file and run the bundled runner against the same confirmed target as defined by the workflow.
-
----
-
-## 1. Relationship discovery
-
-Inspect relationships when a join path or cardinality is unknown. Start with declared or informational constraints, then verify an undeclared relationship with key uniqueness and row-count checks.
+## 1. Relationships
 
 ### Declared constraints on one table
-
-Execute this read-only query after replacing the placeholders:
 
 ```sql
 SELECT
@@ -26,13 +19,11 @@ WHERE table_schema = 'schema_name'
 ORDER BY constraint_type, constraint_name;
 ```
 
-This query lists constraints declared on the requested table. It does not reveal inbound references from other tables. Redshift constraints can be informational and may be absent. No returned constraint means that the relationship is not declared, not that no relationship exists.
+The query lists constraints declared on this table only, not references from other tables.
 
-Relationship discovery is complete when constraints declared on the requested table are reported or no declared constraint is found. Inbound references remain unverified unless a separate supported catalog query establishes them.
+### Join-key uniqueness
 
-### Join-key uniqueness check
-
-Before joining on a candidate key, confirm which side is unique. Replace the placeholders with the exact schema and table names:
+Check which side of a join is unique, because a duplicated key fans out the join and inflates every aggregate after it.
 
 ```sql
 SELECT
@@ -45,23 +36,30 @@ ORDER BY DuplicateCount DESC
 LIMIT 20;
 ```
 
-Zero rows means the key has no duplicate values in the checked population. Any row means the join can multiply rows; state the expected cardinality and check the joined row count.
+Zero rows means no duplicate key in the checked population.
+Any row means the join can multiply rows, so state the expected cardinality and check the joined row count.
 
-Join-key verification is complete when uniqueness status, expected cardinality, and any row multiplication are reported.
+### Unmatched keys
 
-Relationship analysis is complete when every requested join path has a declared constraint or a tested cardinality, or the limitation is reported.
+Count the child rows whose key finds no parent, because an `INNER JOIN` drops them without a signal.
+Run it after the uniqueness check confirms the parent key is unique, because a duplicated parent key inflates `ChildRows`.
 
----
+```sql
+SELECT
+    COUNT(*) AS ChildRows,
+    SUM(CASE WHEN parent_table.ParentKey IS NULL THEN 1 ELSE 0 END) AS UnmatchedRows
+FROM schema_name.child_table AS child_table
+LEFT JOIN schema_name.parent_table AS parent_table
+    ON child_table.ParentKey = parent_table.ParentKey;
+```
 
-## 2. Exact object and column discovery
+Rows with a NULL child key count as unmatched.
 
-Use the MCP listing tools while MCP is active. Use the catalog queries while Python is active.
+## 2. Schemas, objects, and columns
 
-### Find one known schema
+On MCP, use #tool:awslabs.redshift-mcp-server/list_schemas , #tool:awslabs.redshift-mcp-server/list_tables , and #tool:awslabs.redshift-mcp-server/list_columns ; on the fallback, use the catalog queries below.
 
-Call #tool:awslabs.redshift-mcp-server/list_schemas with the resolved cluster identifier in `cluster_identifier` and database name in `schema_database_name`. Identify the requested schema from the returned result.
-
-When Python is active, execute this targeted query instead:
+### One named schema
 
 ```sql
 SELECT
@@ -70,13 +68,7 @@ FROM svv_all_schemas
 WHERE schema_name = 'schema_name';
 ```
 
-Schema discovery is complete when the requested schema is identified or no matching schema is reported.
-
-### Find one known table or view
-
-Call #tool:awslabs.redshift-mcp-server/list_tables with the resolved cluster identifier in `cluster_identifier`, database name in `table_database_name`, and exact `table_schema_name`. Identify the requested table or view from the returned result.
-
-When Python is active, execute this targeted query instead:
+### Tables and views matching a name
 
 ```sql
 SELECT
@@ -90,15 +82,10 @@ ORDER BY all_tables.schema_name, all_tables.table_name
 LIMIT 100;
 ```
 
-`svv_all_tables` covers visible local and external objects. If the query returns 100 rows, narrow the object pattern before treating the result as complete.
+`svv_all_tables` lists the views and the base, external, and shared tables the current user can access.
+A full 100 rows means the list may be incomplete, so narrow the name pattern.
 
-Object discovery is complete when one intended object is identified, or no matching object is reported.
-
-### Inspect columns for one object
-
-Call #tool:awslabs.redshift-mcp-server/list_columns with the resolved cluster identifier in `cluster_identifier`, database name in `column_database_name`, exact `column_schema_name`, and `column_table_name`. Inspect every column used by the planned query.
-
-When Python is active, execute this targeted query instead:
+### Columns of one object
 
 ```sql
 SELECT
@@ -115,17 +102,9 @@ WHERE columns.table_schema = 'schema_name'
 ORDER BY columns.ordinal_position;
 ```
 
-When `svv_columns` is denied, use `svv_redshift_columns` for local tables and report that external-column coverage is unavailable.
+When `svv_columns` is denied, query `svv_redshift_columns` with `schema_name` in place of `table_schema` and without the length, precision, and scale columns, which it lacks, and report external columns as unverified.
 
-Column inspection is complete when every required column is returned with its available type and nullability metadata, or the missing metadata is reported.
-
----
-
-## 3. View definition inspection
-
-Redshift view logic can contain filters and joins that affect the requested result. Read the definition when those hidden expressions could change interpretation.
-
-Execute this read-only query after replacing the placeholders:
+## 3. View definition
 
 ```sql
 SELECT
@@ -137,15 +116,12 @@ WHERE schemaname = 'schema_name'
     AND viewname = 'view_name';
 ```
 
-Inspection is complete when the definition is available or its unavailability is reported before interpretation.
-
-`pg_catalog.pg_views` covers standard views visible to the session. When the object may be a materialized, external, shared, or otherwise separately cataloged view, use a catalog source available for that object and report the coverage limit before interpretation.
-
----
+`pg_catalog.pg_views` covers standard views visible to the session.
+For a materialized, external, or shared view, use the catalog that holds it, or report its filters and joins as unverified.
 
 ## 4. Column search
 
-Search the catalog when the table containing a required column is unknown. Use a narrow pattern instead of enumerating every column. When the schema is known, add the schema predicate shown in the text below; when it is unknown, omit that predicate:
+Find the tables that hold a column matching a name pattern; add `AND table_schema = 'schema_name'` to the `WHERE` clause when the schema is known.
 
 ```sql
 SELECT
@@ -160,21 +136,10 @@ ORDER BY table_schema, table_name, column_name
 LIMIT 100;
 ```
 
-When the schema is known, add `AND table_schema = 'schema_name'` to the `WHERE` clause.
+`information_schema.columns` misses external and shared objects, so zero rows does not prove the column is absent when the target holds them.
+A full 100 rows means the search may be incomplete, so narrow the pattern, or remove the bound when the task needs every match.
 
-This search covers objects exposed through `information_schema.columns`. If the target can contain external, shared, or otherwise separately cataloged objects, report the catalog coverage limit and use an available catalog source for those objects instead of treating zero rows as proof that the column is absent.
-
-The query is bounded at 100 rows. If it returns 100 rows, report the search as potentially incomplete and narrow the pattern or remove the bound only when a complete search is required.
-
-Search is complete when all matching candidates are reported within the bound, or the bound is reached and the search is marked potentially incomplete with its next action.
-
----
-
-## 5. Data sampling
-
-### Recent rows with explicit columns
-
-Use a bounded sample for an unfamiliar object or when the user requests a quick look:
+## 5. Sample
 
 ```sql
 SELECT
@@ -186,13 +151,13 @@ ORDER BY source_table.CreatedDate DESC
 LIMIT 100;
 ```
 
-Sampling is complete when the bound and ordering are stated and the sample is labeled as non-complete.
+Label a sample as incomplete and state its bound and ordering.
 
----
+## 6. Profile
 
-## 6. Data profiling
+Profile only the columns that can change the interpretation, because each `UNION ALL` branch scans the table again.
 
-### NULL density and distinct count for one column
+### NULL share and distinct count of one column
 
 ```sql
 SELECT
@@ -205,7 +170,7 @@ SELECT
 FROM schema_name.table_name AS source_table;
 ```
 
-### Numeric column statistics
+### Numeric statistics
 
 ```sql
 SELECT
@@ -217,7 +182,7 @@ SELECT
 FROM schema_name.table_name AS source_table;
 ```
 
-### Multi-column profile summary
+### Several columns at once
 
 ```sql
 SELECT
@@ -235,15 +200,7 @@ SELECT
 FROM schema_name.table_name AS source_table;
 ```
 
-Profile only the columns that can change the interpretation. A separate query for each profile can scan the source again.
-
-Profiling is complete when every requested column has the applicable statistics and scan limitations are reported.
-
----
-
-## 7. Value distributions
-
-### Top-N frequency for a categorical column
+## 7. Value distribution
 
 ```sql
 SELECT
@@ -256,15 +213,11 @@ ORDER BY Frequency DESC
 LIMIT 20;
 ```
 
-A NULL value appears as its own group when present. Its frequency is a data-quality finding.
-
-Distribution profiling is complete when the requested category values, frequencies, and NULL handling are reported.
-
----
+NULL forms its own group, and its share is a data-quality finding.
 
 ## 8. Temporal coverage
 
-### Date range of a table
+Run the date range first, because it shows whether the monthly counts fit on screen.
 
 ```sql
 SELECT
@@ -273,10 +226,6 @@ SELECT
     COUNT(*) AS TotalRows
 FROM schema_name.table_name AS source_table;
 ```
-
-### Rows per month
-
-Run the date-range query first. Use the monthly query below as a recent 60-month inspection and report that bound. Remove `LIMIT 60` only when complete monthly coverage is required and the date range establishes that the output remains practical to inspect.
 
 ```sql
 SELECT
@@ -288,6 +237,5 @@ ORDER BY MonthStart DESC
 LIMIT 60;
 ```
 
-A missing month or sudden volume drop within the inspected range is a finding to report, not an artifact to skip.
-
-Temporal inspection is complete when the observed date range, the 60-month bound or its absence, expected period coverage, and missing or sparse periods within the inspected range are reported.
+The monthly query covers the latest 60 months; state that bound, and remove it only when the task needs full coverage and the date range keeps the output readable.
+Report a missing month or a sudden drop in volume as a finding.
