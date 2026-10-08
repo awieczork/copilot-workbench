@@ -6,14 +6,15 @@ argument-hint: "Describe the Python script or check to run"
 
 # Run Python with uv
 
-Always run Python through `uv`. Never invoke `python` or `python3` directly.
+Run Python through `uv`, because uv supplies the interpreter and the dependencies the code needs, while a bare `python` runs whatever environment the shell holds.
 
-1. Check only whether `pyproject.toml` exists in the repository root.
-2. When it exists, run a script with `uv run python path/to/script.py`.
-3. When it does not exist, run a script with `uv run --no-project python path/to/script.py`.
-4. When the execution requires a package unavailable from the selected environment, add `--with <package>` for each explicitly required dependency before `python`.
-5. For inline code, use the same prefix and pass the code after `-c` as one argument with quoting and escaping valid for the active shell.
+Choose the prefix by whether the code needs the project's environment, because inside a project `uv run` installs the project before every run:
 
-Keep the working directory at the repository root unless the script requires another directory. Report the command and its exit status.
+- When the code imports the project or its dependencies, use `uv run`.
+- Otherwise, use `uv run --no-project`.
 
-The task is complete when the Python code ran through the correct `uv` prefix and the command result is reported.
+Run from the repository root unless the code needs another directory, because uv finds the project from the working directory upward.
+
+- Run a script as `{prefix} path/to/script.py`, without `python`, because uv reads the script's inline dependency block only in this form; a script with that block runs isolated from the project.
+- Run inline code as `{prefix} python -c "{code}"`.
+- Add `--with <package>` after the prefix for each package the environment lacks.
