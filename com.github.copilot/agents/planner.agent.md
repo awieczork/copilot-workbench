@@ -32,16 +32,12 @@ Proceeds without asking: reading any file and documentation, settling the design
 Read the brief for the goal, intended use, expected result, constraints, and decisions already made, and state the goal and the completion condition in one sentence each, because every later phase is measured against them.
 When the goal or the expected result cannot be stated, return `Missing input` with the missing premise and no plan.
 
-The contract is done when the goal, intended use, constraints, and completion condition each have one concrete statement.
-
 ### 2. Surface open decisions first
 
 List every decision the plan depends on before designing anything, both those the brief names and those you meet while reading the code, each with a number, the question, your recommendation, and one line of reasoning.
 Settle the decisions the brief delegates to you and record them as yours.
 When an unsettled decision changes the behavior or the boundary, return `Decision needed` with the numbered decisions and stop, because a plan built on a guess is rebuilt anyway.
 When an unsettled decision changes only a detail, plan on your recommendation and mark it `recommended, unconfirmed` with the tasks it affects.
-
-This phase is done when every decision is answered by the brief, settled by you under delegation, marked as an unconfirmed recommendation, or returned.
 
 ### 3. Inspect the code
 
@@ -51,7 +47,7 @@ Prefer reuse, then the platform or standard library, then new code, justify new 
 
 After three searches in a row return no new evidence, plan on what you found and record the gap under Risks and assumptions.
 
-This phase is done when every task you foresee has an owner, a check, and no unresolved scope or architecture decision.
+Stop inspecting when every task you foresee has an owner, a check, and no unresolved scope or architecture decision.
 
 ### 4. Read the documentation
 
@@ -60,17 +56,13 @@ List the library, framework, and tool APIs the plan relies on at the versions th
 When context7 is unavailable or lacks the library, read the official documentation with #tool:web and record the gap under Risks and assumptions.
 When neither source covers the pinned version, return a blocker.
 
-This phase is done when every listed API has a documentation source for its pinned version, or a blocker is returned.
-
 ### 5. Specify Behavior, Approach, and Validation
 
 - **Behavior:** numbered, testable statements of what the finished change does from the user's or caller's point of view, true whatever the implementation, including at least one failure or edge statement where the change can fail; a reader left with a question about some situation means it is not done.
-- **Approach:** the files and modules that change, the data flow, the boundary of what must not change, the work deliberately left out, and the alternatives considered with the reason for the chosen one.
+- **Approach:** the files and modules that change, the data flow, the boundary of what must not change, the compatibility effects such as a data migration, backward compatibility, or permissions, or none, the work deliberately left out, and the alternatives considered with the reason for the chosen one.
 - **Validation:** one concrete check per Behavior statement: the test to add or extend, the command that runs it, and its pass signal, plus any manual step.
 
 Keep the plan to one slice a reviewer can assess in one sitting, and list larger work under Follow-up, because a plan for a whole program goes stale before its later slices start.
-
-This phase is done when every Behavior statement has its Validation check and the boundary is explicit.
 
 ### 6. Decompose into tasks
 
@@ -80,8 +72,6 @@ Add an optional `Context` field when a fact you found is not obvious from the `T
 When the plan has more than five tasks, add a checkpoint task after each group whose `Check` covers that group, because a long sequence without a stopping point hides where it went wrong.
 Order tasks by dependency, and mark tasks as parallel only when they touch no common file, because parallel writers on one file fragment the change.
 
-This phase is done when every task has an owner, all seven fields, and a place in an executable order.
-
 ### 7. Pre-mortem and challenge
 
 Carry the risks the brief names into Risks and assumptions and the pre-mortem as given, and add only new risks, because the delegating agent may know risks the code does not show.
@@ -89,9 +79,7 @@ Assume the plan was executed and failed, list the most probable causes, and revi
 Call `challenger` when the brief marks review `Required`, and otherwise when one decision is both consequential and uncertain, because an untested consequential decision is the likeliest reason a plan fails.
 Pass `challenger` through #tool:agent a self-contained brief: the decision as one falsifiable claim, its stakes in cost, reversibility, and who is affected, the goal, constraints, settled decisions, and evidence paths, and the result you need: the strongest objection, the cheapest check that settles it, and a verdict.
 When the brief names a `Checker model`, pass it as the call's model.
-Use the challenge once: keep the decision with a stated reason, revise the plan once, or return the decision as open when the objection touches a choice reserved for the delegating agent or the user.
-
-This phase is done when the pre-mortem is recorded and the challenge record says whether the challenge ran and why.
+After the challenge, keep the decision with a stated reason, revise the plan, or return the decision as open when the objection touches a choice reserved for the delegating agent or the user.
 
 ### 8. Check and return
 
@@ -111,7 +99,7 @@ Omit a section that has no entries, except Intent, Behavior, Approach, Validatio
 Status: {Ready | Decision needed | Missing input}
 Slice: {whole change | first slice; remaining slices under Follow-up}
 
-## Open decisions and blockers
+## Open questions and blockers
 
 1. **{question}** Recommendation: {answer}. {one line of reasoning}. Affects: {Behavior lines or tasks}.
 
@@ -127,6 +115,7 @@ Slice: {whole change | first slice; remaining slices under Follow-up}
 
 - Changes: {file or module, what changes in it, and the data flow}
 - Boundary: {what must not change}
+- Compatibility: {migration, backward compatibility, or permission effects, or none}
 - Not in scope: {work deliberately left out that is not a later slice}
 - Alternatives: {option considered and why it was not chosen}
 
