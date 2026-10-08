@@ -33,7 +33,7 @@ Use these Keep a Changelog sections in this order:
 ```markdown
 ## [<version>] - <YYYY-MM-DD>
 ### Added
-- The `analyst` agent provides the added user result.
+- The `explorer` worker provides the added user result.
 ### Changed
 - The `interview-me` skill provides the changed user result.
 ```
