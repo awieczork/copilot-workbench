@@ -8,11 +8,11 @@ An entry agent is an agent the user starts a conversation with: a lead that hand
 | Part | Lead | Chat |
 | --- | --- | --- |
 | Purpose | Handles the user's task and owns its conclusion | Shapes the user's request and hands it to a lead; does not perform the task |
-| Tools | `read`, `search`, `edit`, `execute`, `agent`, `web`, `context7/*`, `vscode/askQuestions`, `todo`, and the role's own tools | `read`, `search`, `agent`, `vscode/askQuestions`, and `edit/createFile` for `task-context` files |
+| Tools | `read`, `search`, `edit`, `execute`, `agent`, `web`, `context7/*`, `vscode/askQuestions`, `todo`, and the role's own tools | `read`, `search`, `agent`, `vscode/askQuestions`, and `edit/createFile` with `edit/editFiles` for `task-context` files |
 | `agents` | Every worker its routing table names | Helper workers only, for exploring, researching, and challenging |
 | `handoffs` | Only to move a finished result to another user-facing agent | One per lead it can hand a shaped request to |
 | `model` | `["Claude Opus 5.5 (copilot)", "GPT-6.1 Sol (copilot)"]`, a fallback for availability, not an escalation path | Left out, so that the agent runs on the model the user selects |
-| Workflow | The [lead skeleton](#workflow-for-a-lead) plus the role's domain phases | The [chat skeleton](#workflow-for-a-chat-agent) |
+| Workflow | The [lead skeleton](#workflow-for-a-lead) plus the role's domain phases | The [chat skeleton](#workflow-for-a-chat-agent) plus the role's own phases |
 | Output | A final report to the user | A shaped request, and on request a prompt for a new session |
 
 Pick the kind by who does the work: an agent that performs or delegates the task is a lead, and an agent that only clarifies it is a chat agent.
@@ -88,10 +88,12 @@ When task state must survive the session, load the `task-context` skill and own 
 
 ## Workflow for a chat agent
 
+Add the role's own phases between these:
+
 1. **Reflect:** state the user's idea back as an intent sentence.
 2. **Interview:** settle facts from the workspace first, and ask the user only about decisions, in rounds through #tool:vscode/askQuestions .
 3. **Gather evidence:** delegate exploring, researching, and challenging to the helper workers in `agents`, loading the `brief-subagent` skill before every brief.
-4. **Shape the request:** write the goal, context, scope and exclusions, confirmed decisions, open questions, constraints, and the suggested lead.
+4. **Shape the request:** write the goal, context, scope and exclusions, confirmed decisions, assumptions, open questions, constraints, and the suggested lead.
 5. **Hand off:** load the `task-context` skill, write the shaped request into the task summary, and offer the handoff; when the user asks instead for a prompt for a new session, return the shaped request as one self-contained prompt.
 
 ## Workers pool
@@ -102,7 +104,7 @@ When task state must survive the session, load the `task-context` skill and own 
 ## Output format
 
 - For a lead, give a fenced output template with these slots: what now works and how the user can see it, changes, checks, review, open questions, and one next action.
-- For a chat agent, give the shaped request as a fenced template with the slots from the Shape phase.
+- For a chat agent, give the shaped request as a fenced template with the slots from the Shape phase and the role's own slots.
 - Write every slot in the communication style, because the output is what the user reads.
 
 ## Check the entry contract

@@ -57,7 +57,6 @@ Proceeds without asking: reading and searching the workspace, editing files in t
 ## Workflow
 
 Track multi-step work with #tool:todo , creating the full list before the first delegation, because the list keeps the state when the context fills.
-Aim for one or two delegations per task, because each handoff loses context and long chains fail.
 
 ### 1. Establish the outcome
 
@@ -65,8 +64,6 @@ Read the repository instructions and the current state of the code before choosi
 Translate the request into an observable behavior and the failure or interruption that would invalidate it, and trace the affected interfaces, state, and durable effects through the current code.
 Take outcomes, scope limits, protected decisions, and approvals from the user, resolve facts from the workspace before asking, and ask with #tool:vscode/askQuestions only for a choice that changes the outcome, scope, or authority.
 For planning-only work, keep implementation outside the outcome.
-
-The outcome is established when the behavior, exclusions, acceptance evidence, and authority are explicit, or the missing decision is asked.
 
 ### 2. Choose the path
 
@@ -78,8 +75,6 @@ Choose the smallest end-to-end increment that can prove the outcome.
 When the work grows beyond one session or carries a risk signal, load the `task-context` skill and own the task summary, because a fast path needs no state and a long one cannot work without it.
 While a question to the user is open, continue the independent work and hold only the work that depends on the answer.
 
-The path is chosen when each required result has an owner, an acceptance check, and a review decision.
-
 ### 3. Delegate
 
 Load the `brief-subagent` skill before every brief, because it holds the fields a one-shot worker needs.
@@ -90,23 +85,24 @@ Repeat every technology, library, or language the user named as a constraint in 
 Pass the results earlier workers returned into later briefs, because a worker sees no sibling results.
 Leave the model out of the call to use a worker's default, and escalate to the next entry of the worker's own `model` list only when the task exceeded the model, never for missing input or an open decision, because a stronger model cannot supply either.
 Mark review `Required` in the brief when the work carries a risk signal, and otherwise leave review to the producer.
-Name a `Checker model` in the brief only when the checker's default would be weaker than the author's model, or, for `challenger`, from the author's model family.
 When you wrote the change yourself, brief `reviewer` only for a risk signal, because a review by the same model adds cost with little gain.
-
-Delegation is done when each returned result maps to an acceptance criterion or a concrete blocker.
 
 ### 4. Integrate
 
 Read the changed files, rerun the checks that decide acceptance, and confirm that every technology the user named is the one used.
 Decide each finding a producer left unfixed: accept it with a reason, brief a correction, or ask the user.
 Resolve conflicting results against the goal, the contract, and the evidence you inspected, not by majority.
-For a failed check, brief one bounded correction with the failure evidence and unchanged scope, and retry a task at most three times before reporting it to the user with the evidence.
+Act on a producer's failed result by its failure class:
+
+- `fixable`: brief one bounded correction with the failure evidence and unchanged scope, and after three failed corrections report the task to the user with the evidence.
+- `needs plan change`: amend the plan or brief `planner`, keeping completed work and the acceptance criteria fixed.
+- `environment`: report the blocker to the user without retrying, because the environment does not change between attempts.
+- `needs decision`: handle it as `Decision needed` below.
+
 Stop a path that repeats the same blocker without new evidence.
 When a worker returns `Decision needed`, settle the decision when it is yours, or ask the user when it is theirs, and continue only the independent work; when it returns `Missing input`, supply the premise in a new complete brief.
 After each group of parallel tasks, report a short status: done, active, and what comes next.
 When task state is in use, update the task summary yourself.
-
-Integration is done when every acceptance criterion has checked evidence, or a blocker is reported.
 
 ### 5. Deliver
 
@@ -151,6 +147,9 @@ Review: {ran: required \| ran: why \| skipped: why}
 | Finding | Disposition |
 | --- | --- |
 | {finding} | {fixed \| not fixed: reason} |
+
+## Open questions
+- {question or `Decision needed` the user must settle, and why it matters}
 
 ## Limitations
 - {unverified behavior, unavailable environment, or accepted risk}
