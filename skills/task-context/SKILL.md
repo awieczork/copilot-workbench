@@ -8,6 +8,12 @@ description: "Use when task state must survive the session or pass between agent
 Keep the working state of one task in a Git-ignored task folder, so that it survives the session and reaches every agent that works on the task.
 Keep short work in the conversation, and keep deliverables and approved knowledge in their canonical locations, because a task folder holds working state, not a source of truth.
 
+## Owner and subagents
+
+The **owner** is the agent the user talks to that holds the task, such as a chat agent while it shapes a request, then the lead that receives the handoff.
+Only the owner creates, resumes, archives, or removes a task folder, writes `summary.md` and `notes.md`, and asks the user about the folder.
+A subagent follows only [Delegate with a result file](#delegate-with-a-result-file), because it cannot ask the user and the owner integrates its result.
+
 ## Layout
 
 ```text
@@ -26,10 +32,7 @@ Keep short work in the conversation, and keep deliverables and approved knowledg
 - Before the first write, check that the repository ignores `.github/context/`; when it does not, tell the user and ask before writing, because the folder holds unreviewed working notes.
 - When the folder already exists, keep it and ask the user whether to reuse it or choose another slug.
 
-## Own the summary
-
-The **owner** is the entry agent that holds the task: the chat agent while the task is being shaped, then the lead agent after the handoff.
-Only the owner writes `summary.md` and `notes.md`.
+## Keep the summary
 
 Keep these fields in `summary.md`:
 
@@ -54,13 +57,8 @@ Next action: {one action}
 - {link to a canonical file or document}
 ```
 
-Update the summary after a verified result, a failed step, a confirmed decision, or a change of the next action, and before the session ends or the context is compacted.
-
-## Work through compaction
-
-Continue the task when the context window fills, because compaction lets the session go on from saved state.
-Before compaction, the owner updates `summary.md`, and a subagent with a result path writes its current result to that path.
-Do not stop or shorten the work to save context.
+Update the summary after a verified result, a failed step, a confirmed decision, or a change of the next action, because the context can be compacted at any point and the work then continues from the saved state.
+When the context fills, continue the task instead of stopping or shortening the work to save context.
 
 ## Hand off a task
 
@@ -77,8 +75,7 @@ A subagent that receives a result path:
 2. Writes its complete result to that path before every return, including a blocked, failed, or partial one.
 3. Names the path in its response.
 
-- Write only the result file; never change `summary.md`, `notes.md`, or another agent's file, because the owner integrates results.
-- Treat a result file as permission to write that one file, not as permission for any other edit.
+- Write only that result file, never `summary.md`, `notes.md`, or another agent's file, because the owner integrates results.
 - Treat a result file from another agent as unverified evidence, because saving a claim does not check it.
 
 ## Resume a task
@@ -97,7 +94,3 @@ When none or several match, list the candidates and ask the user to choose.
 - Leave a finished or abandoned task folder in `active/` until the user asks to archive or remove it.
 - To archive, move the folder to `archive/` with its name unchanged; when the destination exists, stop and report it.
 - Before removing a folder, list its contents and get the user's confirmation of the exact path.
-
-## Report
-
-When you read or change a task folder, include its path, status, and next action in your normal report.
