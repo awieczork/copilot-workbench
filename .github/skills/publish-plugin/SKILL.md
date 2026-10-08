@@ -23,13 +23,6 @@ Publish only this allowlist:
 
 Keep build metadata, local source material, tests, and working output on `develop`.
 
-## Compatibility condition
-
-This workflow assumes a Git repository with a `develop` branch, a configured `origin`, an `origin/main` package branch, authenticated GitHub CLI (`gh`), and an active `main` ruleset enforcing `deletion` and `non_fast_forward`.
-Treat the ruleset protection as an environment condition.
-Do not replace the condition with a runtime ruleset lookup.
-Report a push rejection caused by absent protection and stop publication.
-
 ## Stop on preflight failure
 
 1. Read the current branch, working tree state, branch tracking, remotes, and git worktree list.
@@ -48,8 +41,6 @@ Stop and report the failed check before asking for a version when any requiremen
 This skill publishes one release from a clean state and does not resume an interrupted run.
 When a later check finds leftover release state, report the state, the branches and commits that hold it, and the manual recovery required.
 Do not repair it inside this skill.
-
-The preflight is complete only when every listed condition passes.
 
 ## Correct release history
 
@@ -89,15 +80,13 @@ The release-history path is complete only when `CHANGELOG.md`, package-only `mai
 
 Read the current `version` from `plugin.json` on `develop`.
 Treat this as the initial release when `origin/main` has no `CHANGELOG.md` or its `CHANGELOG.md` has no versioned `## [x.y.z]` entry, and no local or remote `v<current-version>` tag exists.
-Ask the owner with `#tool:vscode/askQuestions` for the approved semantic version.
+Ask the owner for the approved semantic version, through #tool:vscode/askQuestions when you hold it.
 Show the current version and require the answer without a leading `v`.
 For the initial release, accept the current version or a greater version when it is valid semantic versioning and carries no existing `v<version>` tag locally or on `origin`.
 For a later release, accept the version only when it is valid semantic versioning, greater than the current version, and carries no existing `v<version>` tag locally or on `origin`.
 Stop when the owner does not approve a version or supplies an invalid version, a version below the current version for the initial release, a non-increasing later-release version, or an already tagged version.
 
 Do not edit `plugin.json`, `CHANGELOG.md`, create a tag, or update a branch before the version answer is accepted.
-
-The version gate is complete only when one approved version is recorded for this run.
 
 ## Draft and approve release notes
 
@@ -112,15 +101,13 @@ Classify every user-visible change in the `origin/main..develop` diff as covered
 Write the draft in English to match this repository's current `CHANGELOG.md` and documentation.
 Run the draft checklist in the reference before asking for approval.
 
-Ask the owner with `#tool:vscode/askQuestions` to approve the exact draft.
+Ask the owner to approve the exact draft, through #tool:vscode/askQuestions when you hold it.
 Include the proposed version and the complete note body in that question.
 Revise the draft when the owner requests a change and ask for approval of the complete replacement.
 Stop without release changes when the owner rejects or does not approve the draft.
 
 After approval, set `notes_file` to an unused temporary file outside the repository and write the complete approved versioned entry to it, including its version heading, date, non-empty subsections, and bullets.
 Require `test -s "$notes_file"` to succeed before continuing.
-
-The notes gate is complete only when the owner has approved the exact entry that will enter the changelog and the GitHub release.
 
 ## Prepare the source commit
 
@@ -171,8 +158,6 @@ Stage the allowlist by name rather than with `git add`, because `git add` silent
 Stop when a path outside the allowlist is staged or when a required allowlisted path cannot be restored.
 When a command after `git worktree add` fails, follow `Handle pre-publication failure` before requesting push confirmation.
 
-The package-tree preparation is complete only when the plugin git worktree contains the explicitly staged allowlist and no other staged path.
-
 ## Verify the package tree
 
 Commit the staged snapshot in the plugin git worktree as `chore(release): publish v<version>`.
@@ -194,8 +179,6 @@ Stop publication when the first command exits non-zero or the second prints a pa
 When tree verification fails, follow `Handle pre-publication failure` before stopping.
 Both commands read the committed candidate through `HEAD`, so neither reports uncommitted working-tree state.
 
-The tree verification is complete only when `git diff --quiet` exits zero and every printed path matches the allowlist.
-
 ## Handle pre-publication failure
 
 When source preparation fails, including a failed post-commit cleanliness check, run `git status --short`, report the failed command and every remaining path, and remove `notes_file`.
@@ -208,15 +191,13 @@ Remove the plugin git worktree when that status is empty.
 When the status is not empty, stop and report the path for manual cleanup.
 Do not continue to tag or push after a failed command.
 
-Failure handling is complete only when the failure, remaining paths, and cleanup result are reported.
-
 ## Get one push confirmation
 
 Verify that the local package `main` tip is the candidate commit.
 Create no tag before this confirmation.
 
 Show the owner the version, both commit identifiers, the two passing tree checks, and the exact publication actions.
-Ask one question with `#tool:vscode/askQuestions` that covers all of these actions:
+Ask one question, through #tool:vscode/askQuestions when you hold it, that covers all of these actions:
 
 - create annotated tag `v<version>` on package `main`;
 - push `develop`, `main`, and `v<version>` to `origin`;
@@ -253,7 +234,7 @@ gh release create "v<version>" \
   --notes-file "$notes_file"
 ```
 
-Omit `--target`, because the tag already exists on `origin` at this point and `gh` ignores the flag for an existing tag.
+Omit `--target`, because the tag already exists on `origin` at this point and the GitHub API ignores the target for an existing tag.
 
 Stop on any non-zero tag, push, or GitHub CLI result.
 Do not force-push, move an existing tag, or retry a rejected push automatically.
@@ -280,8 +261,6 @@ Commit the second snapshot as `chore(release): sync v<version> publication` and 
 
 Stop and report the exact branch, snapshot, or record state when a post-publication reconciliation command fails.
 
-The full publication workflow is complete only when the release effects and the post-publication record synchronization both succeed.
-
 ## Clean the plugin git worktree
 
 Remove the temporary notes file once the run reaches this section by any path, unless an earlier failure branch already removed it.
@@ -294,5 +273,3 @@ Run `git status --short --branch`, `git worktree list`, and `git show --stat --o
 
 Report the published version, the source and snapshot commits when present, the tag, the GitHub release result, and the final git worktree state.
 After a successful publication, remind the owner to tell the users about the release and to recommend that they check for an update.
-
-Cleanup is complete only when the temporary plugin git worktree is absent, the temporary notes file is absent, and the three final checks have been run and reported.

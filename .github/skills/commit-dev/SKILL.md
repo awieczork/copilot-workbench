@@ -2,7 +2,6 @@
 name: commit-dev
 description: Commit and push day-to-day changes on `develop`, reconcile `CHANGELOG.md`, `PROJECT-STATUS.md`, and `OPEN-ISSUES.md`, and apply a safety screen for data files, secrets, and large files. Use when the owner asks to inspect, commit, or push build-workspace changes on the develop branch.
 argument-hint: "[commit goal, action, or file list]"
-user-invocable: true
 disable-model-invocation: true
 ---
 
@@ -12,7 +11,6 @@ Handle day-to-day Git work on `develop`.
 
 Treat an invocation that names no file, path, or action as approval to group, commit, and push every change in the working tree to `origin/develop`.
 When the invocation names a file, a path, or an action, act on that set plus the repository documentation paths required by the synchronization step, and leave every other path untouched.
-The requested change set is complete only when every named path or action and every required documentation path is identified.
 
 ## Refuse another branch or an unfinished operation
 
@@ -22,8 +20,6 @@ Stop and report the branch when `HEAD` is detached or any other branch is checke
 Stop and report the unfinished Git operation when a merge, rebase, cherry-pick, bisect, or unresolved conflict is in progress, and leave its resolution to the owner.
 Stop and report the upstream when local `develop` has no upstream or its upstream is not `origin/develop`.
 When `git status --porcelain` returns no output, continue as a push-only run only for an invocation with no file or path, or one that explicitly names the `push` action; stop when no unpushed commit exists.
-
-The branch gate is complete only when the branch is `develop`, it tracks `origin/develop`, no unfinished Git operation is in progress, and either the working tree has a path or an unpushed commit exists.
 
 ## Screen the working tree
 
@@ -40,13 +36,12 @@ Screen every candidate path, tracked or untracked, against these patterns:
 
 Apply the secret rule first when a path matches more than one pattern.
 
-Route all flagged paths to one `#tool:vscode/askQuestions` call.
-Offer a path that matches a secret-bearing name only two resolutions: add it to the repository-root `.gitignore`, or leave it out of every commit group. Never offer to commit it, and point the owner at environment-based configuration instead.
+Ask about all flagged paths in one question, through #tool:vscode/askQuestions when you hold it.
+Offer a path that matches a secret-bearing name only two resolutions: add it to the repository-root `.gitignore`, or leave it out of every commit group.
+Never offer to commit it, and point the owner at environment-based configuration instead.
 Offer every other flagged path three resolutions: add it to the repository-root `.gitignore`, commit it deliberately, or leave it out of every commit group.
 When the owner chooses `.gitignore` for a path that Git already tracks, state that ignoring alone leaves the file tracked, and stop for the owner to decide whether to untrack it.
 Stop until the owner resolves every flagged path.
-
-The screen is complete only when every in-scope candidate path is either in a proposed commit group or recorded with the owner's resolution, and every out-of-scope candidate path is recorded as untouched.
 
 ## Synchronize repository documentation
 
@@ -65,8 +60,6 @@ Update `README.md` only when the owner selected it or the requested change expli
 Keep each required documentation update in the same commit group as the change it describes.
 When one documentation update describes multiple groups, consolidate those related changes into one group or use a separate `docs:` group and state the dependency in the plan.
 Leave one of the three required documentation files unchanged only after comparing it with the selected changes and confirming that no fact is stale or missing; record that comparison and result in the final report.
-
-Documentation synchronization is complete only when each of the three files is updated and assigned to exactly one group, or has a recorded comparison showing why its current content remains accurate.
 
 ## Show the commit plan
 
@@ -103,11 +96,7 @@ git push origin develop
 When the push is rejected because `origin/develop` moved ahead, report the divergence and stop for the owner to choose between `git pull --rebase` and another resolution; never force-push or rewrite history in this skill.
 When `origin` is unreachable, report the error and stop with the commits retained locally.
 
-The execution step is complete only when every planned commit exists, `git push` exits zero, and every path the owner excluded is unchanged and named in the report.
-
 ## Verify the result
 
 After the push, read `git status --short --branch` and `git log --oneline -n <number of new commits>`.
 Report each commit with its message, the push target, the resolution of every flagged path, and every path left uncommitted.
-
-The skill is complete only when the report matches the output of those two commands and names every path that remains in the working tree.

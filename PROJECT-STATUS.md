@@ -4,13 +4,14 @@
 - **Updated:** `2026-10-08`
 - **Owner:** Adam Wieczorkiewicz
 - **Objective:** Prepare the first `v0.1.0` release of a private, reusable GitHub Copilot plugin.
-- **Focus:** Batch 7, the last of the pre-release audit, is next: the `.github/instructions/` files and the `.github/skills/` skills, reviewed by the `Customization authoring` section of the project instructions with their inspirations and the pillars; nothing blocks it.
+- **Focus:** The per-batch audit is done; phase 1 closes it with one review of the plugin as a whole, because batch reviews cannot show how agents, skills, rules, and contracts work together; nothing blocks it.
 
 ## Roadmap
 
-1. `active` Audit and polish the plugin and `.github/` customizations slowly, taking each batch as a fresh, comprehensive look at its artifacts as a whole: their purpose, fit with the pillars, structure, coherence with each other and the repository instructions, accuracy against primary sources, and fitness for a capable model. Give an overall verdict per batch, then present findings one file at a time, fix only the findings the owner approves, and validate the whole batch before the next one starts.
-   1. [ ] Batch 7: the `.github/instructions/` files and the `.github/skills/` skills.
-2. `planned` Clean up stale record statements, `.gitignore`, and the local setup, including `CLAUDE.md`.
+1. `active` Close the pre-release audit with one comprehensive review of the plugin as a whole, measured against the three pillars, `copilot-customization`, and the team contracts: coherence across agents, skills, rules, contracts, and MCP configuration, end-to-end user journeys, discovery and routing, terminology, context load, and package conformance, with fixes only where the owner approves them.
+   1. [ ] Review the plugin as a whole and give the owner one verdict.
+   2. [ ] Apply the approved fixes and validate the package.
+2. `planned` Clean up stale record statements in README, ARCHITECTURE, CHANGELOG, and the project instructions, trim `.gitignore`, check the local setup including `CLAUDE.md`, archive the audit task folder, and push `develop`.
 3. `planned` Revalidate the package, then run the unchanged publication skill for the package-only `main` snapshot, the `v0.1.0` tag, and the GitHub Release with owner-approved notes; the previous history and tags stay in the verified bundle `~/backups/copilot-workbench-pre-v0.1.0-2026-10-05.bundle`.
 
 ## Blockers

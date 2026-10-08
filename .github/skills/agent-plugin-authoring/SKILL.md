@@ -1,9 +1,9 @@
 ---
 name: agent-plugin-authoring
-description: Apply Agent Plugins 1.0 packaging and static-conformance knowledge in a VS Code plugin repository. Use when work changes plugin.json, mcp.json, package structure, component placement, packaged paths, or the static integration of com.github.copilot components. Does not govern component wording, installation, runtime operation, or publication.
+description: "Use when work changes plugin.json, mcp.json, package structure, component placement, packaged paths, or the static integration of com.github.copilot components. Supplies Agent Plugins 1.0 packaging and static-conformance rules. Not for component wording, installation, runtime operation, or publication."
 ---
 
-# Agent Plugin Authoring
+# Agent plugin authoring
 
 Apply these rules within the user's current task rather than running a separate packaging workflow or producing a separate report.
 
@@ -15,8 +15,6 @@ Apply these rules within the user's current task rather than running a separate 
 - Accept the content of a skill, agent, command, instruction, or hook as task input.
 - Validate load-critical metadata and placement without rewriting the component's instructional content.
 - Keep installation, editor settings, interactive surfaces, runtime behavior, credential handling, updates, release timing, tagging, and publication outside this skill.
-
-The boundary is satisfied when every applied rule concerns a package file or a statically verifiable relationship between package files.
 
 ## Recognize the package
 
@@ -63,34 +61,34 @@ Read [Manifest and MCP reference](references/manifest.md) when work creates, cha
 | Other packaged support file | A path inside the plugin root | Referenced by a component and included with the package |
 | Package metadata | `README.md`, `LICENSE`, `CHANGELOG.md` | Plugin root; not loaded as a component |
 
-Keep every packaged path resolvable inside the plugin root. Replace any symlink, junction, or relative path that resolves outside the root with a copy inside it, because VS Code rejects a path that leaves the package. In a stdio MCP server, `${PLUGIN_DATA}` may name writable server state outside the packaged files in `args`, `env`, and `cwd`. The `Check static conformance` section verifies this rule.
+Keep every packaged path resolvable inside the plugin root.
+Replace any symlink, junction, or relative path that resolves outside the root with a copy inside it, because VS Code rejects a path that leaves the package.
+In a stdio MCP server, `${PLUGIN_DATA}` may name writable server state outside the packaged files in `args`, `env`, and `cwd`.
 
 Include component support files that are referenced by packaged configuration or content.
 Exclude generated runtime state, temporary results, and unrelated repository inputs from the package.
 
-Placement is valid when every packaged component and referenced support file has one canonical in-root path and no packaged path resolves outside the plugin root.
-
 ## Name a skill inside the plugin
 
-VS Code invokes a plugin skill as the skill command `/<plugin-name>:<skill-name>`, adding the prefix itself. Keep the prefix out of the skill `name`, because a prefixed name makes the skill fail to load.
+VS Code invokes a plugin skill as the skill command `/<plugin-name>:<skill-name>`, adding the prefix itself.
+Keep the prefix out of the skill `name`, because a prefixed name makes the skill fail to load.
 
-A plugin `name` may contain a period; a skill `name` may not. Rewrite the plugin name in plain kebab-case before reusing it as a skill name, because a period there makes the skill fail to load.
+A plugin `name` may contain a period; a skill `name` may not.
+Rewrite the plugin name in plain kebab-case before reusing it as a skill name, because a period there makes the skill fail to load.
 
-Skill naming is valid when each immediate child of `skills/` that contains `SKILL.md` has a `name` equal to its directory name, contains 1-64 lowercase letters, digits, or hyphens, starts and ends with a letter or digit, and contains no consecutive hyphens.
+Give each immediate child of `skills/` that contains `SKILL.md` a `name` equal to its directory name, with 1-64 lowercase letters, digits, or hyphens, starting and ending with a letter or digit, and no consecutive hyphens.
 
 ## Check static conformance
 
 Apply every relevant check to changed package files and relationships:
 
 - Parse every changed JSON document and YAML frontmatter block.
-- Validate `plugin.json` and `mcp.json` against their declared schemas when the schemas are reachable.
+- Validate `plugin.json` and `mcp.json` against their declared schemas when the schemas are reachable, because VS Code loads a manifest or MCP entry that the specification rejects.
 - Apply the normative Agent Plugins specification when its text adds a semantic constraint or conflicts with a machine-readable schema.
 - Verify every immediate child of `skills/` that contains `SKILL.md` against the Agent Skills frontmatter, directory-name, resource-link, and path-containment requirements.
 - Verify each `com.github.copilot` file has the documented suffix, canonical path, and parseable format for its type.
 - Resolve every packaged path, symlink, junction, component reference, and relative resource link inside the plugin root.
 - Read `plugin.json`, `mcp.json`, and hook commands in full for machine-specific absolute paths and unsupported fields.
-
-Static conformance passes when every applicable check that the current task can execute succeeds.
 
 ## Use current authorities
 
