@@ -14,7 +14,7 @@ Create a worker under the project's `.github/agents/`: a hidden subagent that pe
 1. Load the `copilot-customization` skill and follow its procedure for a custom agent, and read the [worker contract](references/worker-contract.md) before writing, because it defines how a worker fits the plugin's team.
 2. Draft a specification from the request and the workspace, and present it with only the questions whose answers change it:
    - `name`, `description`, and kind;
-   - `tools`, `agents`, and the `model` ladder, naming the existing worker whose row it copies;
+   - `tools`, `agents`, and the `model` ladder from [model tiers](references/model-tiers.md), naming the existing worker whose row it copies;
    - what proceeds without asking and what needs approval;
    - the workflow phases and the output slots;
    - the project workers and plugin workers it overlaps, with a recommendation to reuse or extend one that covers the role, because a project entry agent can list a plugin worker directly;
@@ -25,14 +25,12 @@ Create a worker under the project's `.github/agents/`: a hidden subagent that pe
 6. Validate the files on disk against the custom agents validation list, the writing checklist, and the worker contract checklist, and repair each failure.
 7. Report the result in the [output format](#output-format).
 
-The worker is done when the user confirmed the specification, every changed file passes all three checklists, and the report names the entry agent that lists the worker or the one still needed.
-
 ## Connect the worker
 
 Plugin agents cannot be edited inside a project, so plugin leads never delegate to a project worker.
 
 - When a project entry agent should delegate to the worker, add it to that agent's `agents` list and routing table.
-- When the project has no entry agent, report that one must list the worker, and that `/build-entry-agent` builds it.
+- When the project has no entry agent, report that one must list the worker, and that the `build-entry-agent` skill builds it.
 
 ## Output format
 

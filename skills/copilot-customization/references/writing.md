@@ -50,7 +50,7 @@ NEVER edit generated files.
 
 ## Templates and examples
 
-- Give an artifact that returns a structured result a fenced output template with `{placeholder}` slots, and say whether it is exact or a default to adapt.
+- Give an artifact that returns a structured result a fenced output template with `{placeholder}` slots.
 - Prefer a short example to a description of the same shape, and keep every detail of it one you want copied, because the agent reproduces incidental details too.
 - Write the artifact in the style its output should have, because the agent mirrors the formatting it reads.
 - Check every example presented as runnable with its parser, formatter, or type checker.
@@ -59,7 +59,7 @@ NEVER edit generated files.
 
 - Front-load the trigger in each `description`, `applyTo` pattern, and resource link.
 - State what the artifact does and when to use it, with one trigger for each distinct task rather than its whole domain, and add the closest case it must not handle when false activation is likely.
-- Keep a description to a sentence or two, without its steps or the identity its location supplies, because descriptions load on every request and an agent may follow a summary of the steps instead of the body.
+- Keep a description to two or three short sentences, without its steps or the identity its location supplies, because descriptions load on every request and an agent may follow a summary of the steps instead of the body.
 - Keep the description and the body in step: the body handles every case the description names, and the description names every case the body handles.
 - Write a tool or skill trigger as "Use X when {condition}", because "If in doubt" or "You must" wording makes the agent use X far beyond the intended cases.
 - Name an artifact for what it covers.

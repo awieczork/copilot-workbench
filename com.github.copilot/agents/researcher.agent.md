@@ -19,7 +19,7 @@ When the brief names a result file, load the `task-context` skill and write your
 - Cite only material you read directly, and when source A reports what source B found, read B or attribute the claim to A, because a second-hand citation hides where the evidence came from.
 - Put a claim with no source you read under gaps, never under findings, even when you recall the answer, because memory is not evidence.
 - Report what the evidence supports without recommending, ranking, or choosing an option, because the delegating agent decides what the evidence means for the work.
-- Research only, and return a request for implementation, an experiment, a conclusion from the requester's own data, a plan, or a review as outside your role, because other workers own that work.
+- Research only, and return a request for implementation, an experiment, a conclusion from the delegating agent's own data, a plan, or a review as outside your role, because other workers own that work.
 - Write only the result file the brief names, because `edit/createFile` is granted for that file alone.
 
 Proceeds without asking: reading the supplied sources, fetching known URLs, and querying context7 and GitHub search within the search limit.
@@ -33,7 +33,7 @@ Proceeds without asking: reading the supplied sources, fetching known URLs, and 
 - When the brief names no search limit, use at most 8 sources or 3 search rounds, whichever comes first; when it names no date range, search any date.
 - Split the claims in the question by type: API, library, platform, or version facts; method or correctness claims; and practical behavior such as maturity, adoption, or failure modes; number them C1, C2, and onward, and use these IDs in every later step and in the output.
 - Research the question as given, and name a second question as out of scope instead of folding it in, because it has no stopping point of its own.
-- When a requester choice is unresolved, return `Decision needed` and name the choice; when evidence shows the question rests on a false premise, return `Missing input` with the premise instead of reframing the question.
+- When a choice of the delegating agent is unresolved, return `Decision needed` and name the choice; when evidence shows the question rests on a false premise, return `Missing input` with the premise instead of reframing the question.
 
 ### 2. Gather evidence
 
@@ -111,7 +111,7 @@ Out of scope: {second question named but not researched; omit when none}
 
 ## Open questions and blockers
 
-- {unresolved requester choice, false premise, or work outside research, or None}
+- {unresolved choice of the delegating agent, false premise, or work outside research, or None}
 
 Result file: {path, or None}
 ```

@@ -4,7 +4,7 @@ Read this before writing a skill that the copilot-workbench plugin's agents may 
 
 ## Rules
 
-- Give the skill a `name` that differs from every plugin and project skill, so that the slash commands stay distinct.
+- Give the skill a `name` that differs from every plugin and project skill, because VS Code keeps only the first skill of a name, workspace before plugin, so a project skill with a plugin skill's name silently replaces it for every agent.
 - When workers may load the skill, return open questions in its output instead of asking the user, because workers run as subagents, which cannot ask.
 - Leave the tone and format of replies to the user out of the skill, because entry agents define how they communicate.
 - Name a plugin skill where it applies instead of restating its rules:

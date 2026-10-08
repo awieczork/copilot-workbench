@@ -28,7 +28,7 @@ A subagent follows only [Delegate with a result file](#delegate-with-a-result-fi
 ```
 
 - Create one task folder per objective, dated on creation.
-- Form the slug from lowercase ASCII letters, digits, and single hyphens, because the folder must stay a direct child of `active/`.
+- Form the slug from lowercase ASCII letters, digits, and single hyphens, because the path must be typed and matched the same on every file system and shell.
 - Before the first write, check that the repository ignores `.github/context/`; when it does not, tell the user and ask before writing, because the folder holds unreviewed working notes.
 - When the folder already exists, keep it and ask the user whether to reuse it or choose another slug.
 
@@ -62,8 +62,8 @@ When the context fills, continue the task instead of stopping or shortening the 
 
 ## Hand off a task
 
-1. Before the handoff, the chat agent writes the current state into `summary.md` and names the task folder path in the handoff prompt.
-2. The lead agent reads `summary.md` and `notes.md`, becomes the owner, and records the change in the summary.
+1. Before the handoff, the chat agent writes the current state into `summary.md`, with the shaped request below the summary fields, because the summary must carry the request once the conversation is compacted or the task resumes in a new session.
+2. The lead agent reads `summary.md` and `notes.md`, becomes the owner, and records itself as the owner of `summary.md` in the `Files` table.
 
 ## Delegate with a result file
 

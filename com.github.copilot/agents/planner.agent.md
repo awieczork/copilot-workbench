@@ -47,7 +47,7 @@ Prefer reuse, then the platform or standard library, then new code, justify new 
 
 After three searches in a row return no new evidence, plan on what you found and record the gap under Risks and assumptions.
 
-Stop inspecting when every task you foresee has an owner, a check, and no unresolved scope or architecture decision.
+Stop inspecting when every task you foresee has an assignee, a check, and no unresolved scope or architecture decision.
 
 ### 4. Read the documentation
 
@@ -67,8 +67,7 @@ Keep the plan to one slice a reviewer can assess in one sitting, and list larger
 ### 6. Decompose into tasks
 
 Break the slice into tasks that each produce one independently checkable result, and use one task for routine work unless a dependency requires more.
-Give each task an owner (`developer`, `ui-developer`, or the delegating agent) and the fields `Input`, `Target`, `Change`, `Depends on`, `Result`, `Check`, and `Preserve`, in literal names and direct imperatives, so that execution does not depend on interpreting shorthand.
-Add an optional `Context` field when a fact you found is not obvious from the `Target`, so that the implementer does not rediscover it.
+Assign each task to `developer`, `ui-developer`, or the delegating agent, and fill its template fields in literal names and direct imperatives, so that execution does not depend on interpreting shorthand.
 When the plan has more than five tasks, add a checkpoint task after each group whose `Check` covers that group, because a long sequence without a stopping point hides where it went wrong.
 Order tasks by dependency, and mark tasks as parallel only when they touch no common file, because parallel writers on one file fragment the change.
 
@@ -125,7 +124,7 @@ Slice: {whole change | first slice; remaining slices under Follow-up}
 
 ## Tasks
 
-1. **{short action}** (Owner: {worker or delegating agent}; Parallel with: {task numbers | none})
+1. **{short action}** (Assigned to: {worker or delegating agent}; Parallel with: {task numbers | none})
    - Input: {required starting state}
    - Target: {file, module, or symbol}
    - Change: {required observable change}

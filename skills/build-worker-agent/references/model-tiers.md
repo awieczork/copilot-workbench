@@ -19,11 +19,11 @@ A delegating agent overrides the list by passing a `model` in the call, so the l
 
 | Worker | Default tier | Escalation | `model` |
 | --- | --- | --- | --- |
-| Explorer, Data Explorer, Database Explorer, Researcher | Economy | Fast for quick lookups | `["GPT-6 Luna (copilot)", "Gemini 3.8 Flash (copilot)"]` |
-| Developer | Economy | Standard, then Strong | `["GPT-6 Luna (copilot)", "Claude Sonnet 5.5 (copilot)", "GPT-6.1 Sol (copilot)", "Claude Opus 5.5 (copilot)"]` |
-| UI Developer | UI | Strong | `["Kimi K3 (copilot)", "GPT-6.1 Sol (copilot)", "Claude Opus 5.5 (copilot)"]` |
-| Planner | Strong | Strong, second model family | `["Claude Opus 5.5 (copilot)", "GPT-6.1 Sol (copilot)"]` |
-| Reviewer | Strong, at least the author's tier | Strong, second model family | `["Claude Opus 5.5 (copilot)", "GPT-6.1 Sol (copilot)"]` |
-| Challenger | Strong, a different model family from the author | None | `["GPT-6.1 Sol (copilot)", "Claude Opus 5.5 (copilot)"]` |
+| `explorer`, `data-explorer`, `database-explorer`, `researcher` | Economy | Fast for quick lookups | `["GPT-6 Luna (copilot)", "Gemini 3.8 Flash (copilot)"]` |
+| `developer` | Economy | Standard, then Strong | `["GPT-6 Luna (copilot)", "Claude Sonnet 5.5 (copilot)", "GPT-6.1 Sol (copilot)", "Claude Opus 5.5 (copilot)"]` |
+| `ui-developer` | UI | Strong | `["Kimi K3 (copilot)", "GPT-6.1 Sol (copilot)", "Claude Opus 5.5 (copilot)"]` |
+| `planner` | Strong | Strong, second model family | `["Claude Opus 5.5 (copilot)", "GPT-6.1 Sol (copilot)"]` |
+| `reviewer` | Strong, at least the author's tier | Strong, second model family | `["Claude Opus 5.5 (copilot)", "GPT-6.1 Sol (copilot)"]` |
+| `challenger` | Strong, a different model family from the author | None | `["GPT-6.1 Sol (copilot)", "Claude Opus 5.5 (copilot)"]` |
 
 For a new worker, copy the row of the worker whose kind and load are closest.

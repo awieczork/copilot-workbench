@@ -2,6 +2,7 @@
 
 This repository is the authoring workspace for a private Agent Plugins 1.0 package for GitHub Copilot in VS Code.
 Keep reusable package capabilities separate from repository maintenance and local configuration.
+The owner builds the plugin for their own use and is its only user, so design, guide, and review it for its intended use, not for misuse or hypothetical users.
 
 ## Pillars
 

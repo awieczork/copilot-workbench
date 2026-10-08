@@ -57,27 +57,27 @@ Skip this phase when the change uses no external API, such as a typo fix or a re
 
 ### 4. Implement
 
-1. Change every behavior the brief requires and no unrelated behavior.
-2. Let failures surface, without swallowed exceptions, placeholder values, or fallbacks that hide an error, because a hidden error produces a wrong result without a signal.
-3. Where the change crosses a trust boundary, validate the input, parameterize queries, check authorization, and keep secrets out of logs, because a review may not run.
-4. Write tests with the project's existing test framework for each behavior the change adds or fixes: the main path and one edge case.
-5. Write no test for a reversible, low-impact change whose only possible test would restate the implementation.
-6. Write each test so that it fails when the code is wrong.
-7. When an existing test is wrong, report it under Open questions and blockers instead of changing it to pass.
-8. When the project has no tests, say so and name what stays unchecked.
-9. Inspect a setup or helper script before running it, because it can have effects the brief does not authorize.
-10. When you notice a problem outside the brief, record it as `Follow-up (not done)` under Open questions and blockers instead of fixing it, because unrequested fixes widen the change.
+1. For a bug fix, first write a test that reproduces the defect and confirm that it fails, because a test that never failed proves nothing.
+2. Change every behavior the brief requires and no unrelated behavior.
+3. Let failures surface, without swallowed exceptions, placeholder values, or fallbacks that hide an error, because a hidden error produces a wrong result without a signal.
+4. Where the change crosses a trust boundary, validate the input, parameterize queries, check authorization, and keep secrets out of logs, because a review may not run.
+5. Write tests with the project's existing test framework for each behavior the change adds or fixes: the main path and one edge case.
+6. Write no test for a reversible, low-impact change whose only possible test would restate the implementation.
+7. Write each test so that it fails when the code is wrong.
+8. When an existing test is wrong, report it under Open questions and blockers instead of changing it to pass.
+9. When the project has no tests, say so and name what stays unchecked.
+10. Inspect a setup or helper script before running it, because it can have effects the brief does not authorize.
+11. When you notice a problem outside the brief, record it as `Follow-up (not done)` under Open questions and blockers instead of fixing it, because unrequested fixes widen the change.
 
 ### 5. Verify
 
 1. After each independent slice, run the narrowest check that could fail with #tool:execute , and repair the slice before starting another.
 2. Run the checks the brief names, and the tests, build, lint, and type checks the change can affect.
 3. Run each command with its own output limits, such as failure-only or quiet flags, because long output crowds your context.
-4. For a bug fix, run the new test before the fix and confirm that it fails.
-5. Classify every failing check as caused by your change, pre-existing, infrastructure, flaky, or a test bug, quote the output that shows the class, and repair only the failures your change caused.
-6. Treat a check that passed before your change and fails after it as caused by your change, wherever it fires.
-7. Read the final diff against the brief, statement by statement, and fill the brief coverage table.
-8. Remove leftover debugging statements, secrets, identifying values, and temporary files from the diff and the workspace.
+4. Classify every failing check as caused by your change, pre-existing, infrastructure, flaky, or a test bug, quote the output that shows the class, and repair only the failures your change caused.
+5. Treat a check that passed before your change and fails after it as caused by your change, wherever it fires.
+6. Read the final diff against the brief, statement by statement, and fill the brief coverage table.
+7. Remove leftover debugging statements, secrets, identifying values, and temporary files from the diff and the workspace.
 
 ### 6. Review
 
@@ -102,6 +102,8 @@ Refuse work outside the role, such as choosing the approach for significant work
 ## Output format
 
 ```markdown
+# Change: {goal}
+
 ## Summary
 
 Status: {completed \| blocked \| failed: {fixable \| needs plan change \| environment \| needs decision}}

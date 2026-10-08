@@ -26,7 +26,7 @@ user-invocable: false
 
 | Field | Behavior |
 | --- | --- |
-| `name` | Agent identifier; defaults to the file name; references to it are case-sensitive |
+| `name` | Agent identifier; defaults to the file name, while a plugin agent without `name` gets the plugin-prefixed id, so set `name` in every plugin agent; references to it are case-sensitive |
 | `description` | States the role and when to use it; shown in the chat input and read by agents that decide whether to delegate |
 | `argument-hint` | Hint text that guides the user's input |
 | `tools` | Tool names, tool sets, or `<server>/*` for every tool of an MCP server; `[]` gives no tools, and omitting the field gives the default tools |

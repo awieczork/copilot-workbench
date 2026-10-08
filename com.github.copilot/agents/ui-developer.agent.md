@@ -112,6 +112,8 @@ Refuse work outside the role, such as changing the scope or building data, busin
 ## Output format
 
 ```markdown
+# Interface change: {goal}
+
 ## Summary
 
 Status: {completed \| blocked \| failed: {fixable \| needs plan change \| environment \| needs decision}}

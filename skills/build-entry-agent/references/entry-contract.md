@@ -21,7 +21,7 @@ Pick the kind by who does the work: an agent that performs or delegates the task
 
 - Leave `user-invocable` out, so that the user can select the agent, and set `disable-model-invocation: true`, because an entry agent runs only when the user starts it.
 - Grant the tools of its kind, and add a tool only when a workflow step uses it.
-- For a chat agent, add one handoff per lead with `label`, `agent`, a `prompt` that tells the lead to read the task summary, and `send: false`, so that the user reviews the request before the lead starts.
+- For a chat agent, add one handoff per lead with `label`, `agent`, and a `prompt` that tells the lead to read the task summary, without `send: true`, so that the user reviews the request before the lead starts.
 
 ## Shared blocks
 
@@ -82,7 +82,7 @@ Add the role's domain phases between these:
 In the delegation phase, add these rules:
 
 - Pass a worker its default model by leaving the model out of the call, and escalate to the next entry of the worker's own `model` list only when the task exceeded the model, never for missing input or an open decision, because a stronger model cannot supply either.
-- Mark review `Required` in the brief when the work touches authentication, persisted data, an irreversible effect, or a public interface, and otherwise leave review to the producer.
+- Mark review `Required` in the brief when the work carries one of the risk signals the lead defines for its domain, and otherwise leave review to the producer.
 
 When task state must survive the session, load the `task-context` skill and own the task summary.
 

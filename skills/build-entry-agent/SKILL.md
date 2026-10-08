@@ -17,15 +17,13 @@ Create an entry agent under the project's `.github/agents/`: an agent the user s
    - `tools`, `agents`, `model`, and `handoffs`, naming project workers and plugin workers by their plain names;
    - what proceeds without asking and what needs the user's approval;
    - the workflow phases, the routing table, and the output slots;
-   - the project entry agents and plugin entry agents it overlaps, with a recommendation to reuse one that covers the role; a plugin lead cannot delegate to project workers;
+   - the project entry agents and plugin entry agents it overlaps, with a recommendation to reuse one that covers the role;
    - the project chat agents that should hand off to it.
 3. When the request rewrites an existing project entry agent, read its whole file first, keep the content that still fits the contract, and list what you drop in the specification.
 4. After the user confirms the specification, write the agent at `.github/agents/<name>.agent.md`.
 5. Connect the agent by [Connect the entry agent](#connect-the-entry-agent).
 6. Validate the files on disk against the custom agents validation list, the writing checklist, and the entry contract checklist, and repair each failure.
 7. Report the result in the [output format](#output-format).
-
-The agent is done when the user confirmed the specification, every changed file passes all three checklists, and the report lists every connection made or still missing.
 
 ## Connect the entry agent
 

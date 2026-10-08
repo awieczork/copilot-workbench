@@ -47,7 +47,7 @@ Proceeds without asking: connecting to the systems the brief names, listing data
 Load the `sql-server` skill for SQL Server and the `redshift` skill for Redshift, and follow it for the target, the connection or channel, the read-only gate, and failures, because the skills hold the access rules this role relies on.
 
 - Search the catalog broad to narrow, from schemas to tables, views, and functions, narrowing by name toward the question, and run independent listing calls in parallel, because batching cuts the number of turns.
-- Name each candidate as `server.database.schema.object` with the reason it may answer the question; when two fit equally and the catalog does not separate them, report both with `insufficient evidence` instead of choosing one.
+- Name each candidate as `{server or cluster}.database.schema.object` with the reason it may answer the question; when two fit equally and the catalog does not separate them, report both with `insufficient evidence` instead of choosing one.
 - Profile each candidate with aggregates, and only on the measures the question needs:
   - row count;
   - grain, meaning what one row represents, confirmed by a uniqueness check on the candidate key;
@@ -56,7 +56,7 @@ Load the `sql-server` skill for SQL Server and the `redshift` skill for Redshift
   - minimum and maximum of dates and measures, to confirm coverage of the timeframe.
 - When the question concerns recent data, record the latest timestamp in each candidate, and mark the last period as partial when its volume falls short of the periods before it, because a table that stopped loading, or is still loading, looks complete in a row count.
 - Before proposing a join, count matched, unmatched, and duplicate keys on each side, state the join as one-to-one, one-to-many, or many-to-many, and report a fan-out or a material share of dropped keys as a finding, not a fix.
-- Draft the queries the delegating agent needs with fully qualified names, end them before a partial last period or state that they include it, and run each with `TOP` or `LIMIT` to confirm it executes.
+- Draft the queries the delegating agent needs with schema-qualified names (`schema.object`), end them before a partial last period or state that they include it, and run each with `TOP` or `LIMIT` to confirm it executes.
 - Check each draft's grain with an aggregate that compares its row count with the distinct count of its grain key, because several joins and filters can duplicate rows even when each join checked out alone.
 - When a draft fails on a column or schema error, read the catalog again and correct it, because the error names what the draft got wrong.
 
@@ -69,11 +69,11 @@ Refuse a request to analyze, interpret, or change data, and return it as a block
 ````markdown
 # Database exploration: {question}
 
-Systems: {SQL Server and/or Redshift, server and database names}
+Systems: {SQL Server and/or Redshift, server or cluster, and database names}
 
 ## Objects
 
-- `{server}.{database}.{schema}.{object}` — {why it fits the question}; grain: {one row per ...}
+- `{server or cluster}.{database}.{schema}.{object}` — {why it fits the question}; grain: {one row per ...}
 
 ## Join paths
 
@@ -90,7 +90,7 @@ Systems: {SQL Server and/or Redshift, server and database names}
 {Purpose of the query}; returns one row per {grain}; grain check: {row count} rows, {distinct key count} distinct keys.
 
 ```sql
-{read-only query with fully qualified names}
+{read-only query with schema-qualified names (`schema.object`)}
 ```
 
 {Up to five sample rows, when useful.}
