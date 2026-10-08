@@ -1,12 +1,9 @@
 /CLAUDE.md
-/.copilot-sessions/
 /.vscode/
 /.tmp/
 /.env
 .env.*
-/.archive/
 /.github/context/
-/context/
 
 .venv/
 .Python
@@ -32,11 +29,3 @@ build/
 dist/
 .eggs/
 *.egg-info/
-
-.quarto/
-_freeze/
-*_cache/
-.Rproj.user/
-.Rhistory
-.RData
-.Ruserdata
