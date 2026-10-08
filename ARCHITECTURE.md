@@ -28,23 +28,24 @@ The user selects an entry agent, which works directly or delegates bounded assig
 
 | Agent | Kind | Role |
 | --- | --- | --- |
-| [`discuss`](com.github.copilot/agents/discuss.agent.md) | Entry | Clarifies an unfinished request, then hands it to a lead or produces a self-contained prompt. |
-| [`software-lead`](com.github.copilot/agents/software-lead.agent.md) | Entry | Owns the approach and integration of software changes. |
-| [`data-lead`](com.github.copilot/agents/data-lead.agent.md) | Entry | Owns the analytical question, evidence, and conclusion. |
-| [`explorer`](com.github.copilot/agents/explorer.agent.md) | Worker | Locates workspace evidence for one question, read-only. |
-| [`database-explorer`](com.github.copilot/agents/database-explorer.agent.md) | Worker | Discovers and profiles database objects, read-only. |
-| [`data-explorer`](com.github.copilot/agents/data-explorer.agent.md) | Worker | Discovers and profiles local dataset files without changing them. |
-| [`researcher`](com.github.copilot/agents/researcher.agent.md) | Worker | Gathers sourced external evidence. |
-| [`planner`](com.github.copilot/agents/planner.agent.md) | Worker | Produces an executable plan with settled implementation decisions. |
-| [`developer`](com.github.copilot/agents/developer.agent.md) | Worker | Implements and checks a bounded software change. |
-| [`ui-developer`](com.github.copilot/agents/ui-developer.agent.md) | Worker | Implements and visually checks interface changes. |
+| [`discuss`](com.github.copilot/agents/discuss.agent.md) | Chat | Clarifies an unfinished request, then hands it to a lead or produces a self-contained prompt. |
+| [`software-lead`](com.github.copilot/agents/software-lead.agent.md) | Lead | Owns the approach and integration of software changes. |
+| [`data-lead`](com.github.copilot/agents/data-lead.agent.md) | Lead | Owns the analytical question, evidence, and conclusion. |
+| [`explorer`](com.github.copilot/agents/explorer.agent.md) | Helper | Locates workspace evidence for one question, read-only. |
+| [`database-explorer`](com.github.copilot/agents/database-explorer.agent.md) | Helper | Discovers and profiles database objects, read-only. |
+| [`data-explorer`](com.github.copilot/agents/data-explorer.agent.md) | Helper | Discovers and profiles local dataset files without changing them. |
+| [`researcher`](com.github.copilot/agents/researcher.agent.md) | Helper | Gathers sourced external evidence. |
+| [`planner`](com.github.copilot/agents/planner.agent.md) | Producer | Produces an executable plan with settled implementation decisions. |
+| [`developer`](com.github.copilot/agents/developer.agent.md) | Producer | Implements and checks a bounded software change. |
+| [`ui-developer`](com.github.copilot/agents/ui-developer.agent.md) | Producer | Implements and visually checks interface changes. |
 | [`reviewer`](com.github.copilot/agents/reviewer.agent.md) | Checker | Assesses a finished result against its goal. |
-| [`challenger`](com.github.copilot/agents/challenger.agent.md) | Checker | Tests one consequential decision or framing. |
+| [`challenger`](com.github.copilot/agents/challenger.agent.md) | Helper | Tests one consequential decision or framing. |
 
 ## Coordination
 
 Every delegation is one-shot and self-contained, following [`brief-subagent`](skills/brief-subagent/SKILL.md), and the lead treats worker output as evidence while keeping conclusions and integration decisions.
 The lead works directly when a brief would cost more than the change, runs independent work in parallel, and never lets two writers edit overlapping files at once.
+A producer reports a failed result by failure class, and the lead retries a fixable failure and routes the others.
 Only entry agents ask the owner; workers return missing decisions, and an open question blocks only the work that depends on it.
 Each role receives only the tools it needs, and read-only roles rest on instructions, because query and execution tools can also write.
 Leads use strong models and workers the tier that fits their role, as defined in the [entry contract](skills/build-entry-agent/references/entry-contract.md) and the [worker model tiers](skills/build-worker-agent/references/model-tiers.md).
@@ -57,7 +58,7 @@ Leads use strong models and workers the tier that fits their role, as defined in
 | Plugin extensions | [`build-entry-agent`](skills/build-entry-agent/SKILL.md), [`build-worker-agent`](skills/build-worker-agent/SKILL.md), [`build-skill`](skills/build-skill/SKILL.md) | Project procedures for extending the plugin, and the team contract for each artifact kind. |
 | Coordination | [`brief-subagent`](skills/brief-subagent/SKILL.md), [`task-context`](skills/task-context/SKILL.md), [`interview-me`](skills/interview-me/SKILL.md) | Self-contained assignments, temporary state, and intent clarification. |
 | Execution | [`run-python`](skills/run-python/SKILL.md), [`redshift`](skills/redshift/SKILL.md), [`sql-server`](skills/sql-server/SKILL.md) | Runtime selection and bounded, read-only database work. |
-| Scoped rules | [Markdown](com.github.copilot/rules/markdown.instructions.md), [Python](com.github.copilot/rules/python.instructions.md), [SQL](com.github.copilot/rules/sql.instructions.md) | Conventions for ordinary documents, owner-run task scripts, and read-only query text. |
+| Scoped rules | [Markdown](com.github.copilot/rules/markdown.instructions.md), [Python](com.github.copilot/rules/python.instructions.md), [SQL](com.github.copilot/rules/sql.instructions.md) | Conventions for ordinary documents, user-run task scripts, and read-only query text. |
 
 General behavior belongs in agents and skills, not in language rules.
 
@@ -81,7 +82,7 @@ The user runs a `build-*` skill as a slash command in any agent that can ask the
 
 | Artifact | Destination | Connection |
 | --- | --- | --- |
-| Skill | `.github/skills/<name>/` | A project instruction names it, because that is the only way to reach plugin agents. |
+| Skill | `.github/skills/<name>/` | It loads by its description, and a project instruction also names it when it only supplies knowledge. |
 | Worker | `.github/agents/<name>.agent.md` | A project entry agent lists it, because plugin leads list only plugin workers. |
 | Entry agent | `.github/agents/<name>.agent.md` | Its `agents` list names project workers and plugin workers by their plain names, such as `explorer`, and its body names the plugin skills it uses. |
 

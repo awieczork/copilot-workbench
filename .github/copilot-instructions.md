@@ -74,7 +74,7 @@ Guidance says what is wanted, once, in plain words a capable newcomer reads one 
 
 ## Execution and validation
 
-- When executing Python, follow [run-python](../skills/run-python/SKILL.md) and run it through `uv`, because project and no-project execution use different prefixes.
+- When executing Python, follow [run-python](../skills/run-python/SKILL.md) and run it through `uv`, because the skill chooses the environment the code needs.
 - Before relying on an additional runtime, confirm that this Linux workspace provides it.
 - After text edits, run `git diff --check` before reporting completion.
 - Match executable checks to the changed behavior, and report checks that were unavailable or not run.
