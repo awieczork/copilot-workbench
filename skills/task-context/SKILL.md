@@ -12,7 +12,7 @@ Keep short work in the conversation, and keep deliverables and approved knowledg
 
 The **owner** is the agent the user talks to that holds the task, such as a chat agent while it shapes a request, then the lead that receives the handoff.
 Only the owner creates, resumes, archives, or removes a task folder, writes `summary.md` and `notes.md`, and asks the user about the folder.
-A subagent follows only [Delegate with a result file](#delegate-with-a-result-file), because it cannot ask the user and the owner integrates its result.
+A subagent follows only [Delegate with a result file](#delegate-with-a-result-file) and [Keep the folder lean](#keep-the-folder-lean), because it cannot ask the user and the owner integrates its result.
 
 ## Layout
 
