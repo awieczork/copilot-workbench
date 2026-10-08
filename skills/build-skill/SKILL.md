@@ -17,18 +17,16 @@ Create an Agent Skill under the project's `.github/skills/` that fits the copilo
    - sections and bundled resources;
    - the project skills, project instructions, and plugin skills it overlaps, with a recommendation to reuse or extend one that covers the need;
    - whether the capability would serve any project, in which case it would also fit the plugin itself;
-   - the project instruction that will name the skill, when agents should load it.
+   - how agents will load it: by description, or through a project instruction.
 3. After the user confirms the specification, write the skill at `.github/skills/<name>/`.
-4. When agents should load the skill, connect it by [Connect the skill to agents](#connect-the-skill-to-agents).
+4. When the skill only supplies knowledge, connect it by [Connect the skill to agents](#connect-the-skill-to-agents).
 5. Validate the files on disk against the Agent Skills validation list, the writing checklist, and the skill contract checklist, and repair each failure.
 6. Report the result in the [output format](#output-format).
-
-The skill is done when the user confirmed the specification, every created file passes all three checklists, and the report lists every changed file.
 
 ## Connect the skill to agents
 
 Plugin agents cannot be edited inside a project, and agents often skip a skill that only supplies knowledge.
-When agents should load the skill, name it in the project instruction that matches its scope:
+When the skill only supplies knowledge, name it in the project instruction that matches its scope, because a skill with a procedure loads by its description:
 
 - For files of one language, framework, or folder, add a pointer to a scoped instruction with a matching `applyTo` and `description`.
 - For guidance most tasks need, add a pointer to the project's `copilot-instructions.md` or `AGENTS.md`.
@@ -45,7 +43,7 @@ Created `.github/skills/{name}/`: {one-sentence purpose}
 - `{path}`: {created | changed}
 
 ## Loading
-{slash command only | loaded by agents through `{instruction path}`}
+{slash command only | by description | through `{instruction path}`}
 
 ## Checks
 - {checklist}: {pass | fail: reason}

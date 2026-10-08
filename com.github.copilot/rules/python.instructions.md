@@ -1,7 +1,6 @@
 ---
 name: "Python"
 description: "Use when writing or changing a Python task script that the user runs directly. Supplies its shape, typing, comments, Polars data work, and validation rules. Not for reusable modules, tests, or application code."
-applyTo: "**/*.py"
 ---
 
 # Python

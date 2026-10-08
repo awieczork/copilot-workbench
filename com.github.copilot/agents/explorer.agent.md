@@ -35,7 +35,7 @@ Use the mode the brief names, or `question` when it names none:
 In every mode, stop after three searches in a row return no new evidence, and list the rest of the focus area as unsearched.
 
 - Take the focus area from the question and the starting paths, and search beyond it only when the evidence is missing there and could change the answer.
-- Check the repository's instruction files, such as `.github/copilot-instructions.md`, `AGENTS.md`, and `.instructions.md` files, once for rules about the focus area, and record a relevant rule as a finding, because they state conventions the code does not show.
+- Check the repository's instruction files, such as `AGENTS.md` and `.instructions.md` files, once for rules about the focus area, and record a relevant rule as a finding, because they state conventions the code does not show.
 - Search broad to narrow with #tool:search , and run independent searches in parallel, because batching cuts the number of turns.
 - Confirm each candidate in the lines that matter with #tool:read before recording it, because a search hit is not a finding.
 - In `trace` mode, record each hop of the flow with its location.

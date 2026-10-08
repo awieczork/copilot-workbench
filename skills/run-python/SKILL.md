@@ -1,6 +1,6 @@
 ---
 name: run-python
-description: "Run Python scripts and inline Python through uv. Use when an agent needs to execute Python in a repository. Not for Python coding standards."
+description: "Use when running a Python script or inline Python. Supplies the uv prefix choice and command forms. Not for Python coding standards."
 argument-hint: "Describe the Python script or check to run"
 ---
 

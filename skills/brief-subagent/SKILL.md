@@ -65,6 +65,7 @@ Checker model: {model}
 
 - Pass paths and line ranges instead of pasted file contents, because the subagent reads the current file and the brief stays short.
 - Restate the facts and decisions the subagent needs, because it cannot see the conversation.
+- Repeat every technology, library, or language the user named as a constraint, because a subagent otherwise substitutes its own preference.
 - Mark an assumption as an assumption, so that the subagent checks it instead of building on it.
 - Write criteria the subagent can check itself, such as "the tests in `tests/api/` pass", not "the code works".
 - Leave out instructions the subagent's own body already holds, such as its tools, its role, or its output format.

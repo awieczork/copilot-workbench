@@ -28,11 +28,9 @@ Check each statement before sending it, because the fallback runner executes wha
 
 ## Python fallback
 
-1. Check that `.env` exists at the workspace root without reading its values, because it holds the user's credentials.
-   When it is missing, report that the fallback needs `REDSHIFT_USER`, `REDSHIFT_PASSWORD`, `REDSHIFT_HOST`, `REDSHIFT_PORT`, and `REDSHIFT_DATABASE` there, and stop.
-2. Ask the user to confirm that the host, port, and database in `.env` identify the resolved target, or return the confirmation to the delegating agent when you run as a subagent, because the file can point to another cluster.
-3. Run [the runner](scripts/query_redshift.py) from this skill's folder as a script by the `run-python` skill, from the workspace root, and pipe the statement on standard input in the active shell's syntax.
-4. Read the one JSON object it prints: `columns`, `row_count`, `truncated`, and either `rows` or the absolute `csv_path` of a result over 100 rows in the system temporary directory.
+1. Ask the user to confirm that the host, port, and database in `.env` identify the resolved target, or return the confirmation to the delegating agent when you run as a subagent, because the file can point to another cluster.
+2. Run [the runner](scripts/query_redshift.py), located in this skill's folder, as a script by the `run-python` skill with the workspace root as the working directory, and pipe the statement on standard input in the active shell's syntax.
+3. Read the one JSON object it prints: `columns`, `row_count`, `truncated`, and either `rows` or the absolute `csv_path` of a result over 100 rows in the system temporary directory.
 
 The runner exits with `2` for invalid input, `3` for missing configuration or a failed connection, and `4` for a failed query, and writes the reason to standard error without credentials.
 
@@ -52,7 +50,7 @@ The runner exits with `2` for invalid input, `3` for missing configuration or a 
 ## Gotchas
 
 - Every MCP call takes `cluster_identifier`, but the database parameter is named per tool: `schema_database_name` for #tool:awslabs.redshift-mcp-server/list_schemas , `table_database_name` for #tool:awslabs.redshift-mcp-server/list_tables , `column_database_name` for #tool:awslabs.redshift-mcp-server/list_columns , and `database_name` for #tool:awslabs.redshift-mcp-server/execute_query .
-- #tool:awslabs.redshift-mcp-server/execute_query itself rejects writes and multiple statements, while the fallback runner does not.
+- #tool:awslabs.redshift-mcp-server/execute_query itself rejects writes and multiple statements.
 - The runner returns at most 1,000 rows, and its `row_count` counts the returned rows, not every matching row; treat `truncated: true` as an incomplete result and revise the query.
 - When this skill's path is a Windows path and the terminal runs in Windows Subsystem for Linux (WSL), convert the runner path with `wslpath -u` before running it.
 - Windows PowerShell 5.1 replaces non-ASCII characters in piped text with `?`, so set `$OutputEncoding = [System.Text.UTF8Encoding]::new()` before piping a statement that contains them.

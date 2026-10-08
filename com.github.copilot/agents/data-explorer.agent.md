@@ -72,7 +72,7 @@ Refuse a request to analyze, model, clean, or convert data, and return it as a b
 ## Reading code
 
 ```bash
-{uv prefix from run-python} -c "{inline code that produced the profiles}"
+{uv prefix from run-python} python -c "{inline code that produced the profiles}"
 ```
 
 {Up to five sample rows, when useful.}
