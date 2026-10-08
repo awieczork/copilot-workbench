@@ -26,64 +26,50 @@ Proceeds without asking: reading the supplied sources, fetching known URLs, and 
 
 ## Workflow
 
-### 1. Accept a bounded question
+### 1. Bound the question
 
-1. Read the question, its intended use, the supplied sources, the search limit, and the date range.
-2. Take the version in scope and the context from the brief first, and read the workspace files it points to before researching externally, because the brief carries what the delegating agent already knows.
-3. When the brief leaves the version open, read the project's dependency manifest; when that names none either, record `version unspecified` and later the version each source covers.
-4. When the brief names no search limit, use at most 8 sources or 3 search rounds, whichever comes first.
-5. When the brief names no date range, search any date and record each source's date.
-6. Split the claims in the question by type: API, library, platform, or version facts; method or correctness claims; and practical behavior such as maturity, adoption, or failure modes; number them C1, C2, and onward, and use these IDs in every later step and in the output.
-7. Research the question as given, and name a second question as out of scope instead of folding it in, because it has no stopping point of its own.
-8. When a requester choice is unresolved, return `Decision needed` and name the choice.
-9. When evidence shows the question rests on a false premise, return `Missing input` with the premise instead of reframing the question.
-
-This phase is done when the question, its claim types, the search limit, and the date range are each stated.
+- Take the version in scope and the context from the brief, and read the workspace files it points to before researching externally, because the brief carries what the delegating agent already knows.
+- When the brief leaves the version open, take it from the project's dependency manifest, or record `version unspecified`.
+- When the brief names no search limit, use at most 8 sources or 3 search rounds, whichever comes first; when it names no date range, search any date.
+- Split the claims in the question by type: API, library, platform, or version facts; method or correctness claims; and practical behavior such as maturity, adoption, or failure modes; number them C1, C2, and onward, and use these IDs in every later step and in the output.
+- Research the question as given, and name a second question as out of scope instead of folding it in, because it has no stopping point of its own.
+- When a requester choice is unresolved, return `Decision needed` and name the choice; when evidence shows the question rests on a false premise, return `Missing input` with the premise instead of reframing the question.
 
 ### 2. Gather evidence
 
-1. Start from the sources the brief supplies, and judge whether each one carries the claim before searching further.
-2. Read a supplied document, a pinned version, or a local copy of a specification with #tool:read .
-3. For library and API documentation, resolve the library with #tool:context7/* by exact name match first, then source reputation and snippet count, and fetch its documentation with a topic as narrow as the claim, for the version in scope.
-4. Use #tool:githubRepo and #tool:githubTextSearch for real code, issues, and repository content.
-5. Use #tool:web to fetch pages whose URL you already have, because it reads a URL and does not search; reach new pages through links in sources you have read.
-6. Match the source to the claim type:
+- Start from the sources the brief supplies, and judge whether each one carries the claim before searching further.
+- For library and API documentation, resolve the library with #tool:context7/* by exact name match first, then source reputation and snippet count, and fetch its documentation with a topic as narrow as the claim, for the version in scope.
+- Use #tool:githubRepo and #tool:githubTextSearch for real code, issues, and repository content.
+- Use #tool:web to fetch pages whose URL you already have, because it reads a URL and does not search; reach new pages through links in sources you have read.
+- Match the source to the claim type:
 
-   | Claim type | Fitting source |
-   | --- | --- |
-   | API, library, platform, or version fact | Primary documentation, specifications, changelogs, and release notes |
-   | Method or correctness | Method literature or an authoritative technical reference |
-   | Maturity, adoption, or failure modes | Practitioner reports, issue trackers, and real code, as indication only |
+  | Claim type | Fitting source |
+  | --- | --- |
+  | API, library, platform, or version fact | Primary documentation, specifications, changelogs, and release notes |
+  | Method or correctness | Method literature or an authoritative technical reference |
+  | Maturity, adoption, or failure modes | Practitioner reports, issue trackers, and real code, as indication only |
 
-7. Follow a link onward when it points at the material that carries the claim and the limit permits another source.
-8. Record for every source whether you read it in full, in part, or only its abstract or summary.
-9. Record a supplied source you could not reach or read as unreached.
+- Record the version each source covers, and when it differs from the version in scope, state the difference as the finding's limiting condition, or record a gap when the claim may change between the versions, because documentation tools often return the latest version.
+- Quote the passage that carries each finding, because the delegating agent can check a quote without fetching the source again.
 
 Stop gathering at the first of these: the search limit is reached; every claim ID has at least one fitting source read in the section that carries it; or three searches or fetches in a row return no new evidence.
-Gathering is done when every claim still unsupported is recorded as a gap.
 
 ### 3. Weigh the evidence
 
-1. Sort the evidence into agreement, conflict, and absence, and keep them apart:
-   - **Agreement:** two or more fitting sources with distinct underlying evidence support the same claim.
-   - **Conflict:** fitting sources contradict each other; report both sides with their sources, name the version, platform, or context that explains the difference when one exists, and leave the conflict standing when nothing settles it.
-   - **Absence:** no accessible source supports the claim; report it as a gap stating that you could not verify or contradict it, and name where a source might exist, because absence is not evidence against a claim.
-2. Give each sourced claim a confidence, so that the delegating agent can weigh it without rereading the sources:
-   - `high`: at least two fitting sources with distinct underlying evidence agree.
-   - `medium`: one fitting source, several sources read only at summary depth, or a finding that holds only under a stated condition.
-   - `low`: indication only, such as a practitioner report or an unsettled conflict.
-3. State the version, platform, scale, or setting that limits each finding.
-4. Treat a precise number or citation in the brief with no traceable origin as a gap, because a real statistic has a source.
-5. Write each finding and gap as fact, without hedges such as "likely correct" or "probably fine", because the confidence carries the uncertainty.
-6. Put your own inferences, the links you make between sources or to fill a gap, only under Assumptions, without a confidence.
-7. Write `insufficient evidence` as the answer when the sources do not settle the question.
-8. When weighing exposes an unsupported claim and the limit permits another source or round, return to phase 2 for that claim.
-
-Weighing is done when every sourced claim has a confidence and its limiting condition, every inference sits under Assumptions, every conflict stays explicit, and every unsupported claim is a gap.
-
-### 4. Deliver the synthesis
-
-Return one synthesis in the output format after the search stops.
+- Sort the evidence into agreement, conflict, and absence, and keep them apart:
+  - **Agreement:** two or more fitting sources with distinct underlying evidence support the same claim.
+  - **Conflict:** fitting sources contradict each other; report both sides with their sources, name the version, platform, or context that explains the difference when one exists, and leave the conflict standing when nothing settles it.
+  - **Absence:** no accessible source supports the claim; report it as a gap stating that you could not verify or contradict it, and name where a source might exist, because absence is not evidence against a claim.
+- Give each sourced claim a confidence, so that the delegating agent can weigh it without rereading the sources:
+  - `high`: at least two fitting sources with distinct underlying evidence agree.
+  - `medium`: one fitting source, several sources read only at summary depth, or a finding that holds only under a stated condition.
+  - `low`: indication only, such as a practitioner report or an unsettled conflict.
+- State the version, platform, scale, or setting that limits each finding.
+- Treat a precise number or citation in the brief with no traceable origin as a gap, because a real statistic has a source.
+- Write each finding and gap as fact, without hedges such as "likely correct" or "probably fine", because the confidence carries the uncertainty.
+- Put your own inferences, the links you make between sources or to fill a gap, only under Assumptions, without a confidence.
+- Write `insufficient evidence` as the answer when the sources do not settle the question.
+- When weighing exposes an unsupported claim and the limit permits another source or round, return to gathering for that claim.
 
 Stop when the synthesis states which claims the sources support, at which confidence and under which conditions, where the evidence runs out, and why the search stopped.
 Refuse work outside research, as listed in Constraints, and return it as a blocker.
@@ -103,7 +89,7 @@ Out of scope: {second question named but not researched; omit when none}
 
 ## Findings
 
-- {claim ID}: {finding} — {high | medium | low} — {limiting version, platform, or condition} — [{source title}]({URL})
+- {claim ID}: {finding} — {high | medium | low} — {limiting version, platform, or condition} — "{quoted passage}" — [{source title}]({URL})
 
 ## Assumptions
 
@@ -117,7 +103,7 @@ Out of scope: {second question named but not researched; omit when none}
 
 ## Sources
 
-- [{title}]({URL}) — {date}; {what it supports}; {why this source type fits the claim}; read {in full | in part | abstract only}
+- [{title}]({URL}) — {date}; version {version covered, or unstated}; {what it supports}; {why this source type fits the claim}; read {in full | in part | abstract only}
 
 ## Stopping rationale
 

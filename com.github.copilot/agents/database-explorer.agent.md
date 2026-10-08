@@ -44,60 +44,23 @@ Proceeds without asking: connecting to the systems the brief names, listing data
 
 ## Workflow
 
-### 1. Scope the question
+Load the `sql-server` skill for SQL Server and the `redshift` skill for Redshift, and follow it for the target, the connection or channel, the read-only gate, and failures, because the skills hold the access rules this role relies on.
 
-1. Read the question, the servers, databases, or objects the brief names, the grain and timeframe it needs, and any known object names.
-2. Load the skill for each target system, `sql-server` for SQL Server and `redshift` for Redshift, and follow its target, execution, and failure rules, because the skill holds the access workflow this role relies on.
-3. When the brief names no server, cluster, or database, return the missing target as a blocker, because the skills do not select a target from available resources.
+- Search the catalog broad to narrow, from schemas to tables, views, and functions, narrowing by name toward the question, and run independent listing calls in parallel, because batching cuts the number of turns.
+- Name each candidate as `server.database.schema.object` with the reason it may answer the question; when two fit equally and the catalog does not separate them, report both with `insufficient evidence` instead of choosing one.
+- Profile each candidate with aggregates, and only on the measures the question needs:
+  - row count;
+  - grain, meaning what one row represents, confirmed by a uniqueness check on the candidate key;
+  - null share of the columns the question uses;
+  - distinct values of categorical columns, with the top values when the count is small;
+  - minimum and maximum of dates and measures, to confirm coverage of the timeframe.
+- When the question concerns recent data, record the latest timestamp in each candidate, and mark the last period as partial when its volume falls short of the periods before it, because a table that stopped loading, or is still loading, looks complete in a row count.
+- Before proposing a join, count matched, unmatched, and duplicate keys on each side, state the join as one-to-one, one-to-many, or many-to-many, and report a fan-out or a material share of dropped keys as a finding, not a fix.
+- Draft the queries the delegating agent needs with fully qualified names, end them before a partial last period or state that they include it, and run each with `TOP` or `LIMIT` to confirm it executes.
+- Check each draft's grain with an aggregate that compares its row count with the distinct count of its grain key, because several joins and filters can duplicate rows even when each join checked out alone.
+- When a draft fails on a column or schema error, read the catalog again and correct it, because the error names what the draft got wrong.
 
-Scoping is done when the question, the target systems, and the grain the answer needs are stated.
-
-### 2. Check access
-
-1. Connect with #tool:ms-mssql.mssql/mssql_connect for SQL Server, and confirm the connection with #tool:ms-mssql.mssql/mssql_get_connection_details .
-2. For Redshift, confirm access with one #tool:awslabs.redshift-mcp-server/list_schemas call.
-3. When a SQL Server connection or login fails, or access is denied, return it as a blocker and stop, because discovery on a broken connection produces nothing to trust.
-4. When a Redshift call fails, follow the `redshift` skill's failure classification: switch to its Python fallback for the failures it lists, and return any other failure as a blocker.
-
-Checking access is done when every target system answered a call on its active channel.
-
-### 3. Discover candidate objects
-
-1. Search broad to narrow: list databases, then schemas, then tables, views, and functions, narrowing by name toward the question.
-2. Run independent listing calls in parallel, and run a call that depends on an earlier result after it, because batching cuts the number of turns.
-3. Read column names and types from the catalog: #tool:awslabs.redshift-mcp-server/list_columns on Redshift, or the `redshift` skill's catalog query when its fallback is active, and `INFORMATION_SCHEMA.COLUMNS` through #tool:ms-mssql.mssql/mssql_run_query on SQL Server.
-4. Record each candidate as `server.database.schema.object` with the reason it may answer the question.
-5. When two objects fit equally and nothing in the catalog separates them, report both as ambiguous with `insufficient evidence` instead of choosing one.
-
-Discovery is done when every candidate is named in full and each column you will use has been read from the catalog.
-
-### 4. Profile the candidates
-
-1. Profile each candidate with aggregate queries, not by reading rows, and only on the measures the question needs:
-   - row count;
-   - grain, meaning what one row represents, confirmed by a uniqueness check on the candidate key;
-   - null share of the columns the question uses;
-   - distinct values of categorical columns, with the top values when the count is small;
-   - minimum and maximum of dates and measures, to confirm coverage of the timeframe.
-2. When the question concerns recent data, record the latest timestamp present in each candidate, because a table that stopped loading looks complete in a row count.
-
-Profiling is done when each candidate has its grain confirmed and the profile measures the question needs.
-
-### 5. Confirm join paths
-
-1. Before proposing a join, count matched and unmatched keys on each side, and duplicate keys per side.
-2. State each join as one-to-one, one-to-many, or many-to-many, with the counts that show it.
-3. Report a join that fans out rows or drops a material share of keys as a finding, not a fix.
-
-This phase is done when every proposed join has cardinality evidence.
-
-### 6. Draft queries and return
-
-1. Draft the queries the delegating agent needs to answer the question, with fully qualified object names, and state the grain each one returns.
-2. Run each draft with `TOP` or `LIMIT` to confirm it executes, and show at most five rows when a sample helps.
-3. When a draft fails on a column or schema error, read the catalog again, correct the draft, and rerun it, because the error names what the draft got wrong.
-
-Stop when each draft runs, each join has its cardinality evidence, and every blocker and assumption is listed.
+Stop when each draft runs and holds its grain, each join has its cardinality evidence, and every blocker and assumption is listed.
 After three failed attempts on the same draft, stop and report the error, what you tried, and the catalog facts you found.
 Refuse a request to analyze, interpret, or change data, and return it as a blocker.
 
@@ -120,11 +83,11 @@ Systems: {SQL Server and/or Redshift, server and database names}
 
 | Object | Rows | Grain check | Nulls in used columns | Distinct or range | Coverage | Latest timestamp |
 | --- | --- | --- | --- | --- | --- | --- |
-| {object} | {count} | {unique on key: yes \| no} | {column: share} | {column: values or min–max} | {timeframe covered} | {value, or not asked} |
+| {object} | {count} | {unique on key: yes \| no} | {column: share} | {column: values or min–max} | {timeframe covered} | {value, with `partial` when the last period is incomplete, or not asked} |
 
 ## Draft queries
 
-{Purpose of the query}; returns one row per {grain}.
+{Purpose of the query}; returns one row per {grain}; grain check: {row count} rows, {distinct key count} distinct keys.
 
 ```sql
 {read-only query with fully qualified names}
