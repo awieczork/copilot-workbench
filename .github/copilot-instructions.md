@@ -56,7 +56,7 @@ Guidance says what is wanted, once, in plain words a capable newcomer reads one 
 - When creating, changing, or reviewing a plugin worker, entry agent, or skill, also follow [build-plugin-component](skills/build-plugin-component/SKILL.md), which holds the team contracts.
 - Complete and validate one artifact against its applicable references before starting another, because related policy can otherwise drift during the rewrite.
 - Treat every skill and scoped rule as available to every agent, including a subagent, without a reference, because Copilot keeps each skill's `name` and `description` in context and loads the skill when the task matches, and attaches a rule when its `applyTo` matches a changed file or its `description` matches the task; only `disable-model-invocation: true` stops the agent from loading a skill.
-- Name a skill or rule in an agent body only when the agent must load it at a fixed point, such as before its first query, and do not count an unnamed one as unreachable.
+- Name a skill or rule in an agent body only when it belongs to the agent's core work and the agent must load it at a fixed point, such as `brief-subagent` before every brief of a lead, because a named skill reads as one the agent relies on; leave a skill the agent uses only occasionally to discovery, and do not count an unnamed one as unreachable.
 - Use Copilot tool identifiers and supported Copilot model identifiers, because identifiers from another harness do not select Copilot capabilities.
 - Double-quote string frontmatter values in agents and rules, keeping native booleans such as `user-invocable: false`.
 - Keep `software-lead`, `data-lead`, and `discuss` as the only user-facing agents.

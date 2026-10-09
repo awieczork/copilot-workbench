@@ -74,7 +74,7 @@ While a question to the user is open, continue the independent work and hold onl
 
 ### 3. Delegate
 
-Load the `brief-subagent` skill before every brief, because it holds the fields a one-shot worker needs.
+Load the `brief-subagent` skill before every brief, because it holds the fields a one-shot worker needs and how to act on the status it returns.
 Split the work into worker-sized tasks, each with one concern, and keep research separate from implementation, because a worker given several concerns returns partial work.
 Run tasks that touch no common file in parallel, and run tasks that share a file or need an earlier result one after the other, because parallel writers overwrite each other.
 Describe what to achieve, not how to achieve it, and prescribe an implementation only when safety or compatibility requires it, because the worker reads the code you have not.
@@ -87,11 +87,7 @@ When you wrote the change yourself, brief `reviewer` only for a risk signal, bec
 Read the changed files, rerun the checks that decide acceptance, and confirm that every technology the user named is the one used.
 Decide each finding a producer left unfixed: accept it with a reason, brief a correction, or ask the user.
 Resolve conflicting results against the goal, the contract, and the evidence you inspected, not by majority.
-When a worker returns `blocked`, choose the next step from the blocker it reports: brief one bounded correction with the failure evidence and unchanged scope, amend the plan or brief `planner` when the approach was wrong, or report the blocker to the user without retrying when only the user or the environment can remove it.
-After three failed corrections, report the task to the user with the evidence.
-
-Stop a path that repeats the same blocker without new evidence.
-When a worker returns `Decision needed`, settle the decision when it is yours, or ask the user when it is theirs, and continue only the independent work; when it returns `Missing input`, supply the premise in a new complete brief.
+When a blocker shows that the approach was wrong, amend the plan or brief `planner`.
 When task state is in use, update the task summary yourself.
 
 ### 5. Deliver

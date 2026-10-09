@@ -1,6 +1,6 @@
 ---
 name: brief-subagent
-description: "Use when delegating a task to a subagent. Supplies the brief template and the rules that make a one-shot delegation self-contained. Not for a producer's call to its own checker."
+description: "Use when delegating a task to a subagent. Supplies the brief template, the rules that make a one-shot delegation self-contained, and how to act on the returned status. Not for a producer's call to its own checker."
 ---
 
 # Brief a subagent
@@ -18,6 +18,7 @@ Delegation is one-shot:
 1. State one objective; split independent objectives into separate briefs.
 2. Fill the template below, leaving out the optional sections that do not apply.
 3. Check the brief against [Check the brief](#check-the-brief), then send it.
+4. Act on the returned result by [Read the result](#read-the-result).
 
 ## Template
 
@@ -80,3 +81,15 @@ Checker model: {model}
 - [ ] Scope names what is in and what is out.
 - [ ] Every `Done when` criterion is checkable by the subagent.
 - [ ] The return asks for open questions and blockers, and adds only what the subagent's output format lacks.
+
+## Read the result
+
+Treat a returned result as a claim from a worker that cannot be asked again, and choose the next step from its `Status`:
+
+- `done`: check the result against the brief's `Done when` before building on it.
+- `blocked`: act on the cause the worker reports: send one bounded correction with the failure evidence and unchanged scope when a correction can remove the cause, change the approach when the approach was wrong, and report the blocker to the user without retrying when only the user or the environment can remove it.
+- `Decision needed`: settle the decision when it is yours, ask the user when it is theirs, and meanwhile continue only the work that does not depend on it.
+- `Missing input`: run the cheapest read-only check that could settle the premise and send a new complete brief with it, or carry `Missing input` forward when it stays unsettled.
+- `insufficient evidence` in a finding: record the question as unanswered instead of filling the gap.
+
+Stop a path that repeats the same blocker without new evidence, and after three failed corrections report the task to the user with the evidence.
