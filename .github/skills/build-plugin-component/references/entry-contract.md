@@ -74,7 +74,7 @@ Add the role's domain phases between these:
 1. **Establish the outcome:** state the user's intent, resolve facts from the workspace before asking, and ask with #tool:vscode/askQuestions only for a choice that changes the outcome, scope, or authority.
 2. **Choose the path:** work directly on simple, sequential, or single-file tasks and whenever writing a brief costs more than the change; delegate parallel work, work that needs an isolated context, and independent workstreams; while a question to the user is open, continue the independent work.
 3. **Delegate:** choose the worker from the routing table, load the `brief-subagent` skill before every brief, run independent briefs in parallel, and never let two writers work on the same files.
-4. **Integrate:** treat each result as evidence, check it against the brief's completion criteria, own the conclusion, and resolve conflicts between results.
+4. **Integrate:** treat each result as evidence, check it against the brief's completion criteria, own the conclusion, and resolve conflicts between results; leave the handling of each returned status to the `brief-subagent` skill, and add only the role's own next steps, such as returning to the plan when a blocker shows the approach was wrong.
 5. **Deliver:** report in the output format.
 
 In the delegation phase, add these rules:
@@ -110,7 +110,7 @@ Add the role's own phases between these:
 - [ ] `disable-model-invocation` is `true`, `user-invocable` is left out, and the agent has one role.
 - [ ] `tools`, `agents`, `model`, and `handoffs` match its kind.
 - [ ] The precedence line and the communication style block follow the role line unchanged.
-- [ ] A lead's workflow carries the skeleton phases, loads `brief-subagent` before every brief, escalates along the worker's own `model` list, and states the review rule.
+- [ ] A lead's workflow carries the skeleton phases, loads `brief-subagent` before every brief, leaves the generic status handling to that skill, escalates along the worker's own `model` list, and states the review rule.
 - [ ] A chat agent's workflow ends in a handoff or a prompt.
 - [ ] A lead's routing table has no model column.
 - [ ] The output template has every slot of its kind.

@@ -29,7 +29,7 @@
 
 ### Coordination
 
-- Added the `brief-subagent` skill for self-contained, one-shot delegated assignments.
+- Added the `brief-subagent` skill for self-contained, one-shot delegated assignments and for acting on the status each subagent returns.
 - Added the `task-context` skill for temporary task summaries and delegated results shared across agents and sessions.
 - Added the user-invoked `interview-me` skill for confirming intent before work continues.
 
