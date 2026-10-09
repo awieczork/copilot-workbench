@@ -1,10 +1,9 @@
 # Skill contract
 
-Read this before writing a skill that the copilot-workbench plugin's agents may load, in the plugin or in a project.
+Read this before writing or changing a plugin skill that the plugin's agents may load.
 
 ## Rules
 
-- Give the skill a `name` that differs from every plugin and project skill, because VS Code keeps only the first skill of a name, workspace before plugin, so a project skill with a plugin skill's name silently replaces it for every agent.
 - When workers may load the skill, return open questions in its output instead of asking the user, because workers run as subagents, which cannot ask.
 - Leave the tone and format of replies to the user out of the skill, because entry agents define how they communicate.
 - Name a plugin skill where it applies instead of restating its rules:
@@ -18,6 +17,5 @@ Read this before writing a skill that the copilot-workbench plugin's agents may 
 
 ## Check the skill contract
 
-- [ ] The `name` differs from every plugin and project skill.
 - [ ] No step asks the user when workers may load the skill.
 - [ ] The skill names a plugin skill instead of restating it, and creates no task-state folder of its own.

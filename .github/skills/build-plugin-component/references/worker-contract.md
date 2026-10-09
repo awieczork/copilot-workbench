@@ -1,6 +1,6 @@
 # Worker contract
 
-Read this before writing a worker for the copilot-workbench plugin's team, in the plugin or in a project.
+Read this before writing or changing a worker of the plugin's team.
 A worker is a hidden subagent that performs one specialized task from a self-contained brief and returns one result to the agent that delegated it.
 
 ## Choose the kind
