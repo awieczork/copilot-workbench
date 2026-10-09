@@ -44,6 +44,9 @@
 - Added the `markdown` rule for ordinary document syntax, formatting, and prose.
 - Added the `python` rule for user-run task-script conventions and proportionate validation.
 - Added the `sql` rule for the text of one read-only SQL Server or Redshift query.
+- Added the `changelog` rule for writing and reconciling the `## Unreleased` entries of a project's `CHANGELOG.md`.
+- Added the `project-status` rule for keeping a project's `PROJECT-STATUS.md` as a short handoff with its roadmap and blockers.
+- Added the `open-issues` rule for recording and closing a project's unresolved decisions, missing inputs, and verified limitations in `OPEN-ISSUES.md`.
 
 ### MCP servers
 
