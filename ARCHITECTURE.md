@@ -34,7 +34,7 @@ The lead works directly when a brief would cost more than the change, runs indep
 Every worker returns one status, `done`, `blocked`, `Decision needed`, or `Missing input`, and the lead chooses the next step from the details a blocked worker reports.
 Only entry agents ask the owner; workers return missing decisions, and an open question blocks only the work that depends on it.
 Each role receives only the tools it needs, and read-only roles rest on instructions, because query and execution tools can also write.
-Leads use strong models and workers the tier that fits their role, as defined in the [entry contract](.github/skills/build-plugin-component/references/entry-contract.md) and the [worker model tiers](.github/skills/build-plugin-component/references/model-tiers.md).
+Leads use strong models and workers the tier that fits their role, as defined in the [entry contract](.github/skills/build-plugin/references/entry-contract.md) and the [worker model tiers](.github/skills/build-plugin/references/model-tiers.md).
 
 ## Skills and rules
 
@@ -53,7 +53,7 @@ General behavior belongs in agents and skills, not in language rules.
 The plugin changes only in this repository, the workbench.
 A project may hold its own skills, agents, and instructions written with [`copilot-customization`](skills/copilot-customization/SKILL.md), but nothing in a project joins the plugin's team; a capability that should work with the leads goes into the plugin.
 
-The repository skill [`build-plugin-component`](.github/skills/build-plugin-component/SKILL.md) holds the authoring procedure and the team contracts: what makes a worker, entry agent, or skill fit the team, such as worker kinds and their tools, shared rule blocks, model ladders, entry-agent skeletons, and output slots.
+The repository skill [`build-plugin`](.github/skills/build-plugin/SKILL.md) holds the review questions drawn from the pillars, the authoring method, the team contracts, and the packaging rules: what makes a worker, entry agent, or skill fit the team, such as worker kinds and their tools, shared rule blocks, model ladders, entry-agent skeletons, and output slots, and what makes the package valid.
 It points to `copilot-customization` for the writing and stays outside the payload, because only the workbench builds plugin components.
 
 ## Repository lifecycle
