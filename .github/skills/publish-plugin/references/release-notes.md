@@ -9,7 +9,7 @@ The closing checklist restates these rules on purpose, as a separate pass over a
 
 ## Prepare the release body
 
-Use the [Changelog Entries](../../../instructions/changelog.instructions.md) instruction for bullet language and user-facing phrasing.
+Use the [Changelog Entries](../../../../com.github.copilot/rules/changelog.instructions.md) instruction for bullet language and user-facing phrasing.
 Treat the current `## Unreleased` bullets as working material that may need to be updated, merged, or removed before approval.
 Use one approved, final-state entry as the source for both the versioned `CHANGELOG.md` entry and the GitHub Release body.
 
@@ -50,7 +50,7 @@ Use the complete approved versioned entry, including its version heading, date, 
 
 Read the draft once more against this checklist and repair each failure before asking the owner to approve it.
 
-- [ ] Every `## Unreleased` source bullet complies with the [Changelog Entries](../../../instructions/changelog.instructions.md) instruction.
+- [ ] Every `## Unreleased` source bullet complies with the [Changelog Entries](../../../../com.github.copilot/rules/changelog.instructions.md) instruction.
 - [ ] Each bullet names the changed component or capability near the start and states a distinct final user result.
 - [ ] Each versioned and GitHub Release bullet starts with the changed component or capability and does not repeat `Added`, `Changed`, or `Fixed` from its subsection heading.
 - [ ] The draft contains no intermediate, superseded, or commit-history-only bullet.

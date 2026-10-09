@@ -59,6 +59,7 @@ Leads use strong models and workers the tier that fits their role, as defined in
 | Coordination | [`brief-subagent`](skills/brief-subagent/SKILL.md), [`task-context`](skills/task-context/SKILL.md), [`interview-me`](skills/interview-me/SKILL.md) | Self-contained assignments, temporary state, and intent clarification. |
 | Execution | [`run-python`](skills/run-python/SKILL.md), [`redshift`](skills/redshift/SKILL.md), [`sql-server`](skills/sql-server/SKILL.md) | Runtime selection and bounded, read-only database work. |
 | Scoped rules | [Markdown](com.github.copilot/rules/markdown.instructions.md), [Python](com.github.copilot/rules/python.instructions.md), [SQL](com.github.copilot/rules/sql.instructions.md) | Conventions for ordinary documents, user-run task scripts, and read-only query text. |
+| Record rules | [Changelog](com.github.copilot/rules/changelog.instructions.md), [Project status](com.github.copilot/rules/project-status.instructions.md), [Open issues](com.github.copilot/rules/open-issues.instructions.md) | The content of a project's `CHANGELOG.md`, `PROJECT-STATUS.md`, and `OPEN-ISSUES.md`. |
 
 General behavior belongs in agents and skills, not in language rules.
 

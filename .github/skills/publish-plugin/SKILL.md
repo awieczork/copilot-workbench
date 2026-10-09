@@ -91,7 +91,7 @@ Do not edit `plugin.json`, `CHANGELOG.md`, create a tag, or update a branch befo
 ## Draft and approve release notes
 
 Read [release note rules](references/release-notes.md) before drafting.
-Read the [changelog instruction](../../instructions/changelog.instructions.md) before drafting or revising any bullet.
+Read the [changelog instruction](../../../com.github.copilot/rules/changelog.instructions.md) before drafting or revising any bullet.
 Run `git diff --name-status origin/main..develop` and inspect the changed paths.
 Use `origin/main` as the published-state reference, because a local package branch can be absent before the package-tree setup creates it.
 Inspect changed paths and the behavior they implement before writing a note.

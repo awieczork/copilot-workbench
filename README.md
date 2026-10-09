@@ -62,7 +62,10 @@ Workers run as subagents of an allowed entry agent or producer.
 
 | Rule | Scope |
 | --- | --- |
+| `changelog` | The `## Unreleased` entries of a project's `CHANGELOG.md`. |
 | `markdown` | Ordinary Markdown documents; excludes customization files and bundled skill resources. |
+| `open-issues` | A project's `OPEN-ISSUES.md` register of unresolved decisions, missing inputs, and verified limitations. |
+| `project-status` | A project's `PROJECT-STATUS.md` state, roadmap, and blockers. |
 | `python` | User-run task scripts; reusable code follows its project conventions. |
 | `sql` | One read-only SQL Server or Redshift query; connection handling and execution safety belong to the database workflows. |
 

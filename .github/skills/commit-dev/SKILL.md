@@ -47,7 +47,7 @@ Stop until the owner resolves every flagged path.
 
 When the requested work will create one or more commits, read and reconcile `CHANGELOG.md`, `PROJECT-STATUS.md`, and `OPEN-ISSUES.md` before showing the commit plan.
 
-Read the [changelog instruction](../../instructions/changelog.instructions.md), [project status instruction](../../instructions/project-status.instructions.md), and [open issues instruction](../../instructions/open-issues.instructions.md) before editing their corresponding files.
+Read the [changelog instruction](../../../com.github.copilot/rules/changelog.instructions.md), [project status instruction](../../../com.github.copilot/rules/project-status.instructions.md), and [open issues instruction](../../../com.github.copilot/rules/open-issues.instructions.md) before editing their corresponding files.
 
 Update `CHANGELOG.md` with the current user-visible results selected for commit.
 Apply the changelog instruction by updating, merging, or removing existing `## Unreleased` bullets when the selected changes alter the final result they describe.

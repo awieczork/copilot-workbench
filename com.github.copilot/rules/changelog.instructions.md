@@ -1,13 +1,12 @@
 ---
 name: "Changelog Entries"
-description: "Use when adding, revising, or reconciling the `## Unreleased` entries in CHANGELOG.md. Supplies the wording, category, and reconciliation rules. Not for a versioned release entry, which follows the publish-plugin release-note rules."
+description: "Use when adding, revising, or reconciling the `## Unreleased` entries in CHANGELOG.md. Supplies the wording, category, and reconciliation rules. Not for a versioned release entry."
 applyTo: "CHANGELOG.md"
 ---
 
 # Changelog entries
 
 `## Unreleased` states the current user-visible difference from the latest release, not a history of commits or intermediate states.
-When preparing a versioned entry or a GitHub Release body, read the [release-note rules](../skills/publish-plugin/references/release-notes.md) and pass their checklist before handing the work off.
 
 ## Write each bullet
 
@@ -40,6 +39,5 @@ The preferred bullets state the user-facing result, and the avoided bullets bury
 ## Reconcile with the current result
 
 - Take the existing bullets and versioned entries from `CHANGELOG.md`, the prior baseline from the latest versioned entry or release tag, and the changes from the path set selected for the current operation, including its staged, unstaged, and untracked changes.
-- For a release comparison, use the release evidence that the release-note rules define.
 - When the baseline or the selected path set is unavailable, report `Missing input` instead of inferring it, because a guessed baseline turns `Changed` into `Added` or the reverse.
 - Compare each proposed bullet with the existing bullets and the baseline before writing it: update a bullet that a later change extends, merge bullets that produce one final result, remove a bullet whose behavior was replaced or no longer appears, and keep separate bullets for independent results.
