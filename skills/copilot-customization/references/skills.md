@@ -98,7 +98,7 @@ description: "{Use when ... trigger per branch}. {What it supplies}. Not for {cl
 
 - Keep only the sections the skill uses, and add `Output format` only when the skill returns a result.
 - Keep gotchas in `SKILL.md`, and add one when a correction reveals a fact the agent could not have assumed.
-- Name a skill that only supplies knowledge in the agent body or instructions that need it, because agents often skip such a skill on their own.
+- Rely on the `description` for discovery, because an agent loads a skill whose `description` matches the task; name the skill in an agent body or instructions only when they must load it at a fixed point, such as before a first query.
 
 ## Scripts
 

@@ -23,5 +23,5 @@ The work is done when every connection is in place and every checklist item pass
 
 - For a worker, add it to the `agents` list and the `Route the work` table of each lead that delegates to it, and to the `agents` list and workflow of `discuss` when it is a helper that a chat agent calls.
 - For an entry agent, list in `agents` every worker its routing table names, and add a `discuss` handoff when it is a lead that receives shaped requests.
-- For a skill that only supplies knowledge, name it in the body of each plugin agent that needs it, because agents often skip such a skill; a skill with a procedure loads by its description.
+- For a skill, rely on its `description` for discovery, and name it in an agent body only under the naming rule in the [skills reference](../../../skills/copilot-customization/references/skills.md).
 - When a change alters a contract, update the plugin agents it governs in the same change, so that shipped agents keep matching the contract.

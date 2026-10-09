@@ -8,7 +8,7 @@ A worker is a hidden subagent that performs one specialized task from a self-con
 | Kind | Examples | Tools | Writes | Review | Output slots |
 | --- | --- | --- | --- | --- | --- |
 | Helper | `explorer`, `researcher`, `challenger` | `read` and the role's own tools, such as `search`; `edit/createFile` only for a result file | Its result file only | None | Findings with their evidence, `insufficient evidence` when the evidence does not settle the question, and what was not searched or checked |
-| Producer | `developer`, `ui-developer`, `planner` | The role's tools and `context7/*`, plus `agent` with `agents` naming only its checker, such as `reviewer` for `developer` or `challenger` for `planner` | Files in the brief's scope; a planner writes only its plan | By [Review](#review) | A `Status` that names the failure class `fixable`, `needs plan change`, `environment`, or `needs decision` when the work fails, then changed, checked, not checked, still open, review findings with their dispositions; a planner returns its plan sections in place of Changed and its challenge record in place of review findings |
+| Producer | `developer`, `ui-developer`, `planner` | The role's tools and `context7/*`, plus `agent` with `agents` naming only its checker, such as `reviewer` for `developer` or `challenger` for `planner` | Files in the brief's scope; a planner writes only its plan | By [Review](#review) | Changed, checked, not checked, still open, review findings with their dispositions; a planner returns its plan sections in place of Changed and its challenge record in place of review findings |
 | Checker | `reviewer` | `read`, `search`, `execute`, and the role's own tools; `edit/createFile` only for a result file | Its result file only | None; it never delegates | Verdict, checked, not checked, findings with evidence |
 
 Pick the kind by what the worker returns: evidence makes a helper, a change or a plan makes a producer, and a verdict on another worker's result makes a checker.
@@ -33,7 +33,7 @@ When a skill or instruction stops you or makes you ask, return the reason with i
 When the worker holds `edit` or `edit/createFile`, add this line to the block; leave it out otherwise, because the delegating agent saves the result of a worker that cannot write:
 
 ```markdown
-When the brief names a result file, load the `task-context` skill and write your result there before every return.
+When the brief names a result file, write your result there before every return.
 ```
 
 ## Constraints
@@ -61,6 +61,7 @@ When the brief names a result file, load the `task-context` skill and write your
 ## Output format
 
 - Give the worker a fenced output template with the slots of its kind, most important first, and an `Open questions and blockers` slot.
+- Start the template with `Status: {done | blocked | Decision needed | Missing input}`, and keep a verdict in its own slot, because every lead reads results through this one set; a `blocked` result names its cause and what would remove it, and the lead chooses the next step from those details.
 - Write the slots so that a person can read the result, because the delegating agent may pass it on unchanged.
 
 ## Check the worker contract
@@ -71,4 +72,4 @@ When the brief names a result file, load the `task-context` skill and write your
 - [ ] The shared rules block follows the role line unchanged, with the result-file line exactly when the worker holds `edit` or `edit/createFile`.
 - [ ] A producer reads current documentation before writing code or a plan that uses an external API.
 - [ ] A producer's review phase runs on `Required` or on its own judgment, passes the brief's `Checker model` when named, and reports whether the review ran and why.
-- [ ] The output template has every slot of its kind and an `Open questions and blockers` slot.
+- [ ] The output template starts with the shared `Status` line and has every slot of its kind and an `Open questions and blockers` slot.

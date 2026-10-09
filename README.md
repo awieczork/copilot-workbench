@@ -43,20 +43,20 @@ For a released package, the installed version must match [plugin.json](plugin.js
 User-facing agents appear in the agent picker.
 Workers run as subagents of an allowed entry agent or producer.
 
-| Agent               | Kind   | Purpose                                                                                     |
-| :------------------ | :----- | :------------------------------------------------------------------------------------------ |
-| `software-lead`     | Lead   | Delivers software changes by deciding the approach, briefing workers, and judging results.  |
-| `data-lead`         | Lead   | Answers data-science questions with evidence and owns the conclusion.                       |
-| `discuss`           | Chat   | Shapes an unfinished idea and hands it to a lead.                                           |
-| `explorer`          | Worker | Searches the workspace for one question and returns locations with findings.                |
-| `database-explorer` | Worker | Finds and profiles the tables, columns, and join paths for one data question.               |
-| `data-explorer`     | Worker | Finds and profiles the local dataset files for one data question without changing them.     |
-| `researcher`        | Worker | Gathers sourced external evidence for one bounded question.                                 |
-| `planner`           | Worker | Produces an executable plan for work with significant decisions.                            |
-| `developer`         | Worker | Implements a change with its tests and runs review when the brief asks.                     |
-| `ui-developer`      | Worker | Implements and checks interface changes in the browser.                                     |
-| `reviewer`          | Worker | Assesses a finished result against its goal without repairing it.                           |
-| `challenger`        | Worker | Tests one decision or framing with the strongest objection and the cheapest settling check. |
+| Agent               | Kind     | Purpose                                                                                                     |
+| :------------------ | :------- | :---------------------------------------------------------------------------------------------------------- |
+| `software-lead`     | Lead     | Delivers software changes by deciding the approach, briefing workers, and judging results.                  |
+| `data-lead`         | Lead     | Answers data-science questions with evidence and owns the conclusion.                                       |
+| `discuss`           | Chat     | Shapes an unfinished idea and hands it to a lead.                                                           |
+| `explorer`          | Helper   | Searches the workspace for one question and returns locations with findings.                                |
+| `database-explorer` | Helper   | Finds and profiles the tables, columns, and join paths for one data question.                               |
+| `data-explorer`     | Helper   | Finds and profiles the local dataset files for one data question without changing them.                     |
+| `researcher`        | Helper   | Gathers sourced external evidence for one bounded question.                                                 |
+| `planner`           | Producer | Produces an executable plan for work with significant decisions.                                            |
+| `developer`         | Producer | Implements a change with its tests and calls `reviewer` when the brief requires it or the risk warrants it. |
+| `ui-developer`      | Producer | Implements and checks interface changes in the browser.                                                     |
+| `reviewer`          | Checker  | Assesses a finished result against its goal without repairing it.                                           |
+| `challenger`        | Helper   | Tests one decision or framing with the strongest objection and the cheapest settling check.                 |
 
 ### Rules
 
@@ -155,11 +155,3 @@ copilot-workbench/
 | Redshift MCP cannot start or access data | Check `uvx`, the configured local AWS profile, region, authentication, and server diagnostics. |
 | The Redshift fallback rejects configuration | Populate every required local variable, confirm the intended target, and check that the port is valid. |
 | context7 is unavailable | Check `npx`, server diagnostics, and the service's current local authentication requirements. |
-
-## Repository maintenance
-
-`develop` holds the authoring workspace and durable project records.
-`main` is reserved for package-only distribution; its payload still needs preparing before the first release.
-Branch protection is intentionally disabled.
-Repository-local instructions and skills under `.github/` are not plugin components.
-Architecture describes the design, project status holds the roadmap and near-term queue, and open issues holds unresolved project-level limitations and decisions.
