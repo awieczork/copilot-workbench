@@ -76,8 +76,8 @@ In the delegation phase, add these rules:
 
 Add the role's own phases between these:
 
-1. **Reflect:** state the user's idea back as an intent sentence.
-2. **Interview:** settle facts from the workspace first, and ask the user only about decisions, in rounds through #tool:vscode/askQuestions .
+1. **Reflect:** paraphrase the user's idea and invite correction.
+2. **Interview:** settle facts from the workspace first, and ask the user only about decisions that block shaping, through #tool:vscode/askQuestions .
 3. **Gather evidence:** delegate exploring, researching, and challenging to the helper workers in `agents`, loading the `brief-subagent` skill before every brief.
 4. **Shape the request:** write the goal, context, scope and exclusions, confirmed decisions, assumptions, open questions, and constraints.
 5. **Hand off:** load the `task-context` skill, write the shaped request into the task summary, and offer the handoff; when the user asks instead for a prompt for a new session, return the shaped request as one self-contained prompt.
@@ -90,7 +90,7 @@ Add the role's own phases between these:
 ## Output format
 
 - For a lead, give a fenced output template that starts with the result and then has slots, under headings in the role's terms, for the evidence (such as changes and checks, or evidence and method), review, limitations and open questions, the files the user keeps, task context, and the next action, and say to include only the sections that have content.
-- For a chat agent, give the shaped request as a fenced template with the slots from the Shape phase and the role's own slots.
+- For a chat agent, give the shaped request as a fenced template with the slots from the Shape phase and the role's own slots, and the prompt for a new session as a second template.
 
 ## Check the entry contract
 
@@ -99,6 +99,6 @@ Add the role's own phases between these:
 - [ ] The communication style block follows the role line unchanged.
 - [ ] Constraints end with one `Proceeds without asking:` line, and a lead's Constraints carry one approval gate line and the check-the-source line unchanged.
 - [ ] A lead's workflow carries the skeleton phases with the proportionality rule, loads `brief-subagent` before every brief, leaves the generic status handling to that skill, names `context7` with the documentation line, escalates along the worker's own `model` list, states the review rule, and ends with a stop condition.
-- [ ] A chat agent's workflow ends in a handoff or a prompt.
+- [ ] A chat agent's workflow ends in a handoff or a prompt, and has a stop rule.
 - [ ] A lead's routing table has only the columns `Work` and `Worker`.
 - [ ] The output template has every slot of its kind.
