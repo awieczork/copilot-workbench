@@ -25,7 +25,7 @@ When a field or behavior is not covered here, read the official documentation li
 
 ## Review artifacts
 
-1. Read the artifact, its bundled resources, and the customizations that load with it: project instructions, rules whose `applyTo` matches its files, skills it names, and agents it delegates to.
+1. Read the artifact, its bundled resources, and every other customization that can apply to the same task, because conflicts and gaps arise between files.
 2. Check it against [Writing guidance](references/writing.md) and the validation list of its type reference.
 3. Flag conflicts: two loaded files that give different instructions for the same case, or that disagree on what to deliver, what the agent may do without asking, or what counts as done.
 4. Flag silent gaps: a case the artifact must handle that no loaded file covers.

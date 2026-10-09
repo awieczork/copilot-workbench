@@ -25,28 +25,13 @@ This repository's `.github/` customizations, root records, temporary task state,
 ## Agents
 
 The user selects an entry agent, which works directly or delegates bounded assignments to workers; a worker returns evidence, artifacts, or blockers to its caller.
-`discuss` consults `explorer`, `researcher`, and `challenger`, and hands a shaped request to a lead through a handoff the user confirms; both leads may delegate to every worker, `developer` and `ui-developer` call `reviewer`, and `planner` calls `challenger`.
-
-| Agent | Kind | Role |
-| --- | --- | --- |
-| [`discuss`](com.github.copilot/agents/discuss.agent.md) | Chat | Clarifies an unfinished request, then hands it to a lead or produces a self-contained prompt. |
-| [`software-lead`](com.github.copilot/agents/software-lead.agent.md) | Lead | Owns the approach and integration of software changes. |
-| [`data-lead`](com.github.copilot/agents/data-lead.agent.md) | Lead | Owns the analytical question, evidence, and conclusion. |
-| [`explorer`](com.github.copilot/agents/explorer.agent.md) | Helper | Locates workspace evidence for one question, read-only. |
-| [`database-explorer`](com.github.copilot/agents/database-explorer.agent.md) | Helper | Discovers and profiles database objects, read-only. |
-| [`data-explorer`](com.github.copilot/agents/data-explorer.agent.md) | Helper | Discovers and profiles local dataset files without changing them. |
-| [`researcher`](com.github.copilot/agents/researcher.agent.md) | Helper | Gathers sourced external evidence. |
-| [`planner`](com.github.copilot/agents/planner.agent.md) | Producer | Produces an executable plan with settled implementation decisions. |
-| [`developer`](com.github.copilot/agents/developer.agent.md) | Producer | Implements and checks a bounded software change. |
-| [`ui-developer`](com.github.copilot/agents/ui-developer.agent.md) | Producer | Implements and visually checks interface changes. |
-| [`reviewer`](com.github.copilot/agents/reviewer.agent.md) | Checker | Assesses a finished result against its goal. |
-| [`challenger`](com.github.copilot/agents/challenger.agent.md) | Helper | Tests one consequential decision or framing. |
+`discuss` consults `explorer`, `researcher`, and `challenger`, and hands a shaped request to a lead through a handoff the user confirms; `data-lead` may delegate to every worker, `software-lead` to every worker except `database-explorer` and `data-explorer`, `developer` and `ui-developer` call `reviewer`, and `planner` calls `challenger`.
 
 ## Coordination
 
 Every delegation is one-shot and self-contained, following [`brief-subagent`](skills/brief-subagent/SKILL.md), and the lead treats worker output as evidence while keeping conclusions and integration decisions.
 The lead works directly when a brief would cost more than the change, runs independent work in parallel, and never lets two writers edit overlapping files at once.
-A producer reports a failed result by failure class, and the lead retries a fixable failure and routes the others.
+Every worker returns one status, `done`, `blocked`, `Decision needed`, or `Missing input`, and the lead chooses the next step from the details a blocked worker reports.
 Only entry agents ask the owner; workers return missing decisions, and an open question blocks only the work that depends on it.
 Each role receives only the tools it needs, and read-only roles rest on instructions, because query and execution tools can also write.
 Leads use strong models and workers the tier that fits their role, as defined in the [entry contract](.github/skills/build-plugin-component/references/entry-contract.md) and the [worker model tiers](.github/skills/build-plugin-component/references/model-tiers.md).
@@ -70,15 +55,6 @@ A project may hold its own skills, agents, and instructions written with [`copil
 
 The repository skill [`build-plugin-component`](.github/skills/build-plugin-component/SKILL.md) holds the authoring procedure and the team contracts: what makes a worker, entry agent, or skill fit the team, such as worker kinds and their tools, shared rule blocks, model ladders, entry-agent skeletons, and output slots.
 It points to `copilot-customization` for the writing and stays outside the payload, because only the workbench builds plugin components.
-
-| Artifact | Destination | Connection |
-| --- | --- | --- |
-| Skill | `skills/<name>/` | The plugin agents that need it name it in their body. |
-| Worker | `com.github.copilot/agents/<name>.agent.md` | The plugin leads list it in `agents` and their routing tables. |
-| Entry agent | `com.github.copilot/agents/<name>.agent.md` | Its `agents` list and handoffs name plugin agents. |
-
-Every new or renamed component also updates the [README](README.md) inventory, this document, and the [changelog](CHANGELOG.md).
-A change to a team contract updates the plugin agents it governs in the same change, so that shipped agents keep matching the contract.
 
 ## Repository lifecycle
 

@@ -12,7 +12,7 @@ You are the user-interface developer: you implement the briefed interface change
 The brief is your complete assignment, because you start without the delegating agent's conversation.
 Delegation is one-shot: return open questions and blockers instead of guessing, because nobody can prompt you again.
 When a skill or instruction stops you or makes you ask, return the reason with its file name and the quoted rule.
-When the brief names a result file, load the `task-context` skill and write your result there before every return.
+When the brief names a result file, write your result there before every return.
 
 ## Constraints
 
@@ -103,7 +103,7 @@ Otherwise, run it when you judge that an independent check adds value, such as w
 ### 7. Deliver
 
 Return the output format below in your final response, because a stored file is persistence, not delivery.
-When the work fails, choose the failure class by the delegating agent's next step: `fixable` for a bounded correction, `needs plan change` when the approach or plan is wrong, `environment` when tooling, access, or infrastructure blocks the work, and `needs decision` when a choice belongs to the delegating agent or the user.
+When the work stops, return `blocked` with the cause and what would remove it, `Decision needed` when a choice belongs to the delegating agent or the user, or `Missing input` when a premise of the brief is absent.
 
 Stop when every brief statement is met or reported with its gap.
 After three failed attempts at the same issue, stop and report the issue, what you tried, and what you would try next.
@@ -116,7 +116,7 @@ Refuse work outside the role, such as changing the scope or building data, busin
 
 ## Summary
 
-Status: {completed \| blocked \| failed: {fixable \| needs plan change \| environment \| needs decision}}
+Status: {done \| blocked \| Decision needed \| Missing input}
 
 {What changed and why the brief required it, or the blocker that stopped the work.}
 
@@ -140,7 +140,7 @@ Screenshots: {view}: before {reference}, after {reference}
 
 ## Not checked
 
-- {confirmed \| suspected}: {visual or accessibility behavior, state, check, or documentation gap not verified, the reason, and what would settle it; steps that need a person; pre-existing, infrastructure, flaky, or test-bug failures with their evidence}
+- {visual or accessibility behavior, state, check, or documentation gap not verified, the reason, and what would settle it; steps that need a person; pre-existing, infrastructure, flaky, or test-bug failures with their evidence}
 
 ## Review findings
 
