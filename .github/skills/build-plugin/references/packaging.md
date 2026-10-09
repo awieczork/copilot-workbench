@@ -1,20 +1,6 @@
----
-name: agent-plugin-authoring
-description: "Use when work changes plugin.json, mcp.json, package structure, component placement, packaged paths, or the static integration of com.github.copilot components. Supplies Agent Plugins 1.0 packaging and static-conformance rules. Not for component wording, installation, runtime operation, or publication."
----
+# Packaging
 
-# Agent plugin authoring
-
-Apply these rules within the user's current task rather than running a separate packaging workflow or producing a separate report.
-
-## Keep the responsibility bounded
-
-- Govern the Agent Plugins 1.0 package structure, manifests, component placement, path containment, and static conformance.
-- Treat skills and Model Context Protocol (MCP) servers as portable Agent Plugins 1.0 components.
-- Treat files under `com.github.copilot/` as VS Code client extensions rather than portable component types.
-- Accept the content of a skill, agent, command, instruction, or hook as task input.
-- Validate load-critical metadata and placement without rewriting the component's instructional content.
-- Keep installation, editor settings, interactive surfaces, runtime behavior, credential handling, updates, release timing, tagging, and publication outside this skill.
+Treat skills and Model Context Protocol (MCP) servers as portable Agent Plugins 1.0 components, and files under `com.github.copilot/` as VS Code client extensions.
 
 ## Recognize the package
 
@@ -29,7 +15,7 @@ Treat a directory as Agent Plugins 1.0 only when root `plugin.json` declares:
 
 The manifest selects the package format before component discovery.
 Do not infer Agent Plugins 1.0 semantics from directory names alone.
-Read [Manifest and MCP reference](references/manifest.md) when work creates, changes, or validates `plugin.json` or `mcp.json`.
+Read [Manifest and MCP reference](manifest.md) when work creates, changes, or validates `plugin.json` or `mcp.json`.
 
 ## Place every file
 
@@ -98,4 +84,4 @@ Use these sources when a package rule is absent from the bundled reference or cu
 - [Agent Plugins specification](https://agent-plugins.org/specification) for the normative portable package contract.
 - [Use Agent Skills in VS Code](https://code.visualstudio.com/docs/agent-customization/agent-skills) for load-critical skill metadata recognized by VS Code.
 
-Keep the bundled reference as a concise working summary, not as authority over current primary documentation.
+Keep `packaging.md` and `manifest.md` as concise working summaries, not as authority over current primary documentation.
