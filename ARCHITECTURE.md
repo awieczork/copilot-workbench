@@ -6,14 +6,15 @@ This document gives the high-level design of `copilot-workbench`, a private [Age
 ## Purpose
 
 The package supports the owner's data science, scientific exploration, and hobby software projects, with Python as the general-purpose stack and other technologies chosen per project.
-Its design principles are personal use, technology independence, modular components, and project-owned extensions, and the [pillars](.github/copilot-instructions.md#pillars) set the vision for its development.
+Its design principles are personal use, technology independence, modular components, and plugin authoring kept in the workbench, and the [pillars](.github/copilot-instructions.md#pillars) set the vision for its development.
 
 ## Boundaries
 
 | Layer | Holds |
 | --- | --- |
-| Plugin package | Reusable agents, skills, scoped rules, MCP configuration, and bundled resources. |
-| Project repository | Technology-specific extensions, project instructions, source code, and durable project records. |
+| Plugin package | The agent team, general-use skills, scoped rules, MCP configuration, and bundled resources. |
+| Workbench | Plugin-authoring skills, team contracts, publication, and project records, outside the payload. |
+| Project repository | Standalone project customizations, project instructions, source code, and durable project records. |
 | Local environment | Credentials, saved connections, service configuration, and runtime dependencies. |
 | Temporary task state | Session and delegated-work state in the layout of [`task-context`](skills/task-context/SKILL.md). |
 
@@ -48,50 +49,26 @@ The lead works directly when a brief would cost more than the change, runs indep
 A producer reports a failed result by failure class, and the lead retries a fixable failure and routes the others.
 Only entry agents ask the owner; workers return missing decisions, and an open question blocks only the work that depends on it.
 Each role receives only the tools it needs, and read-only roles rest on instructions, because query and execution tools can also write.
-Leads use strong models and workers the tier that fits their role, as defined in the [entry contract](skills/build-entry-agent/references/entry-contract.md) and the [worker model tiers](skills/build-worker-agent/references/model-tiers.md).
+Leads use strong models and workers the tier that fits their role, as defined in the [entry contract](.github/skills/build-plugin-component/references/entry-contract.md) and the [worker model tiers](.github/skills/build-plugin-component/references/model-tiers.md).
 
 ## Skills and rules
 
 | Group | Components | Responsibility |
 | --- | --- | --- |
 | General customization | [`copilot-customization`](skills/copilot-customization/SKILL.md) | Artifact choice, metadata, writing guidance, and review. |
-| Plugin extensions | [`build-entry-agent`](skills/build-entry-agent/SKILL.md), [`build-worker-agent`](skills/build-worker-agent/SKILL.md), [`build-skill`](skills/build-skill/SKILL.md) | Project procedures for extending the plugin, and the team contract for each artifact kind. |
 | Coordination | [`brief-subagent`](skills/brief-subagent/SKILL.md), [`task-context`](skills/task-context/SKILL.md), [`interview-me`](skills/interview-me/SKILL.md) | Self-contained assignments, temporary state, and intent clarification. |
 | Execution | [`run-python`](skills/run-python/SKILL.md), [`redshift`](skills/redshift/SKILL.md), [`sql-server`](skills/sql-server/SKILL.md) | Runtime selection and bounded, read-only database work. |
 | Scoped rules | [Markdown](com.github.copilot/rules/markdown.instructions.md), [Python](com.github.copilot/rules/python.instructions.md), [SQL](com.github.copilot/rules/sql.instructions.md) | Conventions for ordinary documents, user-run task scripts, and read-only query text. |
 
 General behavior belongs in agents and skills, not in language rules.
 
-## Extensions and plugin authoring
+## Plugin authoring
 
-Agents and skills are created in two places: in a project, which extends the installed plugin, and in this repository, the workbench, which changes the plugin itself.
-Both follow [`copilot-customization`](skills/copilot-customization/SKILL.md) for writing and the same team contract for fitting the plugin's team; they differ in procedure, destination, and connection.
+The plugin changes only in this repository, the workbench.
+A project may hold its own skills, agents, and instructions written with [`copilot-customization`](skills/copilot-customization/SKILL.md), but nothing in a project joins the plugin's team; a capability that should work with the leads goes into the plugin.
 
-### Team contract and project procedure
-
-Each `build-*` skill holds two kinds of content:
-
-- **Team contract:** what makes an artifact of its kind fit the plugin's team, such as worker kinds and their tools, shared rule blocks, model ladders, entry-agent skeletons, and output slots; it sits in the skill's `references/` folder (`worker-contract.md` with `model-tiers.md`, `entry-contract.md`, and `skill-contract.md`) and applies to the plugin and to every project.
-- **Project procedure:** how to add the artifact to a project, from the specification to the project destination and its connection; it sits in the skill's `SKILL.md` and applies only in a project.
-
-The contract ships with the plugin, because projects need it, and it has one home, because the workbench reads the same files.
-
-### Extending the plugin in a project
-
-The user runs a `build-*` skill as a slash command in any agent that can ask the user, usually the default Agent mode; no plugin agent loads these skills, and no dedicated agent runs them.
-
-| Artifact | Destination | Connection |
-| --- | --- | --- |
-| Skill | `.github/skills/<name>/` | It loads by its description, and a project instruction also names it when it only supplies knowledge. |
-| Worker | `.github/agents/<name>.agent.md` | A project entry agent lists it, because plugin leads list only plugin workers. |
-| Entry agent | `.github/agents/<name>.agent.md` | Its `agents` list names project workers and plugin workers by their plain names, such as `explorer`, and its body names the plugin skills it uses. |
-
-Plugin agents and skills are fixed in a project: an extension uses them and never edits them.
-
-### Changing the plugin in the workbench
-
-The workbench does not run a `build-*` procedure, because that procedure targets project paths and treats the plugin as fixed.
-The [repository instructions](.github/copilot-instructions.md) route plugin authoring to `copilot-customization` and the contract file for the artifact's kind.
+The repository skill [`build-plugin-component`](.github/skills/build-plugin-component/SKILL.md) holds the authoring procedure and the team contracts: what makes a worker, entry agent, or skill fit the team, such as worker kinds and their tools, shared rule blocks, model ladders, entry-agent skeletons, and output slots.
+It points to `copilot-customization` for the writing and stays outside the payload, because only the workbench builds plugin components.
 
 | Artifact | Destination | Connection |
 | --- | --- | --- |
@@ -100,7 +77,7 @@ The [repository instructions](.github/copilot-instructions.md) route plugin auth
 | Entry agent | `com.github.copilot/agents/<name>.agent.md` | Its `agents` list and handoffs name plugin agents. |
 
 Every new or renamed component also updates the [README](README.md) inventory, this document, and the [changelog](CHANGELOG.md).
-A change to a team contract updates the plugin agents it governs in the same change, so that shipped agents keep matching what projects build.
+A change to a team contract updates the plugin agents it governs in the same change, so that shipped agents keep matching the contract.
 
 ## Repository lifecycle
 

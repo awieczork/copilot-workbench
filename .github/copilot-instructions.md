@@ -52,7 +52,7 @@ Guidance says what is wanted, once, in plain words a capable newcomer reads one 
 ## Customization authoring
 
 - When creating, changing, or reviewing instructions, agents, or skills, follow [copilot-customization](../skills/copilot-customization/SKILL.md).
-- When creating or changing a plugin skill, worker, or entry agent, also follow its team contract: the [skill contract](../skills/build-skill/references/skill-contract.md), [worker contract](../skills/build-worker-agent/references/worker-contract.md), or [entry contract](../skills/build-entry-agent/references/entry-contract.md); the `build-*` skills are the procedures for projects that use the plugin.
+- When creating, changing, or reviewing a plugin worker, entry agent, or skill, also follow [build-plugin-component](skills/build-plugin-component/SKILL.md), which holds the team contracts.
 - Complete and validate one artifact against its applicable references before starting another, because related policy can otherwise drift during the rewrite.
 - Use Copilot tool identifiers and supported Copilot model identifiers, because identifiers from another harness do not select Copilot capabilities.
 - Double-quote string frontmatter values in agents and rules, keeping native booleans such as `user-invocable: false`.

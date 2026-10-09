@@ -1,6 +1,6 @@
 # Entry contract
 
-Read this before writing an entry agent for the copilot-workbench plugin's team, in the plugin or in a project.
+Read this before writing or changing an entry agent of the plugin's team.
 An entry agent is an agent the user starts a conversation with: a lead that handles a task by delegating to workers, or a chat agent that shapes a request and hands it to a lead.
 
 ## Choose the kind
