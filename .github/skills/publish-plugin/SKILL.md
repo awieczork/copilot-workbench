@@ -2,7 +2,6 @@
 name: publish-plugin
 description: Publish an approved Agent Plugin release from `develop` to package-only `main`, correct existing release history, reconcile release-state records, and verify the package tree. Use when the owner asks to prepare, publish, or correct a plugin release.
 argument-hint: "[release goal or version]"
-user-invocable: true
 disable-model-invocation: true
 ---
 
@@ -46,33 +45,29 @@ Do not repair it inside this skill.
 
 When the request names an existing versioned `CHANGELOG.md` entry or published `v<version>` release, run this path instead of the new-release path.
 
-Read the existing versioned entry and compare it with:
+Read the [release note rules](references/release-notes.md), then read the existing versioned entry and compare it with:
 
 ```bash
 gh release view "v<version>" --json body --jq .body
 ```
 
-Draft one corrected component-first entry that preserves the verified user results and the existing version, date, and non-empty subsections.
-
+Draft one corrected entry that preserves the verified user results and the existing version, date, and non-empty subsections.
 Ask the owner to approve the exact replacement before changing `CHANGELOG.md`, `main`, or the GitHub Release.
 
-After approval, set `notes_file` to an unused temporary file outside the repository and write the complete approved replacement to it.
-
-Require `test -s "$notes_file"` to succeed before continuing.
-
+After approval, write the replacement to `notes_file` as in [Draft and approve release notes](#draft-and-approve-release-notes).
 Update `CHANGELOG.md` on `develop` and commit it as `docs(release): correct notes for v<version>`.
+Build and verify the package tree by [Build the package tree in a git worktree](#build-the-package-tree-in-a-git-worktree) and [Verify the package tree](#verify-the-package-tree), but commit the snapshot as `chore(release): correct notes for v<version>`, and create or move no tag.
 
-Build and verify a package-only `main` snapshot from that commit without creating or moving a tag.
-
-After the owner confirms the exact correction, push `develop` and `main`, then update the GitHub Release with:
+After the owner confirms the exact correction, push both branches as one update, then update the GitHub Release:
 
 ```bash
+git push --atomic origin develop main
 gh release edit "v<version>" --notes-file "$notes_file"
 ```
 
 Do not route a versioned-entry correction through `commit-dev`.
-
 Stop on any failed command and report which branch, release body, or local file was updated.
+Finish every run of this path with [Clean the plugin git worktree](#clean-the-plugin-git-worktree).
 
 The release-history path is complete only when `CHANGELOG.md`, package-only `main`, and the GitHub Release carry the same approved correction.
 
@@ -90,16 +85,10 @@ Do not edit `plugin.json`, `CHANGELOG.md`, create a tag, or update a branch befo
 
 ## Draft and approve release notes
 
-Read [release note rules](references/release-notes.md) before drafting.
-Read the [changelog instruction](../../../com.github.copilot/rules/changelog.instructions.md) before drafting or revising any bullet.
-Run `git diff --name-status origin/main..develop` and inspect the changed paths.
+Read the [release note rules](references/release-notes.md) before drafting, because they hold the bullet rules, the evidence classification, and the entry shape.
+Run `git diff --name-status origin/main..develop`, and inspect the changed paths and the behavior they implement.
 Use `origin/main` as the published-state reference, because a local package branch can be absent before the package-tree setup creates it.
-Inspect changed paths and the behavior they implement before writing a note.
-Read the current `## Unreleased` section in `CHANGELOG.md` as a working description of the current difference, not as a change history.
-Consolidate, update, merge, or remove its bullets so that each remaining bullet describes one distinct user-visible result present in the final `origin/main..develop` state.
-Classify every user-visible change in the `origin/main..develop` diff as covered by an approved final bullet or explicitly omitted as internal.
-Write the draft in English to match this repository's current `CHANGELOG.md` and documentation.
-Run the draft checklist in the reference before asking for approval.
+Draft the versioned entry from the `## Unreleased` section and that diff, and run the draft checklist in the reference before asking for approval.
 
 Ask the owner to approve the exact draft, through #tool:vscode/askQuestions when you hold it.
 Include the proposed version and the complete note body in that question.
@@ -112,21 +101,15 @@ Require `test -s "$notes_file"` to succeed before continuing.
 ## Prepare the source commit
 
 After both approvals, update only the `version` field in `plugin.json` on `develop` when the approved version differs from the current version.
-Apply the approved versioned entry from `notes_file` to `CHANGELOG.md`.
-Use the same text in `CHANGELOG.md` and the GitHub Release; do not add a separate introduction, summary, or migration section to either one.
-Preserve earlier versioned entries below the new entry and apply the release-note rules for any first-release placeholder.
-Keep the entry headings and non-empty sections from the release-note reference.
+Apply the approved versioned entry from `notes_file` to `CHANGELOG.md` by the entry rules in the release-note reference.
 Run `git status --porcelain` and require `CHANGELOG.md` and, when the version changed, `plugin.json` to be the only modified paths.
 Read `git diff -- plugin.json CHANGELOG.md` and require the approved changelog transition and, when applicable, the version bump to be the only content changes.
 Stop when another path is modified or the diff carries a change that is neither the approved changelog transition nor the applicable version bump.
-When source preparation fails, follow `Handle pre-publication failure` before building the package tree.
 
 Stage `CHANGELOG.md` and, when the version changed, `plugin.json` by name.
 Inspect `git diff --cached --name-status` and require exactly the changed paths.
-When staging or the commit fails, follow `Handle pre-publication failure` and stop.
 Create the local conventional commit `chore(release): prepare v<version>` on `develop`.
 Stop and report when the develop working tree is not clean after the commit.
-When the post-commit cleanliness check fails, follow `Handle pre-publication failure` and stop.
 
 The source commit is complete only when `develop` contains the approved version and notes, the release changelog has no duplicated `Unreleased` bullets, and `git status --porcelain` on `develop` returns no output.
 
@@ -136,8 +119,6 @@ Set `repo_root` to the output of `git rev-parse --show-toplevel`.
 Set `plugin_worktree` to `"${repo_root}.plugin-worktree"`, a sibling directory of the repository root.
 When local `main` exists, run `git worktree add "$plugin_worktree" main`.
 When local `main` is absent, run `git worktree add -b main "$plugin_worktree" origin/main`.
-
-When `git worktree add` fails, remove `notes_file`, report the failed command and the retained source commit, and stop.
 
 In the plugin git worktree, reset the index and the checked-out files to an empty tree:
 
@@ -154,9 +135,8 @@ git -C "$plugin_worktree" restore --source=develop --staged --worktree -- \
 ```
 
 Read `git -C "$plugin_worktree" status --short` and require every listed path to belong to the allowlist.
-Stage the allowlist by name rather than with `git add`, because `git add` silently skips a path that the copied `.gitignore` matches.
+The restore command stages the allowlist; do not run `git add`, because it silently skips a path that the copied `.gitignore` matches.
 Stop when a path outside the allowlist is staged or when a required allowlisted path cannot be restored.
-When a command after `git worktree add` fails, follow `Handle pre-publication failure` before requesting push confirmation.
 
 ## Verify the package tree
 
@@ -176,20 +156,16 @@ git -C "$plugin_worktree" ls-tree -r --name-only HEAD
 
 Check every path the second command prints against the allowlist above.
 Stop publication when the first command exits non-zero or the second prints a path outside the allowlist.
-When tree verification fails, follow `Handle pre-publication failure` before stopping.
-Both commands read the committed candidate through `HEAD`, so neither reports uncommitted working-tree state.
 
 ## Handle pre-publication failure
 
-When source preparation fails, including a failed post-commit cleanliness check, run `git status --short`, report the failed command and every remaining path, and remove `notes_file`.
-Leave the versioned files on disk for owner resolution.
-Do not push them with `commit-dev`.
-Stop until the owner resolves the failure and the main working tree is clean.
+Follow this section whenever a check or command fails after preflight and before the push confirmation, then stop.
 
-When a command after `git worktree add` fails before the push confirmation, remove `notes_file` and run `git -C "$plugin_worktree" status --short`.
-Remove the plugin git worktree when that status is empty.
-When the status is not empty, stop and report the path for manual cleanup.
-Do not continue to tag or push after a failed command.
+- In source preparation, including the post-commit cleanliness check, run `git status --short`, report the failed command and every remaining path, and remove `notes_file`; leave the versioned files on disk for owner resolution, and do not push them with `commit-dev`.
+- When `git worktree add` fails, remove `notes_file`, and report the failed command and the retained source commit.
+- After `git worktree add` succeeded, remove `notes_file` and run `git -C "$plugin_worktree" status --short`; remove the plugin git worktree when that status is empty, and otherwise report the path for manual cleanup.
+
+Do not tag or push after a failed command, and wait until the owner resolves the failure and the main working tree is clean.
 
 ## Get one push confirmation
 

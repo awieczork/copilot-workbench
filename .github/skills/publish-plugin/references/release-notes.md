@@ -5,8 +5,6 @@ Apply these rules only while drafting the user-facing changelog entry and GitHub
 `CHANGELOG.md` follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Write no sentence in `CHANGELOG.md` about that convention or about the file's own format; the entries alone carry the document.
 
-The closing checklist restates these rules on purpose, as a separate pass over a finished draft rather than as emphasis.
-
 ## Prepare the release body
 
 Use the [Changelog Entries](../../../../com.github.copilot/rules/changelog.instructions.md) instruction for bullet language and user-facing phrasing.
