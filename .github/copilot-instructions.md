@@ -41,12 +41,13 @@ Guidance says what is wanted, once, in plain words a capable newcomer reads one 
 - Use short active sentences, expand an abbreviation on first use, and keep lists short and ordered by priority.
 - Give an estimate in concrete units with its assumption.
 - Report an error by what failed, its cause or hypothesis, its impact, and the smallest useful check or fix.
+- Write English replies to the owner in ASD-STE100 Simplified Technical English, and write artifacts and text for other agents, such as briefs and results, by their own writing guidance.
 
 ## Artifact scope
 
 - When the request neither names nor implies the destination of a new artifact, ask whether it belongs to the plugin package or this repository's `.github/` folder, because both exist here.
 - Place plugin skills under `skills/<name>/`, agents under `com.github.copilot/agents/`, and scoped rules under `com.github.copilot/rules/`, and keep repository customizations under `.github/`, outside the distributed payload.
-- Keep plugin artifacts usable in any project, without private paths, workbench policy, or dependencies on repository-only records.
+- Keep plugin artifacts free of private paths, workbench policy, and dependencies on repository-only records.
 - Keep secrets and work-specific connection values in local configuration, and refer to them by their local configuration names in [mcp.json](../mcp.json).
 
 ## Customization authoring
@@ -54,27 +55,26 @@ Guidance says what is wanted, once, in plain words a capable newcomer reads one 
 - When creating, changing, or reviewing instructions, agents, or skills, follow [copilot-customization](../skills/copilot-customization/SKILL.md).
 - When creating, changing, or reviewing a plugin worker, entry agent, or skill, also follow [build-plugin-component](skills/build-plugin-component/SKILL.md), which holds the team contracts.
 - Complete and validate one artifact against its applicable references before starting another, because related policy can otherwise drift during the rewrite.
+- Treat every skill and scoped rule as available to every agent, including a subagent, without a reference, because Copilot keeps each skill's `name` and `description` in context and loads the skill when the task matches, and attaches a rule when its `applyTo` matches a changed file or its `description` matches the task; only `disable-model-invocation: true` stops the agent from loading a skill.
+- Name a skill or rule in an agent body only when the agent must load it at a fixed point, such as before its first query, and do not count an unnamed one as unreachable.
 - Use Copilot tool identifiers and supported Copilot model identifiers, because identifiers from another harness do not select Copilot capabilities.
 - Double-quote string frontmatter values in agents and rules, keeping native booleans such as `user-invocable: false`.
-- Mark subagent-only agents with `user-invocable: false`, and keep `software-lead`, `data-lead`, and `discuss` as the user-facing entry points.
-- Write customization prose as direct imperatives, one sentence per line, without hard wrapping.
-- For ordinary documentation, follow the [Markdown rule](../com.github.copilot/rules/markdown.instructions.md); for customization files, follow the `copilot-customization` references instead.
+- Keep `software-lead`, `data-lead`, and `discuss` as the only user-facing agents.
+- Write customization prose one sentence per line, without hard wrapping.
 
 ## Project records
 
 - When changing package design or component boundaries, read [ARCHITECTURE.md](../ARCHITECTURE.md) as the design source and update only the affected design.
-- When continuing staged work or changing verified progress, read and update [PROJECT-STATUS.md](../PROJECT-STATUS.md), the operational handoff and sole roadmap.
-- When an unresolved decision, missing input, or verified limitation affects the work, record it in [OPEN-ISSUES.md](../OPEN-ISSUES.md), the canonical register, and link it under `Blockers` in the project status when it blocks an active task.
+- When continuing staged work or changing verified progress, read and update [PROJECT-STATUS.md](../PROJECT-STATUS.md), the sole roadmap.
+- When an unresolved decision, missing input, or verified limitation affects the work, record it in [OPEN-ISSUES.md](../OPEN-ISSUES.md).
 - When specifying a new agent or skill, consult [REFERENCES.md](../REFERENCES.md) for structural inspiration, and record a newly adopted external source there.
+- When changing the plugin skill `copilot-customization`, follow its sources and refresh procedure in [REFERENCES.md](../REFERENCES.md).
 - When adding, removing, or renaming a plugin component, update the inventory in [README.md](../README.md).
-- When a change affects plugin users, record its verified effect under `Unreleased` in [CHANGELOG.md](../CHANGELOG.md), without claiming a capability absent from the worktree.
-- When task state must survive a session or pass between agents, follow [task-context](../skills/task-context/SKILL.md), and keep those temporary notes under `.github/context/`, apart from the durable records.
+- When a change affects plugin users, record it under `Unreleased` in [CHANGELOG.md](../CHANGELOG.md).
 - Never point a tracked file at content under `.github/context/`, because that folder is untracked and its content is absent from every other clone; move the needed facts into the tracked file instead.
-- When delegating work, pass the decisions already made with it, because a subagent fills unstated decisions with its own guesses.
 
 ## Execution and validation
 
-- When executing Python, follow [run-python](../skills/run-python/SKILL.md) and run it through `uv`, because the skill chooses the environment the code needs.
 - Before relying on an additional runtime, confirm that this Linux workspace provides it.
 - After text edits, run `git diff --check` before reporting completion.
 - Match executable checks to the changed behavior, and report checks that were unavailable or not run.
@@ -83,6 +83,5 @@ Guidance says what is wanted, once, in plain words a capable newcomer reads one 
 
 - Author on `develop`, and treat package-only `main` as the intended distribution branch and remote default without claiming it is ready before verification.
 - Keep branch protection disabled and push through the existing GitHub CLI credential helper without changing GitHub CLI authentication, as the owner decided.
-- Before release work, follow the release phase in [PROJECT-STATUS.md](../PROJECT-STATUS.md), and run the publication skill unchanged.
+- Before release work, follow the release phase in [PROJECT-STATUS.md](../PROJECT-STATUS.md), and run [publish-plugin](skills/publish-plugin/SKILL.md) unchanged.
 - Commit, push, tag, publish, or rewrite history only when the owner explicitly requests it, because implementation approval does not authorize publication.
-- During approved release preparation, reconcile the manifest version, release notes, distribution payload, and project records using verified release evidence.
