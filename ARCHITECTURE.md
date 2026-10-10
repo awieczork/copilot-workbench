@@ -29,10 +29,11 @@ The user selects an entry agent, which works directly or delegates bounded assig
 
 ## Coordination
 
-Every delegation is one-shot and self-contained, following [`brief-subagent`](skills/brief-subagent/SKILL.md), and the lead treats worker output as evidence while keeping conclusions and integration decisions.
-The lead works directly when a brief would cost more than the change, runs independent work in parallel, and never lets two writers edit overlapping files at once.
-Every worker returns one status, `done`, `blocked`, `Decision needed`, or `Missing input`, and the lead chooses the next step from the details a blocked worker reports.
-Only entry agents ask the owner; workers return missing decisions, and an open question blocks only the work that depends on it.
+Every delegation is one-shot and self-contained, following [`brief-subagent`](skills/brief-subagent/SKILL.md), and the delegating agent treats worker output as evidence while keeping conclusions and integration decisions.
+An entry agent delegates when a worker saves its context or works in parallel with it, does the rest itself, and runs briefs in parallel only when their inputs, outputs, and conclusions are independent.
+Every worker returns one status, `done`, `blocked`, `Decision needed`, or `Missing input`, and the delegating agent acts on it as `brief-subagent` describes.
+The task holder, the entry agent the user talks to, keeps task state through [`task-context`](skills/task-context/SKILL.md), and a worker writes task state only to the result file its brief names.
+Only entry agents ask the user; workers return missing decisions, and an open question blocks only the work that depends on it.
 Each role receives only the tools it needs, and read-only roles rest on instructions, because query and execution tools can also write.
 Leads use strong models and workers the tier that fits their role, as defined in the [entry contract](.github/skills/build-plugin/references/entry-contract.md) and the [worker model tiers](.github/skills/build-plugin/references/model-tiers.md).
 

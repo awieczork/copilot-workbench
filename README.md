@@ -30,33 +30,33 @@ For a released package, the installed version must match [plugin.json](plugin.js
 
 | Skill | Purpose |
 | --- | --- |
-| `brief-subagent` | Supplies self-contained briefs for one-shot delegation. |
+| `brief-subagent` | Supplies self-contained briefs for one-shot delegation and how to act on the status each subagent returns. |
 | `copilot-customization` | Guides writing and reviewing Copilot instructions, skills, and agents. |
 | `interview-me` | Clarifies the user's intent before work continues; only the user invokes it. |
 | `redshift` | Runs read-only queries against user-provided Redshift targets, with an MCP-first workflow and a bounded Python fallback. |
-| `run-python` | Runs Python through `uv` in project or no-project mode. |
+| `run-python` | Runs Python scripts and inline code through `uv`, with or without the project environment, and runs a script with an inline dependency block outside the project. |
 | `sql-server` | Runs read-only SQL Server queries against user-provided targets through saved connections. |
-| `task-context` | Keeps temporary task summaries and delegated results under `.github/context/`. |
+| `task-context` | Keeps one task's state in a Git-ignored task folder that the agent the user talks to maintains, with a result file for each delegated result. |
 
 ### Agents
 
 User-facing agents appear in the agent picker.
 Workers run as subagents of an allowed entry agent or producer.
 
-| Agent               | Kind     | Purpose                                                                                                     |
-| :------------------ | :------- | :---------------------------------------------------------------------------------------------------------- |
-| `software-lead`     | Lead     | Delivers software changes by deciding the approach, briefing workers, and judging results.                  |
-| `data-lead`         | Lead     | Answers data-science questions with evidence and owns the conclusion.                                       |
-| `discuss`           | Chat     | Shapes an unfinished idea and hands it to a lead.                                                           |
-| `explorer`          | Helper   | Searches the workspace for one question and returns locations with findings.                                |
-| `database-explorer` | Helper   | Finds and profiles the tables, columns, and join paths for one data question.                               |
-| `data-explorer`     | Helper   | Finds and profiles the local dataset files for one data question without changing them.                     |
-| `researcher`        | Helper   | Gathers sourced external evidence for one bounded question.                                                 |
-| `planner`           | Producer | Produces an executable plan for work with significant decisions.                                            |
-| `developer`         | Producer | Implements a change with its tests and calls `reviewer` when the brief requires it or the risk warrants it. |
-| `ui-developer`      | Producer | Implements and checks interface changes in the browser.                                                     |
-| `reviewer`          | Checker  | Assesses a finished result against its goal without repairing it.                                           |
-| `challenger`        | Helper   | Tests one decision or framing with the strongest objection and the cheapest settling check.                 |
+| Agent | Kind | Purpose |
+| --- | --- | --- |
+| `software-lead` | Lead | Delivers software changes by deciding the approach, briefing workers, and judging results. |
+| `data-lead` | Lead | Answers data-science questions with evidence and owns the conclusion. |
+| `discuss` | Chat | Shapes an unfinished idea and hands it to a lead. |
+| `explorer` | Helper | Searches the workspace for one question and returns locations with findings. |
+| `database-explorer` | Helper | Finds and profiles the SQL Server and Redshift objects and join paths for one data question, drafts read-only queries, and returns the queries it ran. |
+| `data-explorer` | Helper | Finds and profiles the local dataset files for one data question without changing them. |
+| `researcher` | Helper | Gathers sourced external evidence for one bounded question. |
+| `planner` | Producer | Produces an executable plan for a change or an analysis with dependent steps or open design decisions, and calls `challenger` when an error in a decision would be costly. |
+| `developer` | Producer | Implements a change with tests scaled to the cost of an undetected error, and calls `reviewer` when the brief requires it or an error would be costly to find later. |
+| `ui-developer` | Producer | Implements an interface change, checks it in the running app in a browser, and calls `reviewer` when the brief requires it or an error would be costly to find later. |
+| `reviewer` | Checker | Assesses a finished result against its goal without repairing it. |
+| `challenger` | Helper | Tests one decision or framing with the strongest objection and the cheapest settling check. |
 
 ### Rules
 
@@ -90,7 +90,7 @@ The [SQL Server skill](skills/sql-server/SKILL.md) connects to the saved server,
 
 The Redshift MCP configuration currently uses the local AWS profile label `redshift-mcp`.
 Configure that profile's credentials and region on the machine that runs the server; no cluster or database target is encoded in the skills.
-The [Redshift skill](skills/redshift/SKILL.md) uses MCP first and permits its Python fallback only after the documented access or tool failures.
+The [Redshift skill](skills/redshift/SKILL.md) uses MCP first and switches to its Python fallback only when MCP cannot reach the cluster.
 
 The fallback requires a workspace-root `.env` with these locally supplied settings:
 
