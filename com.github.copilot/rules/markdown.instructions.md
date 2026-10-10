@@ -6,27 +6,18 @@ applyTo: "**/*.md"
 
 # Markdown
 
-Write every document against the [GFM specification](https://github.github.com/gfm/).
-Apply the rules below from memory; do not download the specification.
+Write every document in GitHub Flavored Markdown (GFM), and apply the rules below from memory instead of fetching the specification.
 
 ## Scope
 
-These rules govern Markdown documents: READMEs, project documentation, notes, and reports.
-They do not govern agent customization files, which follow their own syntax authorities:
-
-- `**/copilot-instructions.md`, `**/AGENTS.md`, and `**/CLAUDE.md`;
-- `**/CLAUDE.local.md`, `**/.claude/rules/**/*.md`, and `**/*.chatmode.md`;
-- `**/*.instructions.md`, `**/*.agent.md`, and `**/*.prompt.md`;
-- `**/SKILL.md` and every `.md` file bundled under a skill directory.
-
-When a request targets one of those paths, do not apply the rules below.
+Do not apply these rules to a file that customizes an agent, such as an instructions, agent, prompt, or skill file, a file bundled in a skill folder, or a model memory file such as `AGENTS.md` or `CLAUDE.md`, because those files follow their own syntax authorities.
 
 When a rule under Style or Prose language conflicts with a convention the edited document already applies to every instance of the same element, keep the document's convention and name the conflict in your reply.
 Apply the syntax and rendering rules in the other sections without this exception.
 
 When a document opens with a YAML frontmatter block, leave its keys, order, and quoting untouched unless the request targets them.
 
-In this file, the content column is the first column after a parent list marker and its following space.
+The content column of a list item is the first column after its marker and the following space.
 
 ## Blocks
 
@@ -50,7 +41,7 @@ In this file, the content column is the first column after a parent list marker 
   Changing the marker character starts a new list.
 - Indent a nested list or a continuation paragraph to the content column of its parent item.
 - Keep one list either tight throughout or loose throughout; a single blank line between two items makes every item render as a paragraph.
-- Write a task list item as `- [ ]` or `- [x]`, with the space between `-` and `[` present.
+- Write a task list checkbox as `[ ]` or `[x]` after the list marker and one space.
 - Prefix every line of a block quote with `>`, including its blank lines, rather than relying on lazy continuation.
 
 ## Inlines
@@ -58,12 +49,11 @@ In this file, the content column is the first column after a parent list marker 
 - Use `*` for emphasis and `**` for strong emphasis.
   Do not use `_` delimiters because GitHub Flavored Markdown treats them differently inside words.
 - Write strikethrough as exactly `~~text~~`; three or more tildes render literally.
-- Write links inline as `[descriptive text](destination)`, with no whitespace between the text and `(`, and do not use `here` as link text.
+- Write links inline as `[descriptive text](destination)`, with no whitespace between the text and `(`.
   Wrap a destination containing spaces in angle brackets.
   Use a reference definition (`[label]: destination`) only when the same destination appears three or more times.
 - Link to a file in the same repository by a relative path that resolves from the linking document.
-- Give a URL in prose descriptive link text.
-  When the URL itself must remain visible, wrap it in angle brackets so that GFM autolinks it.
+- When a URL itself must remain visible, wrap it in angle brackets so that GFM autolinks it.
 - Give every image alt text that names what the image shows; GFM renders the alt text as plain string content.
 - Escape an ASCII punctuation character with `\` when it would otherwise start markup, such as a leading `#`, `-`, or `>` on a line.
   Put a literal `<` or `&` inside backticks when it could form valid raw HTML or an entity reference.
@@ -75,7 +65,6 @@ In this file, the content column is the first column after a parent list marker 
 ## Style
 
 - Write one sentence per line and do not hard-wrap at a fixed column, so that a diff shows one changed sentence per changed line.
-- Name a heading after the content beneath it, not after its position in the document.
 - Use a table when every item carries the same fields, a list when the items are alternatives or ordered steps, and a paragraph otherwise.
 - Use sentence case in headings and list items, and open every item in one list with the same part of speech.
 - Use bold for a term the document defines and italics for a word the sentence stresses; never use bold in place of a heading.

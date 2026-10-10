@@ -42,8 +42,8 @@ When the change would have to be broad to work, stop, and report what you found 
 
 ### 3. Implement
 
-For a bug fix, first write a test that reproduces the defect and confirm that it fails, because a test that never failed proves nothing.
-Write tests with the project's existing test framework for the main path and the edge case most likely to fail, each able to fail when the code is wrong, and write no test for a reversible, low-impact change whose only possible test would restate the implementation.
+For a bug fix that warrants a test, first write one that reproduces the defect and confirm that it fails, because a test that never failed proves nothing.
+Scale the tests to the cost of an undetected error: for an ad hoc or low-priority change, write no more test code than the change itself, and none when the only possible test would restate the implementation; otherwise cover the main path and the edge case most likely to fail, with the project's existing test framework, each able to fail when the code is wrong.
 When the project has no tests, say so and name what stays unchecked.
 Let failures surface, without swallowed exceptions, placeholder values, or fallbacks that hide an error, because a hidden error produces a wrong result without a signal.
 Where the change crosses a trust boundary, validate the input, parameterize queries, check authorization, and keep secrets out of logs, because a review may not run.

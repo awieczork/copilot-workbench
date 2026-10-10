@@ -11,7 +11,7 @@ applyTo: "CHANGELOG.md"
 ## Write each bullet
 
 - Write one bullet, in one sentence, for one distinct user-visible result.
-- Lead with what a user can do, observe, or rely on after the change, and name the capability or behavior rather than the implementation step.
+- Name the capability or behavior a user can do, observe, or rely on after the change, rather than the implementation step.
 - Include a product name, command, path, or configuration value only when it is part of the user's visible result.
 - Write in plain English, the past tense, and the active voice, and name the changed component or capability right after the opening verb.
 - Start every bullet with `Added` for a capability the latest release did not provide, `Changed` for altered behavior, output, usage, or scope, including a capability removed without replacement, or `Fixed` for a user-visible defect the current change set corrects.
@@ -34,10 +34,8 @@ Avoid:
 - Promoted the `login` component with improved error handling.
 ```
 
-The preferred bullets state the user-facing result, and the avoided bullets bury the component or describe internal status and implementation history.
-
 ## Reconcile with the current result
 
-- Take the existing bullets and versioned entries from `CHANGELOG.md`, the prior baseline from the latest versioned entry or release tag, and the changes from the path set selected for the current operation, including its staged, unstaged, and untracked changes.
+- Take the existing bullets and versioned entries from `CHANGELOG.md`, the prior baseline from the latest versioned entry or release tag, and the changes from the paths the current request covers, including their staged, unstaged, and untracked changes.
 - When the baseline or the selected path set is unavailable, report `Missing input` instead of inferring it, because a guessed baseline turns `Changed` into `Added` or the reverse.
 - Compare each proposed bullet with the existing bullets and the baseline before writing it: update a bullet that a later change extends, merge bullets that produce one final result, remove a bullet whose behavior was replaced or no longer appears, and keep separate bullets for independent results.

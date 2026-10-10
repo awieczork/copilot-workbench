@@ -10,17 +10,16 @@ The whole execution path must therefore be visible from top to bottom.
 Prefer the smallest implementation that produces the requested result.
 
 Apply the rules below only to a task script: a file the user runs directly to answer the current bounded question.
-When the target is imported reusable code, a test, a package initializer, or an application or service module, follow its project conventions instead and do not apply the rules below.
+For any other Python file, follow its project conventions instead.
 
 Within a task script, follow the naming, structure, and idioms already established in the file.
-When an established convention conflicts with a rule below, report the conflict as `Decision needed` instead of rewriting the file solely for conformance.
+When an established convention conflicts with a rule below, keep the file's convention and name the conflict in your result.
 
-Target Python 3.11 as the user's standard.
-When the target project declares another Python version, report the conflict as `Decision needed` before using version-specific syntax.
+Target the Python version the project declares, and Python 3.11 when it declares none.
 
 ## Shape the script linearly
 
-- Start the script with an inline script metadata block that declares `requires-python` and its dependencies, because `run-python` runs such a script in its own environment.
+- Start a script that does not import the project with an inline script metadata block that declares `requires-python` and its dependencies, so that it runs in its own environment.
 - Follow the block with a one-line module docstring stating the result the script produces.
 - Put paths, thresholds, seeds, and other varying values in one constants block below the imports.
 - Define `main()` and call it from `if __name__ == "__main__":`.
@@ -28,15 +27,13 @@ When the target project declares another Python version, report the conflict as 
 - Extract a helper only when it is called from more than one place, or when it replaces a distinct operation longer than 15 nonblank lines.
 - Name intermediate results after their analytical role and keep them as visible variables.
 - Set an explicit seed for every stochastic operation.
-- Name modules, functions, and variables in `snake_case`, and constants in `UPPER_SNAKE_CASE`.
 - Format the finished script with `uvx ruff format`, and when it fails, report the failed check instead of substituting another formatter.
 
 Do not add classes, a command-line interface, configuration objects, plugin registries, dependency injection, or a logging framework to a script.
 These layers cost more to read than the analysis they wrap, and a constant at the top of the file replaces most of them.
-When the task appears to need one, report `Decision needed` with the purpose and the minimum shape, and wait.
+When the task appears to need one, report `Decision needed` with the purpose and the minimum shape, and do not add it.
 
-Do not write tests for a task script; when it produces a wrong number, fix the script.
-Add a test only when the user asks for one.
+Write a test for a task script only when an undetected error would cost more than the test, and keep the test code shorter than the script, because the script answers one bounded question.
 
 ## Type only the boundaries
 
@@ -55,23 +52,22 @@ Add a test only when the user asks for one.
 ## Work on tabular data with Polars
 
 - Use `polars` for tabular work.
-- Ask the user before adding `pandas`, and use it only for a named reason they accepted.
+- Add `pandas` only for a named reason the user accepted, because a second frame library doubles the conversions and idioms a reader must follow.
 - Express transformations as Polars expressions instead of `iter_rows()`, `map_elements()`, or Python row loops.
 - Read Parquet for a lazy workflow with `pl.scan_parquet()`.
 - End a lazy chain with `sink_parquet()` when the result goes to Parquet, and with `.collect()` when the next step needs the frame in memory.
-- Use `pl.read_parquet()` only when the following operation requires an eager frame.
-- Do not call `pl.read_parquet(...).lazy()` because `read_parquet()` has already materialised the file and cannot use scan-level optimisations.
+- Use `pl.read_parquet()` only when the next operation requires an eager frame, because `read_parquet()` materialises the file and loses scan-level optimisations even when followed by `.lazy()`.
 - Prefix DataFrame variables with `df_`.
 - Convert to NumPy or another representation only at the boundary of a library that requires it.
 
 ## Keep validation proportionate
 
 Assume the input data is what the user says it is.
-A script that breaks on bad input gets fixed in a minute; validation scaffolding that outgrows the analysis costs an hour and hides the analysis forever.
+Fixing a script that breaks on bad input costs less than validation that outgrows the analysis and buries it.
 
 - Add a plain `assert` with a short message only for an assumption whose failure would silently change the result, such as join cardinality that could duplicate rows.
 - Let unexpected failures raise; a `try/except` that logs and continues can turn a visible error into a wrong number.
-- Do not add schema validators, custom exception classes, retry logic, input-sanitising layers, or defensive `try/except` around ordinary calls.
+- Do not add schema validators, custom exception classes, retry logic, or input-sanitising layers.
 - Do not check the output for a property you already asserted on the input; inspect the transformation between them instead.
 - Keep the checking code shorter than the transformation it protects.
 

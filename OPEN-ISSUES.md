@@ -1,3 +1,3 @@
 # Open Issues
 
-- None identified
+- None.
