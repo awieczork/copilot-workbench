@@ -12,7 +12,7 @@ Write every document in GitHub Flavored Markdown (GFM), and apply the rules belo
 
 Do not apply these rules to a file that customizes an agent, such as an instructions, agent, prompt, or skill file, a file bundled in a skill folder, or a model memory file such as `AGENTS.md` or `CLAUDE.md`, because those files follow their own syntax authorities.
 
-When a rule under Style or Prose language conflicts with a convention the edited document already applies to every instance of the same element, keep the document's convention and name the conflict in your reply.
+When a rule under Style or Prose language conflicts with a convention the edited document already applies to every instance of the same element, keep the document's convention and name the conflict in your result.
 Apply the syntax and rendering rules in the other sections without this exception.
 
 When a document opens with a YAML frontmatter block, leave its keys, order, and quoting untouched unless the request targets them.

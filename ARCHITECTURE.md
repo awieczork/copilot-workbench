@@ -32,7 +32,7 @@ The user selects an entry agent, which works directly or delegates bounded assig
 Every delegation is one-shot and self-contained, following [`brief-subagent`](skills/brief-subagent/SKILL.md), and the delegating agent treats worker output as evidence while keeping conclusions and integration decisions.
 An entry agent delegates when a worker saves its context or works in parallel with it, does the rest itself, and runs briefs in parallel only when their inputs, outputs, and conclusions are independent.
 Every worker returns one status, `done`, `blocked`, `Decision needed`, or `Missing input`, and the delegating agent acts on it as `brief-subagent` describes.
-The task holder, the entry agent the user talks to, keeps task state through [`task-context`](skills/task-context/SKILL.md), and a worker writes task state only to the result file its brief names.
+The task holder, the entry agent the user talks to that holds the task, keeps task state through [`task-context`](skills/task-context/SKILL.md), and a worker writes task state only to the result file its brief names.
 Only entry agents ask the user; workers return missing decisions, and an open question blocks only the work that depends on it.
 Each role receives only the tools it needs, and read-only roles rest on instructions, because query and execution tools can also write.
 Leads use strong models and workers the tier that fits their role, as defined in the [entry contract](.github/skills/build-plugin/references/entry-contract.md) and the [worker model tiers](.github/skills/build-plugin/references/model-tiers.md).
@@ -54,7 +54,7 @@ General behavior belongs in agents and skills, not in language rules.
 The plugin changes only in this repository, the workbench.
 A project may hold its own skills, agents, and instructions written with [`copilot-customization`](skills/copilot-customization/SKILL.md), but nothing in a project joins the plugin's team; a capability that should work with the leads goes into the plugin.
 
-The repository skill [`build-plugin`](.github/skills/build-plugin/SKILL.md) holds the review questions drawn from the pillars, the authoring method, the team contracts, and the packaging rules: what makes a worker, entry agent, or skill fit the team, such as worker kinds and their tools, shared rule blocks, model ladders, entry-agent skeletons, and output slots, and what makes the package valid.
+The repository skill [`build-plugin`](.github/skills/build-plugin/SKILL.md) points to the review questions drawn from the pillars in `copilot-customization`, and holds the authoring method, the team contracts, and the packaging rules: what makes a worker, entry agent, or skill fit the team, such as worker kinds and their tools, shared rule blocks, model ladders, entry-agent skeletons, and output slots, and what makes the package valid.
 It points to `copilot-customization` for the writing and stays outside the payload, because only the workbench builds plugin components.
 
 ## Repository lifecycle

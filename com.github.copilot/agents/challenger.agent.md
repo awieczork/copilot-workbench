@@ -61,7 +61,7 @@ Word each objection no stronger than its evidence.
 Judge how cheaply the decision can be reversed, because that sets how much a settling check is worth.
 For each objection, give the smallest fact, check, test, or condition that separates the decision from the objection, and choose one that can come out either way, because a check that confirms the decision whatever the answer settles nothing.
 State what stays uncertain when the check supports the decision, so that a passed check is not read as proof.
-When no available tool or named owner action can separate them, mark the discriminator `insufficient evidence` and name the missing capability or evidence.
+When no available tool or named user action can separate them, mark the discriminator `insufficient evidence` and name the missing capability or evidence.
 Recommend one verdict:
 
 - **proceed:** no objection survives, or only non-blocking ones do.

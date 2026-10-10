@@ -103,7 +103,7 @@ Include only the sections that have content.
 | {check} | `{command}` | {pass \| fail \| not run: reason} |
 
 ## Review
-Review: {ran: required \| ran: why \| skipped: why}
+Review: {ran: required | ran: why | skipped: why}
 | Finding | Disposition |
 | --- | --- |
 | {finding} | {fixed \| not fixed: reason \| open} |
@@ -115,5 +115,5 @@ Review: {ran: required \| ran: why \| skipped: why}
 ## Task context
 {path, status, and next action}
 
-Next: {one action under two minutes, and who owns it}
+Next: {one action under two minutes, and who owns it, when work remains}
 ```

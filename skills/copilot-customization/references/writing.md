@@ -11,7 +11,7 @@ Write for a capable model: it handles nuance well, takes wording literally, and 
 - Ask for the result and its evidence rather than the reasoning steps, because current models reason internally.
 - Name the safe routine work the agent may do without asking, such as running the local tests and fixing the failures the change caused, because without that permission capable models stop to ask.
 - Let the agent ask only when the answer would change the result, and only after it has prepared a concrete, reviewable result, because an early question ends the work too soon.
-- When a step asks the user and a subagent may load the artifact, tell a subagent to return the question to the agent that delegated it, because a subagent cannot ask the user.
+- When a step asks the user and a subagent may load the artifact, tell a subagent to return the question to the delegating agent, because a subagent cannot ask the user.
 
 ## Match strictness to the work
 
@@ -53,7 +53,7 @@ NEVER edit generated files.
 
 ## Templates and examples
 
-- Give an artifact that returns a structured result a fenced output template with `{placeholder}` slots, because the caller reads the result by its sections.
+- Give an artifact that returns a structured result a fenced output template with `{placeholder}` slots, because the delegating agent reads the result by its sections.
 - Prefer a short example to a description of the same shape, and keep every detail of it one you want copied, because the agent reproduces incidental details too.
 - Write the artifact in the style its output should have, because the agent mirrors the formatting it reads.
 - Check every example presented as runnable with its parser, formatter, or type checker.
@@ -80,16 +80,24 @@ Write a tool mention in the body as `#tool:<frontmatter-tool-name>` followed by 
 
 Ask each question of every line, section, and file; a "no" marks a change to make.
 
+Direction over detail:
+
 - [ ] Is each rule the principle itself, with its reason, rather than one instance of a broader principle?
 - [ ] Is each enumeration needed, or would the principle behind it steer the same way?
-- [ ] Is exact wording kept for work that tolerates no variation, such as an approval gate, a protocol, or an exact command, and is behavior that must repeat exactly left to a script?
-- [ ] Does each rule sit in the artifact that owns the work, instead of restating another instructions file, skill, or agent, or what VS Code already does?
+- [ ] Is precise detail kept for work that tolerates no variation, such as an approval gate, a protocol, or an exact command, and is a behavior that must repeat exactly left to a script?
+- [ ] Does each rule sit in the artifact that owns the work, instead of restating another instructions file, skill, or agent, or the harness?
+
+Simple first, lean always:
+
 - [ ] Would removing the line, step, section, or file change a result?
-- [ ] Where the text would otherwise sort cases into levels or a wording scale, does one rule that scales the work to its consequence stand instead?
-- [ ] Is each skill, tool, or file the artifact names part of its core work, and does each load at a fixed point?
-- [ ] Does each slot of an output template carry something the reader acts on?
-- [ ] Is each rule stated once across the sections, the output template, and the artifacts that load with it?
-- [ ] Does a capable newcomer read each sentence one way only, with one term for each concept across the artifacts that load together?
+- [ ] Does a proportionality rule stand where the model would otherwise apply a classification, such as levels or a wording scale?
+- [ ] Does each named skill, tool, or reference belong to the core work and load at a fixed point?
+- [ ] Does each output slot carry something the reader acts on?
+
+Every word steers:
+
+- [ ] Is each rule stated once across the sections, the output template, and the skills the artifact loads?
+- [ ] Does a capable newcomer read each sentence one way only, with one term per concept across the artifacts that work together?
 - [ ] Does a reason, instead of emphasis or decoration, carry the weight of each rule?
 - [ ] Do all lines pull in the same direction?
 - [ ] Does each principle still change a concrete behavior, and each qualifier change behavior at all?

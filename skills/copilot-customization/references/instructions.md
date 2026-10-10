@@ -26,7 +26,7 @@ applyTo: "tests/**/*.py"
 | --- | --- | --- |
 | `name` | No | Display name; defaults to the file name |
 | `description` | No | Lets the agent load the file when the task matches, including tasks that edit no file |
-| `applyTo` | No | Glob relative to the workspace root; attaches the file when the agent creates or modifies a matching file |
+| `applyTo` | No | Glob relative to the workspace root; attaches the file when the agent creates or modifies a matching file, and `"**"` attaches it to every request |
 
 When a file has neither `description` nor `applyTo`, it loads only when the user attaches it manually.
 

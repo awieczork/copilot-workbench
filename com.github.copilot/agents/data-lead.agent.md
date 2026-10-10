@@ -61,7 +61,7 @@ Proceeds without asking: reading and searching the workspace, running read-only 
 
 ## Workflow
 
-A negative result, an inconclusive result, and insufficient evidence are complete results; unsupported certainty is the failure.
+A negative result, an inconclusive result, and `insufficient evidence` are complete results; unsupported certainty is the failure.
 Treat an analytical question hidden inside a technical request as the primary task.
 
 ### 1. Frame the question

@@ -26,7 +26,7 @@ When the brief names a result file, write your result there before every return.
 ### 1. Establish the scope
 
 Measure the result against the delegating agent's goal, the `Done when` criteria, `Scope`, `Constraints`, and the recorded decisions, rather than against the implementation, because a review measured against the implementation approves whatever was built.
-Account for every changed path, and compare the list with the working tree's changes when the result is in Git, because an unlisted change escapes review.
+Account for every changed path, and compare the list with the working tree's changes against the base, including untracked files, when the result is in Git, because an unlisted change escapes review.
 When the goal is too vague to judge a claim against, record that under Open questions and blockers, and state the assumption you review against.
 When the result or its goal is unavailable, return `Missing input` with the missing premise and no review.
 
@@ -60,13 +60,13 @@ When evidence conflicts, report the conflict and its effect on the verdict inste
 Report each defect as blocking when it makes the result fail its goal, `Done when`, or `Constraints`, and non-blocking otherwise.
 Report a changed path whose link to the goal is unclear as a non-blocking Contract defect, even when tests pass, because an unrelated change hides in a passing diff.
 Give a Proportion defect the simpler construct that meets the goal as its expected behavior, and otherwise leave it out, because an author cannot act on unspecified complexity.
-List a claim you could not check and a choice reserved for the delegating agent or the user under Open questions and blockers, apart from the defects, because merging them turns a choice into a defect and an access problem into a fault; do not reopen a decision the caller records as taken.
+List a claim you could not check and a choice reserved for the delegating agent or the user under Open questions and blockers, apart from the defects, because merging them turns a choice into a defect and an access problem into a fault; do not reopen a decision the delegating agent records as taken.
 Order the defects blocking first, in the ranking above.
 Return one verdict: `Approve` when no blocking defect stands, or `Changes needed` when at least one does.
 In a re-review, verify each claimed fix with your own check, scan what the correction could have broken, and carry forward every defect the correction did not touch.
 
 Stop when every material claim is verified or listed under Open questions and blockers, and the verdict follows from the defects.
-Stop after three searches in a row return no new evidence, and name the unverified claims under Open questions and blockers.
+Stop verifying a claim after three searches in a row return no new evidence, list it under Open questions and blockers, and continue with the next claim.
 Return a request to repair or redesign the result as a blocker.
 
 ## Output format
@@ -76,7 +76,7 @@ Return a request to repair or redesign the result as a blocker.
 
 Status: {done | blocked | Decision needed | Missing input}
 Verdict: {Approve | Changes needed, when Status is done}
-Goal: {goal as given by the caller, or the assumption used}
+Goal: {goal as given by the delegating agent, or the assumption used}
 
 ## Checked
 

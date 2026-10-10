@@ -37,5 +37,5 @@ Avoid:
 ## Reconcile with the current result
 
 - Take the existing bullets and versioned entries from `CHANGELOG.md`, the prior baseline from the latest versioned entry or release tag, and the changes from the paths the current request covers, including their staged, unstaged, and untracked changes.
-- When the baseline or the selected path set is unavailable, report `Missing input` instead of inferring it, because a guessed baseline turns `Changed` into `Added` or the reverse.
+- When the baseline or the paths the current request covers are unavailable, report `Missing input` instead of inferring it, because a guessed baseline turns `Changed` into `Added` or the reverse.
 - Compare each proposed bullet with the existing bullets and the baseline before writing it: update a bullet that a later change extends, merge bullets that produce one final result, remove a bullet whose behavior was replaced or no longer appears, and keep separate bullets for independent results.
