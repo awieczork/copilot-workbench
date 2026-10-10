@@ -44,7 +44,6 @@ Guidance says what is wanted, once, in plain words a capable newcomer reads one 
 
 - When the request neither names nor implies the destination of a new artifact, ask whether it belongs to the plugin package or this repository's `.github/` folder, because both exist here.
 - Keep repository customizations under `.github/`, outside the distributed payload.
-- Write customization prose one sentence per line, without hard wrapping.
 - Complete and validate one artifact before starting another, because related policy can otherwise drift during a rewrite.
 - Keep secrets and work-specific connection values in local configuration, and refer to them by their local configuration names in [mcp.json](../mcp.json).
 
