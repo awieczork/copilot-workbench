@@ -1,87 +1,42 @@
 # Packaging
 
 Treat skills and Model Context Protocol (MCP) servers as portable Agent Plugins 1.0 components, and files under `com.github.copilot/` as VS Code client extensions.
-
-## Recognize the package
-
-Treat a directory as Agent Plugins 1.0 only when root `plugin.json` declares:
-
-```json
-{
-    "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-    "name": "example-plugin"
-}
-```
-
-The manifest selects the package format before component discovery.
-Do not infer Agent Plugins 1.0 semantics from directory names alone.
-Read [Manifest and MCP reference](manifest.md) when work creates, changes, or validates `plugin.json` or `mcp.json`.
+The [Agent Plugins specification](https://agent-plugins.org/specification) is the authority: validate against [the plugin schema](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json) and [the MCP schema](https://agent-plugins.org/schemas/1.0.0/mcp.schema.json), and follow the specification where a schema differs.
+For VS Code behavior, follow [Agent plugins in VS Code](https://code.visualstudio.com/docs/agent-customization/agent-plugins) and [Use Agent Skills in VS Code](https://code.visualstudio.com/docs/agent-customization/agent-skills).
 
 ## Place every file
 
-```text
-<plugin-root>/
-├── plugin.json                      # required
-├── mcp.json                         # optional MCP servers
-├── skills/<skill-name>/SKILL.md     # optional skills
-├── scripts/                         # optional hook scripts and supporting executables
-├── servers/                         # optional bundled MCP server binaries
-└── com.github.copilot/              # optional Copilot file formats
-    ├── agents/<name>.agent.md
-    ├── commands/<name>.prompt.md
-    ├── rules/<name>.instructions.md
-    └── hooks/hooks.json
-```
-
 | Component | Path | Placement constraint |
 | --- | --- | --- |
-| Manifest | `plugin.json` | Exactly one, at the plugin root |
-| Skill | `skills/<skill-name>/SKILL.md` | Only immediate children of `skills/` are scanned; a skill one level deeper is never discovered |
-| MCP server | `mcp.json` | Root only; uses the plugin MCP schema, not the native VS Code `servers` format |
-| Custom agent | `com.github.copilot/agents/<name>.agent.md` | Copilot role definition |
-| Prompt file | `com.github.copilot/commands/<name>.prompt.md` | Copilot prompt-file format |
-| Instruction file | `com.github.copilot/rules/<name>.instructions.md` | Copilot instruction-file format |
-| Hook | `com.github.copilot/hooks/hooks.json` | One JSON file, not a directory of files |
-| Hook script or bundled server executable | A contained path inside the plugin root | Referenced from `hooks.json` or `mcp.json` with the path form required by that format |
-| Skill support file | A path below `skills/<skill-name>/` | Remains inside its skill directory and is referenced by `SKILL.md` when the agent must discover it |
-| Other packaged support file | A path inside the plugin root | Referenced by a component and included with the package |
-| Package metadata | `README.md`, `LICENSE`, `CHANGELOG.md` | Plugin root; not loaded as a component |
+| Manifest | `plugin.json` | Exactly one, at the plugin root; `"$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"` selects Agent Plugins 1.0 semantics |
+| Skill | `skills/<skill-name>/SKILL.md` | Only immediate children of `skills/` are scanned |
+| Skill support file | A path below `skills/<skill-name>/` | Referenced by `SKILL.md` when the agent must find it |
+| MCP servers | `mcp.json` | Plugin root only |
+| Custom agent | `com.github.copilot/agents/<name>.agent.md` | |
+| Rule | `com.github.copilot/rules/<name>.instructions.md` | |
+| Package metadata | `README.md`, `CHANGELOG.md` | Plugin root; not loaded as a component |
 
-Keep every packaged path resolvable inside the plugin root.
-Replace any symlink, junction, or relative path that resolves outside the root with a copy inside it, because VS Code rejects a path that leaves the package.
-In a stdio MCP server, `${PLUGIN_DATA}` may name writable server state outside the packaged files in `args`, `env`, and `cwd`.
+For any other component, such as commands, hooks, or automations, take the path from the VS Code Agent Plugins page.
+Keep every packaged path inside the plugin root, copying a file instead of linking to it, because the specification requires a client to reject a path that leaves the package.
+Leave generated runtime state, temporary results, and repository-only inputs out of the package.
 
-Include component support files that are referenced by packaged configuration or content.
-Exclude generated runtime state, temporary results, and unrelated repository inputs from the package.
+## plugin.json
 
-## Name a skill inside the plugin
+- Write only the schema's fields; the top level is closed, and only `$schema` and `name` are required.
+- Validate the manifest yourself, because VS Code ignores unknown and malformed optional fields without reporting them.
+- Carry Copilot-specific configuration under `extensions["com.github.copilot"]`, and add a key there only when current VS Code documentation defines it and its effect, because VS Code discards an unknown top-level field without applying it.
 
-VS Code invokes a plugin skill as the skill command `/<plugin-name>:<skill-name>`, adding the prefix itself.
-Keep the prefix out of the skill `name`, because a prefixed name makes the skill fail to load.
+## mcp.json
 
-A plugin `name` may contain a period; a skill `name` may not.
-Rewrite the plugin name in plain kebab-case before reusing it as a skill name, because a period there makes the skill fail to load.
-
-Give each immediate child of `skills/` that contains `SKILL.md` a `name` equal to its directory name, with 1-64 lowercase letters, digits, or hyphens, starting and ending with a letter or digit, and no consecutive hyphens.
+- Write only `$schema` and `mcpServers` at the top level, with the same schema version as `plugin.json`, because a mismatch disables every MCP server of the plugin.
+- Give a stdio server `type` and `command`, with optional `args`, `env`, and `cwd`, and validate each entry against the schema, because a foreign field invalidates the entry under the specification; for a remote server or an explicit `cwd`, read §7.2 of the specification.
+- Translate a native VS Code MCP block field by field rather than copying it, because the MCP schema rejects its keys, such as `servers`, `inputs`, `sandbox`, the `http` type, `oauth`, `envFile`, `dev`, and `sandboxEnabled`.
+- Write `command` as one executable token, a `./` path for an executable the package bundles and a bare name for one it does not, without relying on a `PATH` set in `env`, and move every argument into `args`.
+- Use `${PLUGIN_ROOT}` for packaged files and `${PLUGIN_DATA}` for writable server state, only in `args`, `env` values, and `cwd`.
+- Keep secrets and work-specific connection values in local configuration, and refer to them by their local configuration names.
 
 ## Check static conformance
 
-Apply every relevant check to changed package files and relationships:
-
-- Parse every changed JSON document and YAML frontmatter block.
-- Validate `plugin.json` and `mcp.json` against their declared schemas when the schemas are reachable, because VS Code loads a manifest or MCP entry that the specification rejects.
-- Apply the normative Agent Plugins specification when its text adds a semantic constraint or conflicts with a machine-readable schema.
-- Verify every immediate child of `skills/` that contains `SKILL.md` against the Agent Skills frontmatter, directory-name, resource-link, and path-containment requirements.
-- Verify each `com.github.copilot` file has the documented suffix, canonical path, and parseable format for its type.
-- Resolve every packaged path, symlink, junction, component reference, and relative resource link inside the plugin root.
-- Read `plugin.json`, `mcp.json`, and hook commands in full for machine-specific absolute paths and unsupported fields.
-
-## Use current authorities
-
-Use these sources when a package rule is absent from the bundled reference or current evidence contradicts it:
-
-- [Agent plugins in VS Code](https://code.visualstudio.com/docs/agent-customization/agent-plugins) for VS Code package structure and `com.github.copilot` extensions.
-- [Agent Plugins specification](https://agent-plugins.org/specification) for the normative portable package contract.
-- [Use Agent Skills in VS Code](https://code.visualstudio.com/docs/agent-customization/agent-skills) for load-critical skill metadata recognized by VS Code.
-
-Keep `packaging.md` and `manifest.md` as concise working summaries, not as authority over current primary documentation.
+Run `uv run .github/skills/build-plugin/scripts/check_package.py` from the repository root after any package change, and repair each failure it prints.
+It checks the payload paths (`plugin.json`, `mcp.json`, `skills/`, `com.github.copilot/`, `README.md`, `CHANGELOG.md`): both manifests parse and validate against their declared schemas, the schema versions match, the manifests hold no absolute paths, every frontmatter block parses, each skill `name` equals its folder and meets the name rule, each skill `description` has 1 to 1,024 characters, each `com.github.copilot` file has its documented suffix, every relative link resolves inside the plugin root, and no symlink leaves it.
+It prints one `{path}: {problem}` line per failure and exits with status 1 when any check fails, including when a schema cannot be fetched.
