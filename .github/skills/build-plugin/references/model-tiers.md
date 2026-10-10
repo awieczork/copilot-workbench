@@ -1,22 +1,20 @@
 # Model tiers
 
-Read this when writing a worker's `model` list.
+A worker's `model` list puts its default model first; VS Code runs the first available entry, so every later entry is also an availability fallback.
 
-The `model` list holds the full ladder: the default model first, then the escalation targets in order.
-A delegating agent overrides the list by passing a `model` in the call, so the ladder sets the default and documents the escalation path.
+Give a worker one of two lists:
 
-Build a ladder by these principles:
+- A ladder, when a cheap model does the role well: the cheapest model that does it, then the models a delegating agent escalates to, in order, because most delegations are routine.
+- A pair, when the role needs a strong model: the strong default, then the model of the same strength from the other family, as an alternative, not an escalation.
 
-- Default to the cheapest model that does the role well, because most delegations are routine.
-- Escalate to the other model family at the same strength before a stronger model, because another family often solves what one family misses.
+Build either list by these principles:
+
+- In a ladder, take the other model family at the same strength before a stronger model, because another family often solves what one family misses.
 - Give a checker a model at least as strong as the author's, because a weaker checker misses what the author got wrong.
 - Give a challenger a model from another family than the author's, because one family shares its blind spots.
 
-| Worker | `model` |
-| --- | --- |
-| `explorer`, `data-explorer`, `database-explorer`, `researcher` | `["GPT-6 Luna (copilot)", "Claude Haiku 5.5 (copilot)", "Claude Sonnet 5.5 (copilot)"]` |
-| `developer` | `["GPT-6 Luna (copilot)", "Claude Haiku 5.5 (copilot)", "Claude Sonnet 5.5 (copilot)", "GPT-6.1 Sol (copilot)", "Claude Opus 5.5 (copilot)"]` |
-| `ui-developer` | `["Kimi K3 (copilot)", "GPT-6.1 Sol (copilot)", "Claude Opus 5.5 (copilot)"]` |
-| `planner` | `["Claude Opus 5.5 (copilot)", "GPT-6.1 Sol (copilot)"]` |
-| `reviewer` | `["Claude Opus 5.5 (copilot)", "GPT-6.1 Sol (copilot)"]` |
-| `challenger` | `["GPT-6.1 Sol (copilot)", "Claude Opus 5.5 (copilot)"]` |
+| Strength | Claude | GPT |
+| --- | --- | --- |
+| Light | `Claude Haiku 5.5 (copilot)` | `GPT-6 Luna (copilot)` |
+| Medium | `Claude Sonnet 5.5 (copilot)` | |
+| Strong | `Claude Opus 5.5 (copilot)` | `GPT-6.1 Sol (copilot)` |

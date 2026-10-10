@@ -1,7 +1,6 @@
 # Worker contract
 
-Read this before writing or changing a worker of the plugin's team.
-A worker is a hidden subagent that performs one specialized task from a self-contained brief and returns one result to the agent that delegated it.
+A worker is a hidden subagent that performs one specialized task from a self-contained brief and returns one result to the delegating agent.
 
 ## Choose the kind
 
@@ -9,21 +8,20 @@ Pick the kind by what the worker returns.
 
 | Kind | Returns | Writes | Calls a checker |
 | --- | --- | --- | --- |
-| Helper, such as `explorer`, `database-explorer`, `data-explorer`, `researcher`, or `challenger` | Evidence | Its result file only, when it can write | No |
-| Producer, such as `developer`, `ui-developer`, or `planner` | A change or a plan | Files in the brief's scope; a planner only its plan | Yes: `reviewer`, or `challenger` for a plan, by "For a producer" below |
-| Checker, such as `reviewer` | A verdict on another worker's result | Its result file only, when it can write | No |
+| Helper | Evidence | Its result file only, when it can write | No |
+| Producer | A change or a plan | Files in the brief's scope; a planner only its result file | Yes: `reviewer`, or `challenger` for the planner's costliest decision, by "For a producer" below |
+| Checker | A verdict on another worker's result | Its result file only, when it can write | No |
 
 ## Frontmatter
 
 - Set `user-invocable: false`, because a worker runs only as a subagent.
 - Grant only the tools a workflow step uses.
-- For a producer, add `agent` and set `agents` to its checker alone; leave both out of helpers and checkers.
-- Take the `model` list from [model-tiers.md](model-tiers.md).
+- For a producer, add `agent` and set `agents` to its checker alone; leave both out of helpers and checkers, because a helper or checker that delegates breaks its one result to the delegating agent.
 
 ## Shared block
 
 Open with a role line that states what the worker does and what it does not do.
-Follow it with this block unchanged, because every worker needs it before it loads any skill:
+Follow it with this block unchanged, because every worker needs the same one-shot and evidence rules, and identical wording lets a review find drift:
 
 ```markdown
 You start from the brief alone and cannot be asked again, so return what you cannot settle, or what needs the user's approval, instead of guessing or acting.
@@ -44,33 +42,37 @@ When the brief names a result file, write your result there before every return.
 ## Workflow
 
 - Write numbered phases in the role's terms.
-- Name the skill that holds access or procedure at the phase where it loads, and do not restate its rules.
-- End with a stop rule; a stop, worded in the role's terms, after three attempts at the same step without progress, that reports what was tried and what remains; and the return of an out-of-role request as a blocker.
+- Name the skill that holds access or procedure at the point where it loads, and do not restate its rules.
+- When the worker writes code, a query, or a plan, add the documentation line from `build-plugin`.
+- End with the completion condition.
+- Add a stop, in the role's terms, after three attempts at the same step without progress, that reports what was tried and what remains.
+- Return an out-of-role request as a blocker.
 
 ## For a producer
 
-When the producer writes code or a plan, add this line unchanged:
-
-```markdown
-Before you rely on a library, an external API, or a tool in code, a query, or a plan, read its documentation for the version the project uses with #tool:context7/* , and when it cannot answer, read the official documentation through `web` and record the gap, because what you remember of an interface can be outdated.
-```
-
-Add these review rules:
+Add these review rules in the role's terms:
 
 - Run one review round with the checker when the brief marks review `Required`, and otherwise when an error would be costly to find later.
-- Call the checker through #tool:agent with the delegating agent's goal verbatim; the brief's `Done when`, `Scope`, `Constraints`, and the decisions in its `Context`; the changed paths; and the brief's `Checker model` as the call's model when the brief names one.
-- Fix the findings the producer accepts, give every finding a disposition, and report whether the review ran and why.
+- Call the checker through #tool:agent with the delegating agent's goal verbatim; the brief's `Done when`, `Scope`, `Constraints`, and the decisions in its `Context`; and what to check: the changed paths, or for a plan, the decision to test as one falsifiable claim with the paths of its evidence.
+- Fix each defect or objection the producer accepts, give every defect, objection, and open question a disposition, and report whether the review ran and why.
+- When the checker returns a status other than `done`, report the review as not run with that status and its cause, and carry its open questions into Open questions and blockers.
+
+For a producer that implements code, add this block unchanged to its Constraints, because both implementing producers need the same limits and gate:
+
+```markdown
+- Keep every test, assertion, and check as strict as you found it, repair the code instead, and report a test you believe is wrong, because a check weakened to pass proves nothing.
+- Change only what the brief requires, without refactors, cleanups, restyling, or formatting outside the change, and record a problem you notice outside it under Open questions and blockers, because unrequested edits widen the review and the risk.
+- Add a framework, dependency, abstraction, or configuration option only when the brief asks for it or an observed failure cannot be fixed without it, and return `Decision needed` when a loaded rule forbids it, because each addition is lasting maintenance the brief did not approve.
+- Let failures surface, without swallowed exceptions, placeholder values, or fallbacks that hide an error, because a hidden error produces a wrong result without a signal.
+- Inspect a setup or helper script before running it, because it can have effects the brief does not authorize.
+- Edit files inside the brief's scope, and run local builds, tests, linters, and the app without asking; return the following to the delegating agent instead, unless the brief names the operation and its scope, because tool access is not authorization:
+  - committing, pushing, or changing a branch or history;
+  - deleting files;
+  - installing into a shared environment;
+  - calling an external service that changes data or uses credentials;
+  - changing the objective, scope, or `Done when`.
+```
 
 ## Output format
 
-Give a fenced output template that starts, after its title, with `Status: {done | blocked | Decision needed | Missing input}`, keeps a verdict in its own slot, gives slots in the role's terms that the delegating agent acts on, most important first, and ends with an `Open questions and blockers` slot in which each entry names its cause and what would remove it.
-
-## Check the worker contract
-
-- [ ] `user-invocable` is `false`, and the role line states one role with what the worker does and does not do.
-- [ ] Every tool serves a workflow step, and only a producer has `agent`, with `agents` naming only its checker.
-- [ ] The `model` list matches a row in `model-tiers.md`.
-- [ ] The shared block follows the role line unchanged, with the result-file line exactly when the worker holds `edit` or `edit/createFile`.
-- [ ] The workflow has numbered phases, names each skill at its loading point without restating it, and ends with the stop rule, the no-progress stop, and the out-of-role blocker.
-- [ ] A producer carries the documentation line and the review rules.
-- [ ] The output template starts, after its title, with the `Status` line and ends with the `Open questions and blockers` slot.
+Give a fenced output template that starts, after its title, with `Status: {done | blocked | Decision needed | Missing input}`, keeps a checker's verdict in its own slot, gives slots in the role's terms that the delegating agent acts on, most important first, and ends with an `Open questions and blockers` slot in which each entry names its cause and what would remove it.
