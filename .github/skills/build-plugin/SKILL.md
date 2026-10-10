@@ -17,29 +17,7 @@ Write each component by [copilot-customization](../../../skills/copilot-customiz
 
 ## Ask the questions
 
-Ask each question of every line, section, and file; a "no" marks a change to make.
-
-Direction over detail:
-
-- [ ] Is each rule the principle itself, with its reason, rather than one instance of a broader principle?
-- [ ] Is each enumeration needed, or would the principle behind it steer the same way?
-- [ ] Is precise detail kept for work that tolerates no variation, such as an approval gate, a protocol, or an exact command, and is a behavior that must repeat exactly left to a script?
-- [ ] Does each rule sit in the component that owns the work, instead of restating a skill, a worker, or the harness?
-
-Simple first, lean always:
-
-- [ ] Would removing the line, step, section, or file change a result?
-- [ ] Does a proportionality rule stand where the model would otherwise apply a classification, such as levels or a wording scale?
-- [ ] Does each named skill, tool, or reference belong to the core work and load at a fixed point?
-- [ ] Does each output slot carry something the reader acts on?
-
-Every word steers:
-
-- [ ] Is each rule stated once across the sections, the output template, and the skills the component loads?
-- [ ] Does a capable newcomer read each sentence one way only, with one term per concept across the team?
-- [ ] Does a reason, instead of emphasis or decoration, carry the weight of each rule?
-- [ ] Do all lines pull in the same direction?
-- [ ] Does each principle still change a concrete behavior, and each qualifier change behavior at all?
+Ask the questions under "Check the writing" in the `copilot-customization` [writing guidance](../../../skills/copilot-customization/references/writing.md) of every line, section, and file, and read "the artifacts that work together" as the whole team.
 
 ## Read the contract for the kind
 
@@ -74,6 +52,6 @@ When you add, rename, or change the role of a component, keep its connections cu
 
 ## Validate
 
-Validate the changed files on disk against the `copilot-customization` validation lists, the contract checklist for the kind, the questions above, and, for a package change, the static conformance checks in [packaging](references/packaging.md), and repair each failure.
+Validate the changed files on disk against the `copilot-customization` validation lists, the contract checklist for the kind, and, for a package change, the static conformance checks in [packaging](references/packaging.md), and repair each failure.
 
 The work is done when every connection is in place and every check passes.

@@ -64,7 +64,7 @@ When the folder for a new objective already exists, ask the user whether to resu
 
 ## Delegate with a result file
 
-When a delegated result must survive the session, choose a path that does not exist yet, such as `results/reviewer-1.md`, register it in the `Files` table, and pass the exact path in the brief.
+When a delegated result must survive the session, choose a path inside the task folder that does not exist yet, such as `.github/context/active/YYYY-MM-DD-<slug>/results/reviewer-1.md`, register it in the `Files` table, and pass that path from the workspace root in the brief.
 
 ## Keep the folder lean
 

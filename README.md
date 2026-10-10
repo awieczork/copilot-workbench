@@ -36,7 +36,7 @@ For a released package, the installed version must match [plugin.json](plugin.js
 | `redshift` | Runs read-only queries against user-provided Redshift targets, with an MCP-first workflow and a bounded Python fallback. |
 | `run-python` | Runs Python scripts and inline code through `uv`, with or without the project environment, and runs a script with an inline dependency block outside the project. |
 | `sql-server` | Runs read-only SQL Server queries against user-provided targets through saved connections. |
-| `task-context` | Keeps one task's state in a Git-ignored task folder that the agent the user talks to maintains, with a result file for each delegated result. |
+| `task-context` | Keeps one task's state in a Git-ignored task folder that the agent the user talks to maintains, with a result file for a delegated result that must survive the session. |
 
 ### Agents
 
@@ -52,7 +52,7 @@ Workers run as subagents of an allowed entry agent or producer.
 | `database-explorer` | Helper | Finds and profiles the SQL Server and Redshift objects and join paths for one data question, drafts read-only queries, and returns the queries it ran. |
 | `data-explorer` | Helper | Finds and profiles the local dataset files for one data question without changing them. |
 | `researcher` | Helper | Gathers sourced external evidence for one bounded question. |
-| `planner` | Producer | Produces an executable plan for a change or an analysis with dependent steps or open design decisions, and calls `challenger` when an error in a decision would be costly. |
+| `planner` | Producer | Produces an executable plan for a change or an analysis with dependent steps or open design decisions, and calls `challenger` when an error in a decision would be costly to find later. |
 | `developer` | Producer | Implements a change with tests scaled to the cost of an undetected error, and calls `reviewer` when the brief requires it or an error would be costly to find later. |
 | `ui-developer` | Producer | Implements an interface change, checks it in the running app in a browser, and calls `reviewer` when the brief requires it or an error would be costly to find later. |
 | `reviewer` | Checker | Assesses a finished result against its goal without repairing it. |

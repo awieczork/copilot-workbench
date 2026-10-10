@@ -33,7 +33,7 @@ Do not add classes, a command-line interface, configuration objects, plugin regi
 These layers cost more to read than the analysis they wrap, and a constant at the top of the file replaces most of them.
 When the task appears to need one, report `Decision needed` with the purpose and the minimum shape, and do not add it.
 
-Write a test for a task script only when an undetected error would cost more than the test, and keep the test code shorter than the script, because the script answers one bounded question.
+Scale the tests to the cost of an undetected error: write a test for a task script only when an undetected error would cost more than the test, and write no more test code than the script itself, because the script answers one bounded question.
 
 ## Type only the boundaries
 

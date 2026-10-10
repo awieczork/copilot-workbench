@@ -49,7 +49,7 @@ Guidance says what is wanted, once, in plain words a capable newcomer reads one 
 
 ## Authoring
 
-- When creating, changing, or reviewing any part of the plugin, follow [build-plugin](skills/build-plugin/SKILL.md), which holds the pillar questions, the contracts, and the packaging rules.
+- When creating, changing, or reviewing any part of the plugin, follow [build-plugin](skills/build-plugin/SKILL.md), which holds the authoring method, the contracts, and the packaging rules and points to the pillar questions in `copilot-customization`.
 - When creating, changing, or reviewing a repository customization under `.github/`, follow [copilot-customization](../skills/copilot-customization/SKILL.md).
 
 ## Project records

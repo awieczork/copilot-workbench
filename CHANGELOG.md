@@ -18,7 +18,7 @@
 
 ### Implementation and checking
 
-- Added the `developer` worker for implementing software changes with tests scaled to the cost of an undetected error and reported verification limits.
+- Added the `developer` worker for implementing software changes with tests scaled to the cost of an undetected error and unverified checks reported as open questions.
 - Added the `ui-developer` worker for implementing interfaces and visually checking the changed experience.
 - Added the `reviewer` worker for independent assessment of finished results without repairing them.
 - Added the `challenger` worker for testing one decision or framing with a discriminating check.

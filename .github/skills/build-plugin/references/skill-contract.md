@@ -21,13 +21,10 @@ As a subagent, return each question or choice for the user to the delegating age
 ## Content
 
 - Write a gate as an allow-list followed by the look-alikes it refuses, because a principle read loosely lets a look-alike through.
-- For a bundled script, state how to give it its input, its working directory, and every output field and limit the agent reads, because the agent cannot see the script.
-- Keep under Gotchas only traps a capable model gets wrong, without platform or shell branches, tool parameters, or catalogs of queries or commands the model writes itself.
 
 ## Check the skill contract
 
 - [ ] The skill owns one system or procedure, and names another skill only at a step that depends on it.
 - [ ] A skill whose subagent-run steps ask the user, and that a model can load, carries the subagent line unchanged after its opening sentence.
 - [ ] Task state goes only through `task-context`, and the skill carries no communication style.
-- [ ] A gate is an allow-list with its look-alikes, and a bundled script's input and output fields are stated.
-- [ ] Every gotcha is a trap a capable model gets wrong.
+- [ ] A gate is an allow-list with its look-alikes.

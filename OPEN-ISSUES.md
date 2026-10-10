@@ -1,3 +1,3 @@
-# Open Issues
+# Open issues
 
 - None.
