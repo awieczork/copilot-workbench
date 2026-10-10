@@ -1,18 +1,13 @@
 ---
 name: task-context
-description: "Use when task state must survive the session or pass between agents, when a brief or handoff names a task folder or result path, or when an interrupted task resumes. Supplies the task folder layout under .github/context/ and the rules for its summary and result files. Not for finished deliverables, durable project knowledge, or tracked records."
+description: "Use when task state must survive the session or pass from one agent to another, or when an interrupted task resumes. Supplies the task folder layout under .github/context/ and the rules for its summary and result files. Not for finished deliverables, durable project knowledge, or tracked records."
 ---
 
 # Task context
 
 Keep the working state of one task in a Git-ignored task folder, so that it survives the session and reaches every agent that works on the task.
 Keep short work in the conversation, and keep deliverables and approved knowledge in their canonical locations, because a task folder holds working state, not a source of truth.
-
-## Task holder and subagents
-
-The **task holder** is the agent the user talks to that holds the task, such as a chat agent while it shapes a request, then the lead that receives the handoff.
-Only the task holder creates, resumes, archives, or removes a task folder, writes `summary.md` and `notes.md`, and asks the user about the folder.
-A subagent follows only "Delegate with a result file" and "Keep the folder lean" below, because it cannot ask the user and the task holder integrates its result.
+The task holder, the agent the user talks to that holds the task, alone creates, resumes, archives, and removes the folder and writes `summary.md` and `notes.md`; a subagent writes only the result file its brief names.
 
 ## Layout
 
@@ -21,16 +16,14 @@ A subagent follows only "Delegate with a result file" and "Keep the folder lean"
 ├── active/
 │   └── YYYY-MM-DD-<slug>/
 │       ├── summary.md          # current state, kept by the task holder
-│       ├── notes.md            # optional decisions, ideas, and discussion notes
+│       ├── notes.md            # optional working notes and ideas
 │       └── results/
 │           └── <role>-<n>.md   # one file per delegated result
 └── archive/
 ```
 
-- Create one task folder per objective, dated on creation.
-- Form the slug from lowercase ASCII letters, digits, and single hyphens, because the path must be typed and matched the same on every file system and shell.
+- Create one task folder per objective, dated on creation, with a slug of lowercase ASCII letters, digits, and single hyphens, because the path must match exactly wherever it is typed.
 - Before the first write, check that the repository ignores `.github/context/`; when it does not, tell the user and ask before writing, because the folder holds unreviewed working notes.
-- When the folder already exists, keep it and ask the user whether to reuse it or choose another slug.
 
 ## Keep the summary
 
@@ -57,35 +50,25 @@ Next action: {one action}
 - {link to a canonical file or document}
 ```
 
-Update the summary after a verified result, a failed step, a confirmed decision, or a change of the next action, because the context can be compacted at any point and the work then continues from the saved state.
-When the context fills, continue the task instead of stopping or shortening the work to save context.
+Update the summary whenever one of its fields changes, because the context can be compacted at any point and the work continues from the saved state, so a full context is no reason to stop or shorten the work.
 
 ## Hand off a task
 
-1. Before the handoff, the chat agent writes the current state into `summary.md`: the request's decisions and open questions go into the summary fields, and the rest of the shaped request goes below them, because the summary must carry the request once the conversation is compacted or the task resumes in a new session.
-2. The lead agent reads `summary.md` and `notes.md`, becomes the task holder, and records itself as the writer of `summary.md` in the `Files` table.
-
-## Delegate with a result file
-
-When a delegated result must survive the session, the task holder registers a result path in the `Files` table, such as `results/reviewer-1.md`, and passes the exact path in the brief.
-
-A subagent that receives a result path:
-
-1. Checks that the path lies inside the task folder and does not exist yet; otherwise it returns the problem without starting work.
-2. Writes its complete result to that path before every return, including a blocked, failed, or partial one.
-
-- Write only that result file, never `summary.md`, `notes.md`, or another agent's file, because the task holder integrates results.
-- Treat a result file from another agent as unverified evidence, because saving a claim does not check it.
+Before a handoff, write the request's decisions and open questions into the summary fields, and the rest of the shaped request below them.
 
 ## Resume a task
 
-Select the active task folder whose objective and status match the request, and continue from its `summary.md`.
+To take over or resume a task, select the active task folder whose objective and status match the request, read its `summary.md` and `notes.md`, and continue from them.
 When none or several match, list the candidates and ask the user to choose.
+When the folder for a new objective already exists, ask the user whether to resume it or choose another slug, and never overwrite it.
+
+## Delegate with a result file
+
+When a delegated result must survive the session, choose a path that does not exist yet, such as `results/reviewer-1.md`, register it in the `Files` table, and pass the exact path in the brief.
 
 ## Keep the folder lean
 
 - Record concise state and link to files instead of copying them.
-- Keep structured state, such as the status of each item or test, as a table in `notes.md` or a result file, and keep progress notes as free text, because a table shows what is left at a glance.
 - Leave out credentials, personal data, secrets, full command output, and conversation transcripts.
 
 ## Archive or remove

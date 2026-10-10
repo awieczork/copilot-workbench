@@ -12,7 +12,7 @@ A plugin skill owns the access to one system or one procedure; agents load it th
 
 ## Subagent line
 
-When a step asks the user and the skill does not set `disable-model-invocation: true`, add this line unchanged after the opening sentence, and let the other steps say "ask the user":
+When a step that a subagent may run asks the user, and the skill does not set `disable-model-invocation: true`, add this line unchanged after the opening sentence, and let the other steps say "ask the user":
 
 ```markdown
 As a subagent, return each question or choice for the user to the delegating agent instead of asking the user.
@@ -27,7 +27,7 @@ As a subagent, return each question or choice for the user to the delegating age
 ## Check the skill contract
 
 - [ ] The skill owns one system or procedure, and names another skill only at a step that depends on it.
-- [ ] A skill that asks the user and can be loaded by a model carries the subagent line unchanged after its opening sentence.
+- [ ] A skill whose subagent-run steps ask the user, and that a model can load, carries the subagent line unchanged after its opening sentence.
 - [ ] Task state goes only through `task-context`, and the skill carries no communication style.
 - [ ] A gate is an allow-list with its look-alikes, and a bundled script's input and output fields are stated.
 - [ ] Every gotcha is a trap a capable model gets wrong.
