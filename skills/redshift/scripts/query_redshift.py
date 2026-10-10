@@ -9,7 +9,6 @@
 
 """Execute one Redshift SQL statement from standard input and emit a bounded JSON result."""
 
-import argparse
 import csv
 import json
 import os
@@ -36,17 +35,6 @@ class ConfigurationError(Exception):
 
 class QueryError(Exception):
     """Raised when Redshift cannot execute or return a query result."""
-
-
-def parse_args() -> argparse.Namespace:
-    """Parse command-line arguments."""
-    parser = argparse.ArgumentParser(
-        description=(
-            "Run one Redshift SQL statement read from standard input and print a bounded"
-            " JSON result. Connection settings come from .env in the working directory."
-        )
-    )
-    return parser.parse_args()
 
 
 def read_query() -> str:
@@ -160,13 +148,11 @@ def result_payload(
     csv_path = csv_path_for()
     write_csv(csv_path, columns, rows)
     payload["csv_path"] = str(csv_path)
-    payload["note"] = "Rows are stored in csv_path."
     return payload
 
 
 def main() -> int:
     """Run the SQL statement and print exactly one JSON payload on success."""
-    parse_args()
     try:
         query = read_query()
         columns, rows, truncated = execute_query(query, connection_settings())
