@@ -13,8 +13,6 @@ Choose the prefix by whether the code needs the project's environment, because i
 - When the code imports the project or its dependencies, use `uv run`.
 - Otherwise, use `uv run --no-project`.
 
-Run from the repository root unless the code needs another directory, because uv finds the project from the working directory upward.
-
 - Run a script as `{prefix} path/to/script.py`, without `python`, because uv reads the script's inline dependency block only in this form; a script with that block runs isolated from the project.
 - Run inline code as `{prefix} python -c "{code}"`.
 - Add `--with <package>` after the prefix for each package the environment lacks.

@@ -5,6 +5,7 @@ tools:
   - "read"
   - "edit/createFile"
   - "execute/runInTerminal"
+  - "execute/getTerminalOutput"
   - "ms-mssql.mssql/mssql_connect"
   - "ms-mssql.mssql/mssql_change_database"
   - "ms-mssql.mssql/mssql_disconnect"
