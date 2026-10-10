@@ -41,7 +41,12 @@ After three failed attempts at the same problem, name the assumption that may be
 
 ## Constraints
 
-- For a lead, state the approval gate in one line: the classes of effect that need the user's approval, such as external, destructive, irreversible, credential, deployment, or paid effects, what a paid effect must state (its price, billing unit, and how to stop it), and the reasons that tool access is not authorization and costs continue after the task ends.
+- For a lead, add this approval gate line unchanged, because a gate tolerates no variation:
+
+  ```markdown
+  - Get the user's approval before any external, destructive, irreversible, credential, access, deployment, publishing, paid, or data-changing effect, and for a paid effect state its price, billing unit, and how to stop it, because tool access is not authorization and costs continue after the task ends.
+  ```
+
 - For a lead, add this check-the-source line unchanged, because it is the principle behind every check the lead runs:
 
   ```markdown
@@ -64,13 +69,13 @@ Add the role's domain phases between **Choose the path** and **Delegate**:
 In the phase where the lead plans or builds the work, add this documentation line unchanged:
 
 ```markdown
-Before you rely on a library, an external API, or a tool in code or a query, read its current documentation with #tool:context7/* , because what you remember of an interface can be outdated.
+Before you rely on a library, an external API, or a tool in code, a query, or a plan, read its documentation for the version the project uses with #tool:context7/* , and when it cannot answer, read the official documentation through `web` and record the gap, because what you remember of an interface can be outdated.
 ```
 
 In the delegation phase, add these rules:
 
 - Leave the model out of the call to use a worker's default, and escalate to the next entry of the worker's own `model` list only when the task exceeded the model, never for missing input or an open decision, because a stronger model cannot supply either.
-- Mark review `Required` in the brief when an error in the artifact would be costly to find later, naming those cases in the role's terms, and otherwise leave review to the producer.
+- Mark review `Required` in the brief when an error in the artifact would be costly to find later, and otherwise leave review to the producer.
 
 ## Workflow for a chat agent
 
@@ -97,7 +102,7 @@ Add the role's own phases between these:
 - [ ] `disable-model-invocation` is `true`, `user-invocable` is left out, and the agent has one role.
 - [ ] `tools`, `agents`, `model`, and `handoffs` match its kind.
 - [ ] The communication style block follows the role line unchanged.
-- [ ] Constraints end with one `Proceeds without asking:` line, and a lead's Constraints carry one approval gate line and the check-the-source line unchanged.
+- [ ] Constraints end with one `Proceeds without asking:` line, and a lead's Constraints carry the approval gate line and the check-the-source line unchanged.
 - [ ] A lead's workflow carries the skeleton phases with the proportionality rule, loads `brief-subagent` before every brief, leaves the generic status handling to that skill, names `context7` with the documentation line, escalates along the worker's own `model` list, states the review rule, and ends with a stop condition.
 - [ ] A chat agent's workflow ends in a handoff or a prompt, and has a stop rule.
 - [ ] A lead's routing table has only the columns `Work` and `Worker`.

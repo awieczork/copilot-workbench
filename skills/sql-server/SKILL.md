@@ -1,19 +1,20 @@
 ---
 name: sql-server
-description: "Use when a task needs data or metadata from a SQL Server database through the Microsoft SQL Server tools. Supplies target resolution, the read-only query gate, and the catalog traps. Not for data or schema changes, deployment, or server administration."
+description: "Use when a task needs data or metadata from a SQL Server database through the Microsoft SQL Server tools. Supplies target resolution, the read-only query gate, and the catalog gotchas. Not for data or schema changes, deployment, or server administration."
 ---
 
 # SQL Server read-only queries
 
 Answer a question from the SQL Server target the user named, with read-only queries whose results are either complete or marked as bounded.
+As a subagent, return each question or choice for the user to the delegating agent instead of asking the user.
 
 ## Procedure
 
 1. Resolve the server and the database from the request; a database is optional when the task only lists databases.
-   When either is missing or ambiguous, ask the user, or return it to the delegating agent when you run as a subagent.
+   When either is missing or ambiguous, ask the user.
 2. Connect through the saved connection for that server; when the server has none, report the missing saved connection and stop, because the saved connection holds the credentials.
 3. Before the first query, confirm the server and database with #tool:ms-mssql.mssql/mssql_get_connection_details , because the connection can land on the server's default database; when the database differs, switch and confirm again.
-4. Run each statement after it passes the [read-only gate](#read-only-gate).
+4. Run each statement after it passes the read-only gate below.
 5. Disconnect when the task finishes or stops after a connection exists.
 
 ## Read-only gate
@@ -27,7 +28,7 @@ Answer a question from the SQL Server target the user named, with read-only quer
 ## Bound the result
 
 - Add `TOP 100` for a sample of an unfamiliar object, and leave the bound out when the question needs the full population.
-- Before returning rows without `TOP`, count them with an aggregate; when the count is too large to read, aggregate, or ask the user for a narrower population, or return the choice to the delegating agent when you run as a subagent.
+- Before returning rows without `TOP`, count them with an aggregate; when the count is too large to read, aggregate, or ask the user for a narrower population.
 - Treat a result as complete only when its row count matches the expected count, and state whether `TOP` was applied.
 
 ## Rules

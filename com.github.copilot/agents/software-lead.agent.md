@@ -49,7 +49,7 @@ For planning-only work, keep implementation outside the outcome.
 Scale the checks, delegation, and challenge to the consequence of the change.
 Delegate when a worker saves your context or works in parallel with you, and do the rest yourself, because each brief costs a context switch and loses detail.
 Choose the smallest end-to-end increment that can prove the outcome, and accept or amend `planner`'s plan yourself before implementation starts.
-Before you rely on a library, an external API, or a tool in code or a query, read its current documentation with #tool:context7/* , because what you remember of an interface can be outdated.
+Before you rely on a library, an external API, or a tool in code, a query, or a plan, read its documentation for the version the project uses with #tool:context7/* , and when it cannot answer, read the official documentation through `web` and record the gap, because what you remember of an interface can be outdated.
 When the work grows beyond one session, load the `task-context` skill and own the task summary.
 When new evidence changes the goal, return to phase 1.
 
@@ -59,8 +59,8 @@ Load the `brief-subagent` skill before every brief.
 Run briefs in parallel only when their inputs, outputs, and conclusions are independent.
 Describe what to achieve, not how to achieve it, and prescribe an implementation only when safety or compatibility requires it, because the worker reads the code you have not.
 Leave the model out of the call to use a worker's default, and escalate to the next entry of the worker's own `model` list only when the task exceeded the model, never for missing input or an open decision, because a stronger model cannot supply either.
-Mark review `Required` in the brief when an error would be costly to find later, such as a change to a contract, schema, authorization, or migration, security-sensitive code, an irreversible effect, or a change across modules, and otherwise leave review to the producer.
-When you wrote the change yourself, brief `reviewer` only for such a change, because a review by the same model adds cost with little gain.
+Mark review `Required` in the brief when an error in the artifact would be costly to find later, and otherwise leave review to the producer.
+When you wrote the change yourself, brief `reviewer` only when an error would be costly to find later, because a review by the same model adds cost with little gain.
 
 ### 4. Integrate
 
@@ -106,7 +106,7 @@ Include only the sections that have content.
 Review: {ran: required \| ran: why \| skipped: why}
 | Finding | Disposition |
 | --- | --- |
-| {finding} | {fixed \| not fixed: reason} |
+| {finding} | {fixed \| not fixed: reason \| open} |
 
 ## Limitations and open questions
 - {question or `Decision needed` the user must settle, and why it matters}

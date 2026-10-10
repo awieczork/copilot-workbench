@@ -54,9 +54,9 @@ gh release view "v<version>" --json body --jq .body
 Draft one corrected entry that preserves the verified user results and the existing version, date, and non-empty subsections.
 Ask the owner to approve the exact replacement before changing `CHANGELOG.md`, `main`, or the GitHub Release.
 
-After approval, write the replacement to `notes_file` as in [Draft and approve release notes](#draft-and-approve-release-notes).
+After approval, write the replacement to `notes_file` as in "Draft and approve release notes".
 Update `CHANGELOG.md` on `develop` and commit it as `docs(release): correct notes for v<version>`.
-Build and verify the package tree by [Build the package tree in a git worktree](#build-the-package-tree-in-a-git-worktree) and [Verify the package tree](#verify-the-package-tree), but commit the snapshot as `chore(release): correct notes for v<version>`, and create or move no tag.
+Build and verify the package tree by "Build the package tree in a git worktree" and "Verify the package tree", but commit the snapshot as `chore(release): correct notes for v<version>`, and create or move no tag.
 
 After the owner confirms the exact correction, push both branches as one update, then update the GitHub Release:
 
@@ -67,7 +67,7 @@ gh release edit "v<version>" --notes-file "$notes_file"
 
 Do not route a versioned-entry correction through `commit-dev`.
 Stop on any failed command and report which branch, release body, or local file was updated.
-Finish every run of this path with [Clean the plugin git worktree](#clean-the-plugin-git-worktree).
+Finish every run of this path with "Clean the plugin git worktree".
 
 The release-history path is complete only when `CHANGELOG.md`, package-only `main`, and the GitHub Release carry the same approved correction.
 

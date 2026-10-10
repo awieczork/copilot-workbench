@@ -62,7 +62,7 @@ A rule has no contract.
 ## Add a component
 
 1. Draft a specification from the request and the plugin, and present it to the owner with only the questions whose answers change it: `name`, `description`, and kind; tools, `agents`, `model`, and `handoffs`; what proceeds without asking; workflow phases and output slots; its connections; and the components it overlaps, with a recommendation to extend one that covers the need.
-2. After the owner confirms, write the component at `com.github.copilot/agents/<name>.agent.md` or `skills/<name>/`, and connect it by [Connect the component](#connect-the-component).
+2. After the owner confirms, write the component at `com.github.copilot/agents/<name>.agent.md` or `skills/<name>/`, and connect it by "Connect the component" below.
 
 ## Connect the component
 

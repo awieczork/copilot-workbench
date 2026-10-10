@@ -17,8 +17,8 @@ Delegation is one-shot:
 
 1. State one objective; split independent objectives into separate briefs.
 2. Fill the template below, leaving out the optional sections that do not apply.
-3. Check the brief against [Check the brief](#check-the-brief), then send it.
-4. Act on the returned result by [Read the result](#read-the-result).
+3. Check the brief against "Check the brief" below, then send it.
+4. Act on the returned result by "Read the result" below.
 
 ## Template
 

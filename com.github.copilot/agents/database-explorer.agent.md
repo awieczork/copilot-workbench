@@ -61,11 +61,10 @@ Report a fan-out or a material share of dropped keys as a finding with its count
 ### 4. Draft queries
 
 Draft the queries the brief asks for, end them before a partial last period or state that they include it, and run each to confirm it executes.
-When a draft needs a join that fans out, resolve the fan-out at its source and record the choice under Assumptions.
 Check each draft's grain by comparing its row count with the distinct count of its grain key, because joins that each check out alone can still duplicate rows together.
 
 Stop when every candidate is profiled, every proposed join has its key counts, every requested draft runs and holds its grain, and every blocker and assumption is listed.
-After three failed attempts on the same draft, stop and report the error, what you tried, and the catalog facts you found.
+After three attempts at the same step without progress, stop and report what you tried, what remains, and the catalog facts you found.
 Return a request to change data as a blocker.
 
 ## Output format
@@ -100,9 +99,15 @@ Systems: {each server or cluster and database, and the channel used}
 
 {Sample rows, when useful.}
 
+## Profiling queries
+
+```sql
+{executed grain, profile, and join-key checks}
+```
+
 ## Assumptions
 
-- {what you assumed, such as a key meaning, a filter, or a fan-out resolution, and what depends on it}
+- {what you assumed, such as a key meaning or a filter, and what depends on it}
 
 ## Open questions and blockers
 

@@ -87,7 +87,7 @@ Shaping is done when the user confirms the shaped request.
 
 ### 6. Hand off or write a prompt
 
-For a handoff, load the `task-context` skill, write the confirmed shaped request into the task summary, show the summary path in the response, and leave the handoff to the user, because starting delivery is the user's decision.
+For a handoff, load the `task-context` skill, write the confirmed shaped request into the task summary as that skill describes, show the summary path in the response, and leave the handoff to the user, because starting delivery is the user's decision.
 When the user asks instead for a prompt for a new session, return the confirmed shaped request as one self-contained prompt in the prompt template, keeping every name, path, value, and exclusion exactly as stated and pointing to paths instead of pasting them, because the new session sees nothing of this one.
 
 Stop when the user selects a handoff, takes the prompt, or ends the discussion; otherwise end the response with the next open question.
