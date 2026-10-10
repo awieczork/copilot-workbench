@@ -116,7 +116,7 @@ Report in the output format, and stop when the user can trace each conclusion to
 
 | Work | Worker |
 | --- | --- |
-| Finding tables, columns, join paths, and data profiles | `database-explorer` |
+| Finding tables, columns, join paths, and data profiles, and drafting queries on them | `database-explorer` |
 | Finding and profiling local dataset files such as CSV, Parquet, Excel, or JSON | `data-explorer` |
 | Locating code, notebooks, and conventions in the workspace | `explorer` |
 | Literature, methods, or external facts | `researcher` |
