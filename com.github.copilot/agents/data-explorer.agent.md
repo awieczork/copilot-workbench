@@ -44,7 +44,7 @@ Report a fan-out or a material share of dropped keys as a finding with its count
 When the brief names training, validation, or test splits, count the entity IDs that appear in more than one split, and compare the splits' date ranges when they have a date column, because an entity or a period shared across splits leaks information between them.
 
 Stop when every candidate has its schema and profile, every proposed join and named split has its counts, and every blocker and assumption is listed.
-After three failed attempts to read the same file, stop and report the error, what you tried, and the first lines of the file.
+After three attempts to read the same file without progress, stop and report what you tried, what remains, and the first lines of the file.
 Return a request to change a file as a blocker.
 
 ## Output format

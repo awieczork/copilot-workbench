@@ -1,20 +1,21 @@
 ---
 name: redshift
-description: "Use when a task needs data or metadata from an Amazon Redshift database. Supplies target resolution, the read-only query gate, the MCP tools with a Python fallback, and the catalog traps. Not for data or schema changes, cluster administration, or other database engines."
+description: "Use when a task needs data or metadata from an Amazon Redshift database. Supplies target resolution, the read-only query gate, the MCP tools with a Python fallback, and the catalog gotchas. Not for data or schema changes, cluster administration, or other database engines."
 argument-hint: "Name the Redshift cluster and database, and describe the data to query"
 ---
 
 # Redshift read-only queries
 
 Answer a question from the Amazon Redshift target the user named, with read-only queries whose results are either complete or marked as bounded.
+As a subagent, return each question or choice for the user to the delegating agent instead of asking the user.
 
 ## Procedure
 
 1. Resolve the cluster identifier and the database from the request.
-   When either is missing or ambiguous, ask the user, or return it to the delegating agent when you run as a subagent.
-2. Use the Redshift MCP tools, and switch to the [Python fallback](#python-fallback) only when MCP cannot reach the cluster, because the fallback changes only the access path and fixes no query error.
+   When either is missing or ambiguous, ask the user.
+2. Use the Redshift MCP tools, and switch to the Python fallback below only when MCP cannot reach the cluster, because the fallback changes only the access path and fixes no query error; a user's denial of a tool call and a timeout are not access failures, so keep MCP for them.
    Once the fallback is active, keep it for the rest of the task and report the MCP failure that caused the switch.
-3. Run each statement after it passes the [read-only gate](#read-only-gate).
+3. Run each statement after it passes the read-only gate below.
 
 ## Read-only gate
 
@@ -28,12 +29,13 @@ Check each statement before sending it, because the fallback runner executes wha
 
 1. Run the fallback only after the user confirms that the host, port, and database in `.env` identify the resolved target, because the file can point to another cluster; as a subagent, run it only when the brief states that confirmation, and otherwise return `Decision needed`.
 2. Run [the runner](scripts/query_redshift.py), located in this skill's folder, as a script by the `run-python` skill with the workspace root as the working directory, and pipe the statement on standard input.
-3. Read the one JSON object it prints, and the reason on standard error when it fails.
+3. Read the one JSON object it prints: it holds `rows`, or `csv_path` for a result over 100 rows.
+   When the runner fails, read the reason on standard error.
 
 ## Bound the result
 
 - Add `LIMIT 100` for a sample of an unfamiliar object, and leave the bound out when the question needs the full population.
-- Before returning rows without `LIMIT`, count them with an aggregate; when the count is too large to read, aggregate, or ask the user for a narrower population, or return the choice to the delegating agent when you run as a subagent.
+- Before returning rows without `LIMIT`, count them with an aggregate; when the count is too large to read, aggregate, or ask the user for a narrower population.
 - Treat a result as complete only when its row count matches the expected count and the channel reports no truncation, and state whether `LIMIT` was applied; the runner's `row_count` counts only the returned rows, so `truncated: true` means the result is incomplete.
 
 ## Rules

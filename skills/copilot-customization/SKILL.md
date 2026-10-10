@@ -12,9 +12,9 @@ Write GitHub Copilot customizations for VS Code that change agent behavior as in
 
 1. Determine the scope: workspace, user profile, or plugin package.
    Take it from the requested path or the repository layout; when neither settles it, ask one question and stop.
-2. Choose the type from [Choose the artifact type](#choose-the-artifact-type).
+2. Choose the type from "Choose the artifact type" below.
    When the requested type does not fit the need, name the mismatch, recommend the fitting type, and ask before writing.
-3. Before writing any content, read [Writing guidance](references/writing.md), then read the reference for the chosen type from [Locate the file](#locate-the-file).
+3. Before writing any content, read [Writing guidance](references/writing.md), then read the reference for the chosen type from "Locate the file" below.
 4. For an existing artifact, read the whole file and its bundled resources first, and keep every decision outside the requested change.
 5. Write the file at the path from the type reference, using its template.
 6. Validate the file on disk against the type reference's validation list and the writing checklist, and repair each failure.

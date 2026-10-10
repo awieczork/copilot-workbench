@@ -12,7 +12,7 @@ Keep short work in the conversation, and keep deliverables and approved knowledg
 
 The **task holder** is the agent the user talks to that holds the task, such as a chat agent while it shapes a request, then the lead that receives the handoff.
 Only the task holder creates, resumes, archives, or removes a task folder, writes `summary.md` and `notes.md`, and asks the user about the folder.
-A subagent follows only [Delegate with a result file](#delegate-with-a-result-file) and [Keep the folder lean](#keep-the-folder-lean), because it cannot ask the user and the task holder integrates its result.
+A subagent follows only "Delegate with a result file" and "Keep the folder lean" below, because it cannot ask the user and the task holder integrates its result.
 
 ## Layout
 
@@ -62,7 +62,7 @@ When the context fills, continue the task instead of stopping or shortening the 
 
 ## Hand off a task
 
-1. Before the handoff, the chat agent writes the current state into `summary.md`, with the shaped request below the summary fields, because the summary must carry the request once the conversation is compacted or the task resumes in a new session.
+1. Before the handoff, the chat agent writes the current state into `summary.md`: the request's decisions and open questions go into the summary fields, and the rest of the shaped request goes below them, because the summary must carry the request once the conversation is compacted or the task resumes in a new session.
 2. The lead agent reads `summary.md` and `notes.md`, becomes the task holder, and records itself as the writer of `summary.md` in the `Files` table.
 
 ## Delegate with a result file
@@ -73,7 +73,6 @@ A subagent that receives a result path:
 
 1. Checks that the path lies inside the task folder and does not exist yet; otherwise it returns the problem without starting work.
 2. Writes its complete result to that path before every return, including a blocked, failed, or partial one.
-3. Names the path in its response.
 
 - Write only that result file, never `summary.md`, `notes.md`, or another agent's file, because the task holder integrates results.
 - Treat a result file from another agent as unverified evidence, because saving a claim does not check it.

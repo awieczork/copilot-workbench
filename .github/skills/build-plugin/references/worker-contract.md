@@ -9,9 +9,9 @@ Pick the kind by what the worker returns.
 
 | Kind | Returns | Writes | Calls a checker |
 | --- | --- | --- | --- |
-| Helper, such as `explorer`, `database-explorer`, `data-explorer`, `researcher`, or `challenger` | Evidence | Its result file only | No |
-| Producer, such as `developer`, `ui-developer`, or `planner` | A change or a plan | Files in the brief's scope; a planner only its plan | Yes, by [For a producer](#for-a-producer) |
-| Checker, such as `reviewer` | A verdict on another worker's result | Its result file only | No |
+| Helper, such as `explorer`, `database-explorer`, `data-explorer`, `researcher`, or `challenger` | Evidence | Its result file only, when it can write | No |
+| Producer, such as `developer`, `ui-developer`, or `planner` | A change or a plan | Files in the brief's scope; a planner only its plan | Yes: `reviewer`, or `challenger` for a plan, by "For a producer" below |
+| Checker, such as `reviewer` | A verdict on another worker's result | Its result file only, when it can write | No |
 
 ## Frontmatter
 
@@ -45,25 +45,25 @@ When the brief names a result file, write your result there before every return.
 
 - Write numbered phases in the role's terms.
 - Name the skill that holds access or procedure at the phase where it loads, and do not restate its rules.
-- End with a stop rule, a stop after three failed attempts at the same step that reports the error and what was tried, and the return of an out-of-role request as a blocker.
+- End with a stop rule; a stop, worded in the role's terms, after three attempts at the same step without progress, that reports what was tried and what remains; and the return of an out-of-role request as a blocker.
 
 ## For a producer
 
 When the producer writes code or a plan, add this line unchanged:
 
 ```markdown
-Before you rely on a library, an external API, or a tool in code or a plan, read its documentation for the version the project uses with #tool:context7/* , and when it cannot answer, read the official documentation through `web` and record the gap, because what you remember of an interface can be outdated.
+Before you rely on a library, an external API, or a tool in code, a query, or a plan, read its documentation for the version the project uses with #tool:context7/* , and when it cannot answer, read the official documentation through `web` and record the gap, because what you remember of an interface can be outdated.
 ```
 
 Add these review rules:
 
-- Run one review round with the checker when the brief marks review `Required`, and otherwise when an error would be costly to find later, naming those cases in the producer's terms.
-- Call the checker through #tool:agent with the delegating agent's goal verbatim, the changed paths, and the brief's `Checker model` as the call's model when the brief names one.
+- Run one review round with the checker when the brief marks review `Required`, and otherwise when an error would be costly to find later.
+- Call the checker through #tool:agent with the delegating agent's goal verbatim; the brief's `Done when`, `Scope`, `Constraints`, and the decisions in its `Context`; the changed paths; and the brief's `Checker model` as the call's model when the brief names one.
 - Fix the findings the producer accepts, give every finding a disposition, and report whether the review ran and why.
 
 ## Output format
 
-Give a fenced output template that starts with `Status: {done | blocked | Decision needed | Missing input}`, keeps a verdict in its own slot, gives slots in the role's terms that the delegating agent acts on, most important first, and ends with an `Open questions and blockers` slot in which each entry names its cause and what would remove it.
+Give a fenced output template that starts, after its title, with `Status: {done | blocked | Decision needed | Missing input}`, keeps a verdict in its own slot, gives slots in the role's terms that the delegating agent acts on, most important first, and ends with an `Open questions and blockers` slot in which each entry names its cause and what would remove it.
 
 ## Check the worker contract
 
@@ -71,6 +71,6 @@ Give a fenced output template that starts with `Status: {done | blocked | Decisi
 - [ ] Every tool serves a workflow step, and only a producer has `agent`, with `agents` naming only its checker.
 - [ ] The `model` list matches a row in `model-tiers.md`.
 - [ ] The shared block follows the role line unchanged, with the result-file line exactly when the worker holds `edit` or `edit/createFile`.
-- [ ] The workflow has numbered phases, names each skill at its loading point without restating it, and ends with the stop rule, the three-failure stop, and the out-of-role blocker.
+- [ ] The workflow has numbered phases, names each skill at its loading point without restating it, and ends with the stop rule, the no-progress stop, and the out-of-role blocker.
 - [ ] A producer carries the documentation line and the review rules.
-- [ ] The output template starts with the `Status` line and ends with the `Open questions and blockers` slot.
+- [ ] The output template starts, after its title, with the `Status` line and ends with the `Open questions and blockers` slot.

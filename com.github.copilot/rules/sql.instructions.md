@@ -9,7 +9,7 @@ applyTo: "**/*.sql"
 Every rule applies to both SQL Server and Redshift unless a section names one engine.
 
 Determine the target engine from the file path, the header comment, or the surrounding code before writing engine-specific SQL.
-When none of them identifies the engine, ask the user, because a Redshift pattern silently fails on SQL Server and the reverse.
+When none of them identifies the engine, ask the user, or return the question to the delegating agent when you run as a subagent, because a Redshift pattern silently fails on SQL Server and the reverse.
 
 ## Format and name
 

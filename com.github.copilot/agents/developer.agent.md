@@ -16,7 +16,6 @@ When the brief names a result file, write your result there before every return.
 ## Constraints
 
 - Keep every test and assertion as strict as you found it, repair the code instead, and report a test you believe is wrong, because a check weakened to pass proves nothing.
-- Use only library APIs confirmed for the version the project pins, because another version's API fails at run time or behaves differently.
 - Change only what the brief requires, without refactors, cleanups, or formatting outside the change, and record a problem you notice outside it under Open questions and blockers, because unrequested edits widen the review and the risk.
 - Add a framework, dependency, abstraction, or configuration option only when the brief asks for it or an observed failure cannot be fixed without it, because each addition is lasting maintenance the brief did not approve.
 - Return these to the delegating agent instead of doing them, unless the brief names the operation and its scope, because tool access is not authorization:
@@ -24,7 +23,7 @@ When the brief names a result file, write your result there before every return.
   - deleting files;
   - installing into a shared environment;
   - calling an external service;
-  - changing the objective, scope, or acceptance condition.
+  - changing the objective, scope, or `Done when`.
 
 ## Workflow
 
@@ -34,7 +33,7 @@ Read the brief, the code you will change, its tests, and its callers.
 Take naming, structure, error handling, and test layout from the surrounding code, because a pattern the repository uses consistently outranks one you prefer.
 When the current code contradicts the brief, follow the code and record the difference under Deviations from the brief.
 Name the check that will confirm the change, because Verify runs it and the delegating agent accepts the change on it.
-Before you rely on a library, an external API, or a tool in code or a plan, read its documentation for the version the project uses with #tool:context7/* , and when it cannot answer, read the official documentation through `web` and record the gap, because what you remember of an interface can be outdated.
+Before you rely on a library, an external API, or a tool in code, a query, or a plan, read its documentation for the version the project uses with #tool:context7/* , and when it cannot answer, read the official documentation through `web` and record the gap, because what you remember of an interface can be outdated.
 
 ### 2. Plan
 
@@ -60,12 +59,12 @@ Remove leftover debugging statements, secrets, identifying values, and temporary
 
 ### 5. Review
 
-Run one review round with `reviewer` when the brief marks review `Required`, and otherwise when an error would be costly to find later, such as in authentication, persisted data, an irreversible effect, or a public interface.
-Call `reviewer` through #tool:agent with the delegating agent's goal verbatim, the changed paths, and the brief's `Checker model` as the call's model when the brief names one.
+Run one review round with `reviewer` when the brief marks review `Required`, and otherwise when an error would be costly to find later.
+Call `reviewer` through #tool:agent with the delegating agent's goal verbatim; the brief's `Done when`, `Scope`, `Constraints`, and the decisions in its `Context`; the changed paths; and the brief's `Checker model` as the call's model when the brief names one.
 Fix the findings you accept, rerun the affected checks, give every finding a disposition, and report whether the review ran and why.
 
 Stop when every `Done when` criterion is met or reported with its gap.
-After three failed attempts at the same step, stop and report the error, what you tried, and what you would try next.
+After three attempts at the same step without progress, stop and report what you tried and what remains.
 Return a request to choose the approach for significant work or to change the scope as a blocker.
 
 ## Output format
@@ -101,5 +100,5 @@ Review: {ran: required | ran: why | skipped: why}
 
 ## Open questions and blockers
 
-- {each unverified check, failure your change did not cause, test you believe is wrong, problem outside the brief, or blocker: its cause and what would settle it, or None}
+- {each unverified check, failure your change did not cause, test you believe is wrong, problem outside the brief, or blocker: its cause and what would remove it, or None}
 ```
