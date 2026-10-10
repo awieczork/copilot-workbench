@@ -2,53 +2,32 @@
 
 ## Unreleased
 
-### Task ownership
+### Added
 
-- Added the `software-lead` agent for software changes with bounded delegation and integrated results.
-- Added the `data-lead` agent for evidence-backed analysis with explicit uncertainty and user-owned decisions.
-- Added the `discuss` agent for clarifying unfinished requests and handing them to a lead or producing a self-contained prompt.
-
-### Exploration and planning
-
-- Added the `explorer` worker for locating workspace evidence for one question.
-- Added the `database-explorer` worker for read-only discovery, profiling, and join verification of SQL Server and Redshift objects for one data question, returning drafted queries and the profiling queries it ran.
-- Added the `data-explorer` worker for profiling local datasets without changing source files.
-- Added the `researcher` worker for sourced external evidence with support, conflicts, and gaps.
-- Added the `planner` worker for executable plans for software changes and data analyses, with open decisions returned to the delegating agent.
-
-### Implementation and checking
-
-- Added the `developer` worker for implementing software changes with tests scaled to the cost of an undetected error and unverified checks reported as open questions.
-- Added the `ui-developer` worker for implementing interfaces and visually checking the changed experience.
-- Added the `reviewer` worker for independent assessment of finished results without repairing them.
-- Added the `challenger` worker for testing one decision or framing with a discriminating check.
-
-### Customization
-
-- Added the `copilot-customization` skill for choosing, writing, and reviewing Copilot project instructions, scoped instructions, custom agents, and Agent Skills for VS Code.
-
-### Coordination
-
-- Added the `brief-subagent` skill for self-contained, one-shot delegated assignments and for acting on the status each subagent returns.
-- Added the `task-context` skill for keeping a task's summary and delegated results in a Git-ignored folder, so that a task survives the session and resumes later.
-- Added the user-invoked `interview-me` skill for confirming intent before work continues.
-
-### Database and Python workflows
-
-- Added the `redshift` skill for read-only queries against user-provided targets with an MCP-first workflow and a bounded, locally configured Python fallback.
-- Added the `sql-server` skill for read-only queries against user-provided targets through verified saved connections.
-- Added the `run-python` skill for running Python scripts and inline code through `uv`, with or without the project environment.
-
-### Scoped rules
-
-- Added the `markdown` rule for ordinary document syntax, formatting, and prose.
-- Added the `python` rule for user-run task-script conventions and proportionate validation.
-- Added the `sql` rule for the text of one read-only SQL Server or Redshift query.
-- Added the `changelog` rule for writing and reconciling the `## Unreleased` entries of a project's `CHANGELOG.md`.
-- Added the `project-status` rule for keeping a project's `PROJECT-STATUS.md` as a short handoff with its roadmap and blockers.
-- Added the `open-issues` rule for recording and closing a project's unresolved decisions, missing inputs, and verified limitations in `OPEN-ISSUES.md`.
-
-### MCP servers
-
-- Added the Redshift MCP server for database queries and catalog discovery using local AWS configuration.
-- Added the context7 MCP server for current library documentation.
+- The `software-lead` agent delivers or plans software changes by deciding the approach, briefing workers, and judging their results.
+- The `data-lead` agent answers data-science questions with evidence, explicit uncertainty, and decisions left to the user.
+- The `discuss` agent shapes an unfinished idea into a request for a lead or a self-contained prompt for a new session.
+- The `explorer` worker locates workspace evidence for one question.
+- The `database-explorer` worker discovers and profiles SQL Server and Redshift objects for one data question, verifies join paths, and returns read-only queries.
+- The `data-explorer` worker profiles local datasets, their joins, and their splits without changing source files.
+- The `researcher` worker gathers sourced external evidence with its support, conflicts, and gaps.
+- The `planner` worker produces executable plans for software changes and data analyses, and returns open decisions to the delegating agent.
+- The `developer` worker implements software changes with tests scaled to the cost of an undetected error.
+- The `ui-developer` worker implements interface changes and checks them in the running app in a browser.
+- The `reviewer` worker assesses finished results against their goal without repairing them.
+- The `challenger` worker tests one decision or framing and recommends whether to proceed, revise, or reject it.
+- The `copilot-customization` skill guides choosing, writing, and reviewing Copilot project instructions, scoped instructions, custom agents, and Agent Skills for VS Code.
+- The `brief-subagent` skill supplies self-contained, one-shot briefs and how to act on the status each worker returns.
+- The `task-context` skill keeps a task's summary and delegated results in a Git-ignored folder, so that a task survives the session and resumes later.
+- The user-invoked `interview-me` skill confirms the user's intent before work continues.
+- The `redshift` skill runs read-only queries against user-provided targets with an MCP-first workflow and a Python fallback that returns at most 100 rows.
+- The `sql-server` skill runs read-only queries against user-provided targets through verified saved connections.
+- The `run-python` skill runs Python scripts and inline code through `uv`, with or without the project environment.
+- The `markdown` rule supplies document syntax, formatting, and prose rules, and only its syntax rules for customization files.
+- The `python` rule supplies conventions for user-run task scripts with proportionate validation.
+- The `sql` rule supplies schema reading, result bounding, and query text rules for read-only SQL Server and Redshift queries.
+- The `changelog` rule keeps a project's `CHANGELOG.md` in Keep a Changelog sections.
+- The `project-status` rule keeps a project's `PROJECT-STATUS.md` as a short handoff with its roadmap and blockers.
+- The `open-issues` rule records and closes a project's unresolved decisions, missing inputs, and verified limitations in `OPEN-ISSUES.md`.
+- The Redshift MCP server runs database queries and catalog discovery with local AWS configuration.
+- The context7 MCP server provides current library documentation.

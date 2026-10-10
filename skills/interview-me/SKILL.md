@@ -1,6 +1,6 @@
 ---
 name: interview-me
-description: "Interview the user to confirm their intent before work continues."
+description: "Interview the user until you share one confirmed understanding of a subject, before work starts or continues."
 disable-model-invocation: true
 ---
 
@@ -16,7 +16,7 @@ Interview the user until you and the user share one confirmed understanding of t
 3. **Ask:** for one local ambiguity, ask one question and wait.
    Otherwise ask in rounds, through #tool:vscode/askQuestions when you hold it and in chat when you do not, and wait for the answers.
    Ask the questions whose answers bear on each other in one round, and hold a question whose options come from an answer not given yet for a later round, because its options may change.
-   Between rounds, gather the facts the answers made available, and do not reopen a settled aspect unless new evidence invalidates it.
+   Between rounds, gather the facts the answers made available, and reopen a settled aspect only when new evidence invalidates it.
 4. **Close:** when every aspect you kept is settled or deferred by the user, present the summary in the output format and ask the user to confirm or correct it.
    When the user corrects it, return to step 3 for the affected aspects.
 5. **Resume:** after the user confirms, resume the work the interview interrupted.

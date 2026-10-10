@@ -13,11 +13,8 @@ Use one of the two files, never both, because two always-on files drift apart an
 The Local agent also loads `CLAUDE.md` by default (`chat.useClaudeMdFile`), so a `CLAUDE.md` beside either file is a second always-on file.
 Nested `AGENTS.md` files in subfolders are experimental and load for the Local agent only when the user enables `chat.useNestedAgentsMdFiles`, which is off by default.
 
-For personal guidance across workspaces, use `~/.copilot/copilot-instructions.md`.
+For personal guidance across workspaces, use `~/.copilot/copilot-instructions.md` in Copilot Agent Host sessions, or a user-scope rule with `applyTo: "**"` for the Local agent.
 An Agent Plugins 1.0 package cannot ship either file; it ships a rule with `applyTo: "**"` instead, which VS Code attaches to every request.
-
-## Frontmatter
-
 Project instructions take no frontmatter.
 
 ## Template
@@ -47,7 +44,5 @@ Include only the sections the workspace needs:
 
 ## Validate
 
-- [ ] Exactly one of `copilot-instructions.md` and `AGENTS.md` exists at its documented location.
-- [ ] Every section applies to most tasks in the workspace.
+- [ ] Exactly one always-on file exists at its documented location: `copilot-instructions.md`, `AGENTS.md`, or a `CLAUDE.md` that the Local agent loads.
 - [ ] Every named command, path, and file exists in the repository.
-- [ ] Rules for a single file type or folder have moved to scoped instructions.

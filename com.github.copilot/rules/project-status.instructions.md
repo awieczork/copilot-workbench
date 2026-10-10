@@ -7,17 +7,17 @@ applyTo: "PROJECT-STATUS.md"
 # Project status
 
 `PROJECT-STATUS.md` is the short handoff that tells the user and any agent where the project stands and what comes next.
-Keep it to current and planned work, because git, `CHANGELOG.md`, and the other root records keep the history.
+Keep it to current and planned work, because git and `CHANGELOG.md` keep the history.
 
 ## Format
 
 ```markdown
 # Project status
 
-- **State:** {`active` | `blocked` | `paused` | `complete`}
-- **Updated:** {today's date as YYYY-MM-DD}
-- **Objective:** {the intended outcome in one sentence}
-- **Focus:** {one or two sentences: the active phase and why it matters now}
+- State: {`active` | `blocked` | `paused` | `complete`}
+- Updated: {today's date as YYYY-MM-DD}
+- Objective: {the intended outcome in one sentence}
+- Focus: {one or two sentences: the active phase and why it matters now}
 
 ## Roadmap
 
@@ -32,7 +32,7 @@ Keep it to current and planned work, because git, `CHANGELOG.md`, and the other 
 ## Update the status
 
 - Take the objective, scope, phase order, task order, and completion from the user's decisions, and the current state from the repository.
-- When neither establishes the objective, scope, or order, ask the user, or return the question to the delegating agent when you run as a subagent, because a guessed roadmap misdirects every later task.
+- When neither establishes the objective, scope, or order, report `Decision needed` with the question, because a guessed roadmap misdirects every later task.
 - Rewrite `Focus` for the present rather than appending to it, so that it never becomes a history log.
 - Give numbered tasks only to the active phase, and add tasks to a planned phase when it becomes active.
 - Treat the first unticked task of the active phase as the next action.
