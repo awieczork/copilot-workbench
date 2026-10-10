@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [0.1.0] - 2026-10-10
+
 ### Added
 
 - The `software-lead` agent delivers or plans software changes by deciding the approach, briefing workers, and judging their results.
