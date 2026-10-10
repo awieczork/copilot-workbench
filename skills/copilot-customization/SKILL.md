@@ -1,7 +1,7 @@
 ---
 name: copilot-customization
-description: "Use when creating, changing, or reviewing GitHub Copilot customizations for VS Code: copilot-instructions.md, AGENTS.md, scoped .instructions.md files, custom agents (.agent.md), and Agent Skills (SKILL.md). Supplies the type choice, frontmatter, templates, and writing rules. Not for prompt files, hooks, or MCP server configuration."
-argument-hint: "[project-instructions|instructions|agent|skill] [goal]"
+description: "Use when creating, changing, or reviewing a GitHub Copilot customization for VS Code: project instructions, scoped instructions, a custom agent, or an Agent Skill. Supplies the type choice, frontmatter, templates, and writing rules. Not for prompt files, hooks, or MCP server configuration."
+argument-hint: "[create|review] [project-instructions|instructions|agent|skill] [goal]"
 ---
 
 # Copilot customization
@@ -11,29 +11,29 @@ As a subagent, return each question or choice for the user to the delegating age
 
 ## Create or change an artifact
 
-1. Determine the scope: workspace, user profile, or plugin package.
+1. Determine the scope: workspace, user, or plugin package.
    Take it from the requested path or the repository layout; when neither settles it, ask one question and stop.
 2. Choose the type from "Choose the artifact type" below.
    When the requested type does not fit the need, name the mismatch, recommend the fitting type, and ask before writing.
 3. Before writing any content, read [Writing guidance](references/writing.md), then read the reference for the chosen type, linked in "Choose the artifact type" below.
-4. For an existing artifact, read the whole file and its bundled resources first, and keep every decision outside the requested change.
+4. For an existing artifact, read the whole file and its bundled resources first, and leave unchanged every decision the request does not touch.
 5. Write the file at the path from the type reference, using its template.
-6. Validate the file on disk against the type reference's validation list and the questions in Writing guidance, and repair each failure; the work is done when the file sits at its path and every item passes.
+6. Validate the file on disk against the type reference and the questions in Writing guidance, and repair each failure; the work is done when the file sits at its path and every item passes.
 
 When a field or behavior is not covered here, read the official documentation linked at the top of the type reference instead of guessing.
 
 ## Review artifacts
 
 1. Read the artifact, its bundled resources, and every other customization that can apply to the same task, because conflicts and gaps arise between files.
-2. Ask the questions in [Writing guidance](references/writing.md) of the artifact, and check it against the validation list of its type reference.
+2. Ask the questions in [Writing guidance](references/writing.md) of the artifact, and check it against its type reference.
 3. Flag a conflict where two files that load together give different instructions for the same case, and a gap where no loaded file covers a case the artifact must handle.
 4. Report the findings in the format below, ordered by impact, and change files only when the user asks for fixes.
 
-The review is done when every loaded file was read and every finding names its file and line and quotes the line.
+The review is done when every loaded file was read and every finding fills the template below.
 
 ```markdown
 ## Findings
-1. `{path}:{line}` — "{quoted text}": {conflict | gap | failed question | validation failure}: {issue}; fix: {proposed text}
+1. `{path}:{line}` — "{quoted text}": {conflict | gap | failed question | validation failure}: {issue}; fix: {proposed text or removal}
 
 ## Checked
 - `{path}`
@@ -57,5 +57,4 @@ Prompt files, hooks, and MCP server configuration are outside this skill; say so
 
 ## Gotchas
 
-- YAML frontmatter fails silently at run time: a value with an unquoted colon or a tab indent stops the artifact from loading, so quote every string that contains a colon.
-- Keep a skill's `name` equal to its folder name, because the Local agent replaces a differing name with the folder name and other harnesses may reject the skill.
+- Quote every frontmatter string that contains a colon and indent with spaces, because a YAML error can drop fields or the whole artifact.

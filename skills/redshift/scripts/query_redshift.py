@@ -9,20 +9,16 @@
 
 """Execute one Redshift SQL statement from standard input and emit a bounded JSON result."""
 
-import csv
 import json
 import os
 import sys
-import tempfile
-from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 import redshift_connector
 from dotenv import load_dotenv
 
-INLINE_ROW_LIMIT = 100
-RESULT_ROW_LIMIT = 1_000
+ROW_LIMIT = 100
 
 
 class InputError(Exception):
@@ -84,7 +80,7 @@ def connection_settings() -> dict[str, Any]:
 def execute_query(
     query: str, settings: dict[str, Any]
 ) -> tuple[list[dict[str, str]], list[tuple[Any, ...]], bool]:
-    """Run a query without committing and return at most RESULT_ROW_LIMIT rows."""
+    """Run a query without committing and return at most ROW_LIMIT rows."""
     connection = None
     cursor = None
     try:
@@ -97,15 +93,19 @@ def execute_query(
             {"name": str(description[0]), "type": str(description[1])}
             for description in cursor.description
         ]
-        rows = list(cursor.fetchmany(RESULT_ROW_LIMIT + 1))
-        truncated = len(rows) > RESULT_ROW_LIMIT
-        return columns, rows[:RESULT_ROW_LIMIT], truncated
+        rows = list(cursor.fetchmany(ROW_LIMIT + 1))
+        truncated = len(rows) > ROW_LIMIT
+        return columns, rows[:ROW_LIMIT], truncated
     except QueryError:
         raise
     except Exception as error:
         if connection is None:
-            raise ConfigurationError("Could not connect to Redshift") from error
-        raise QueryError("Redshift could not execute the SQL query") from error
+            raise ConfigurationError(
+                f"Could not connect to Redshift ({type(error).__name__})"
+            ) from error
+        raise QueryError(
+            f"Redshift could not execute the SQL query: {error}"
+        ) from error
     finally:
         if cursor is not None:
             cursor.close()
@@ -113,42 +113,18 @@ def execute_query(
             connection.close()
 
 
-def csv_path_for() -> Path:
-    """Create an absolute path for a large result CSV in the system temporary directory."""
-    timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ")
-    return Path(tempfile.gettempdir()) / "redshift-results" / f"result-{timestamp}.csv"
-
-
-def write_csv(
-    path: Path, columns: list[dict[str, str]], rows: list[tuple[Any, ...]]
-) -> None:
-    """Write query rows to a CSV file."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", newline="", encoding="utf-8") as csv_file:
-        writer = csv.writer(csv_file)
-        writer.writerow([column["name"] for column in columns])
-        writer.writerows(rows)
-
-
 def result_payload(
     columns: list[dict[str, str]],
     rows: list[tuple[Any, ...]],
     truncated: bool,
 ) -> dict[str, Any]:
-    """Build the JSON result payload and write large results to CSV."""
-    payload: dict[str, Any] = {
+    """Build the JSON result payload."""
+    return {
         "columns": columns,
+        "rows": rows,
         "row_count": len(rows),
         "truncated": truncated,
     }
-    if len(rows) <= INLINE_ROW_LIMIT:
-        payload["rows"] = rows
-        return payload
-
-    csv_path = csv_path_for()
-    write_csv(csv_path, columns, rows)
-    payload["csv_path"] = str(csv_path)
-    return payload
 
 
 def main() -> int:

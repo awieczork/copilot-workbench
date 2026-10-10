@@ -1,6 +1,6 @@
 ---
 name: "SQL"
-description: "Use when writing or reviewing a read-only SELECT query for SQL Server or Redshift. Supplies formatting, correctness, and performance rules. Not for view definitions, procedural batches, or statements that change data or schema."
+description: "Use when writing or reviewing a read-only SELECT query for SQL Server or Redshift. Supplies schema-reading, result-bounding, formatting, correctness, and performance rules. Not for view definitions, procedural batches, or statements that change data or schema."
 applyTo: "**/*.sql"
 ---
 
@@ -21,7 +21,8 @@ Format SQL so that a reader finds an entity by grep and sees the join graph with
 - Write every join explicitly, because a comma join with the condition in `WHERE` hides the join graph.
 - Name new aliases, CTEs, and column aliases in English, and spell existing schema objects exactly as the source system spells them, including non-English ERP names.
 - Target 80 characters per line and keep every line at or below 120, breaking before `AND`, `OR`, or `JOIN`, or after a comma.
-- Comment the intent, business context, or threshold reasoning, never the mechanics; document every numeric threshold, because an undocumented magic number in feature logic is an unrecorded analytical decision.
+- Comment the intent, business context, or threshold reasoning, because the code already shows the mechanics.
+- Document every numeric threshold, because an undocumented magic number in feature logic is an unrecorded analytical decision.
 - Divide a query with distinct analytical phases into phases with `-- === SECTION NAME ===` separators.
 - When the query is kept as a file, open it with a `/* */` header stating purpose and target engine.
 
@@ -60,6 +61,19 @@ SELECT
 FROM active_customers AS ac
 ORDER BY ac.customer_id, ac.order_date;
 ```
+
+## Read the schema first
+
+- Read every object, column, and type from the catalog before relying on it, and read a view's definition before interpreting its filters or joins, because a guessed name or a hidden filter yields a confident wrong answer.
+- Correct a misspelled name from the catalog; when a fix would change what the query means or targets, report the error instead.
+- When metadata is denied or unavailable, use another read-only query that establishes the same fact, or report the fact as unverified.
+- Report a key or constraint the catalog does not declare as `no declared key`, not as no relationship, and test a join path with key checks, because warehouse and ERP schemas often declare none and Redshift constraints are informational.
+
+## Bound the result
+
+- Bound a sample of an unfamiliar object to 100 rows, with `TOP 100` on SQL Server and `LIMIT 100` on Redshift, and leave the bound out when the question needs the full population.
+- Before returning rows without a bound, count them with an aggregate; when the count exceeds 100, aggregate, or ask for a narrower population.
+- Treat a result as complete only when its row count matches the expected count, and state whether the bound was applied.
 
 ## Keep results correct
 

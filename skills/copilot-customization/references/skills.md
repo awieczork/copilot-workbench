@@ -32,18 +32,11 @@ description: "Use when writing or reviewing SQL migrations. Supplies naming, loc
 
 | Field | Required | Behavior |
 | --- | --- | --- |
-| `name` | Yes | 1–64 lowercase letters, digits, and single hyphens, not starting or ending with a hyphen, and matching the folder name; the Local agent loads a mismatched skill under its folder name, and other harnesses may reject it |
-| `description` | Yes | Up to 1024 characters; the only text the agent sees before it decides to load the skill |
+| `name` | Yes | 1–64 lowercase letters, digits, and single hyphens, not starting or ending with a hyphen, and matching the folder name; the docs say a mismatched skill is not loaded, while the Local agent loads it under its folder name, so keep the two equal |
+| `description` | Yes | Up to 1024 characters; with `name`, the only text the agent sees before it decides to load the skill |
 | `argument-hint` | No | Hint shown when the user runs the skill as a slash command |
 | `user-invocable` | No | `false` removes the slash command; defaults to `true` |
 | `disable-model-invocation` | No | `true` stops the agent from loading the skill on its own; defaults to `false` |
-
-| Configuration | Slash command | Loaded by the agent |
-| --- | --- | --- |
-| Both fields omitted | Yes | Yes |
-| `user-invocable: false` | No | Yes |
-| `disable-model-invocation: true` | Yes | No |
-| Both set | No | No |
 
 - Set `disable-model-invocation: true` when the skill should run only on the user's request, and give it a one-line description of its task.
 - Do not add a plugin namespace to `name`, because VS Code adds the plugin prefix itself.
@@ -98,12 +91,10 @@ Bundle a script when the agent would otherwise rewrite the same logic on each ru
 - State each script in `SKILL.md` with what it does, when to run it, how to give it its input, its working directory, and every output field and limit the agent reads, because the agent sees only what `SKILL.md` states and cannot see the script.
 - Make the script non-interactive, taking its input from arguments or standard input, because the agent cannot answer a prompt.
 - Write the data to standard output and the diagnostics to standard error, keep the output size bounded, and state in each error message what was expected, because the agent acts only on what the run returns.
-- Make a script that changes files or systems safe to run again, and give it a dry run.
+- Make a script that changes files or systems safe to run again, and give it a dry run when its effect cannot be undone.
 - Declare dependencies inline or pin their versions, and keep credentials out of the code.
 
 ## Validate
 
 - [ ] The folder sits at a documented location and contains `SKILL.md`.
-- [ ] `name` matches the folder and its syntax, and `description` is present and under 1024 characters.
-- [ ] `SKILL.md` is under 500 lines and holds what every use needs, and every resource is linked directly from it.
-- [ ] Every script is non-interactive, and `SKILL.md` states its input, working directory, output fields, and limits.
+- [ ] `name` matches the folder and its syntax, and `description` is present and at most 1024 characters.

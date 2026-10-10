@@ -1,7 +1,7 @@
 # References
 
 External resources that inform the design of `copilot-workbench`.
-Consult them as structural inspiration when specifying a new agent or skill, not as tone or output templates.
+Use them as structural inspiration, not as tone or output templates.
 
 ## Plugin standard
 
@@ -14,17 +14,17 @@ Consult them as structural inspiration when specifying a new agent or skill, not
 
 The plugin skill [`copilot-customization`](skills/copilot-customization/SKILL.md) ships without its authoring process, so its sources and refresh procedure live here.
 
-### Skill scope
-
-The skill is a plugin-independent reference for agents that write GitHub Copilot customizations in VS Code.
-It holds only what an agent needs while writing: artifact types and when to use them, supported frontmatter, and writing guidance.
-Keep plugin-specific conventions and process for human authors, such as evaluation runs or baseline comparisons, out of the skill.
-
 ### Sources
 
 Product facts were last checked on 2026-10-10.
-The subagent `model` and `reasoning-effort` behavior was checked in the microsoft/vscode source (`src/vs/workbench/contrib/chat/common/tools/builtinTools/runSubagentTool.ts`), because the docs do not cover effort.
-Treat a claim as stale when current documentation differs.
+The microsoft/vscode source alone confirms these facts, because the docs do not cover them or state them differently:
+
+- a subagent call takes a per-call `model` and has no reasoning-effort parameter: `src/vs/workbench/contrib/chat/common/tools/builtinTools/runSubagentTool.ts`;
+- a skill whose `name` differs from its folder loads under the folder name, and a plugin agent without `name` gets a plugin-prefixed id: `promptsServiceImpl.ts`;
+- `applyTo` takes comma-separated patterns and matches a relative pattern at any depth, ignoring case: `computeAutomaticInstructions.ts`;
+- the `web` tool set holds `web/fetch`, `web/githubRepo`, and `web/githubTextSearch`: `extensions/copilot/package.json`.
+
+Treat any other claim as stale when current documentation differs.
 
 Primary sources:
 
@@ -61,9 +61,10 @@ Read sources in full rather than through a summarizing fetch, because summaries 
 ### Refresh the skill's product facts
 
 1. Check the primary VS Code pages and the Agent Skills specification for changed fields, defaults, locations, and experimental labels.
-2. Compare the VS Code built-in `agent-customization` skill for newly documented fields, such as `reasoning-effort`, which appeared there before the public docs.
-3. Update product facts only from primary sources, and update writing guidance only when evidence shows a changed behavior or a credible failure.
-4. Update the date under Sources.
+2. Compare the VS Code built-in `agent-customization` skill for fields the public docs do not list yet.
+3. Check each source-only fact under Sources again in microsoft/vscode.
+4. Update product facts only from primary sources, and update writing guidance only when evidence shows a changed behavior or a credible failure.
+5. Update the date under Sources.
 
 ## Agent and context engineering
 
