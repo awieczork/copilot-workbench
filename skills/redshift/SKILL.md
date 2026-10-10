@@ -1,7 +1,6 @@
 ---
 name: redshift
 description: "Use when a task needs data or metadata from an Amazon Redshift database. Supplies target resolution, the read-only query gate, the MCP tools with a Python fallback, and the catalog gotchas. Not for data or schema changes, cluster administration, or other database engines."
-argument-hint: "Name the Redshift cluster and database, and describe the data to query"
 ---
 
 # Redshift read-only queries
