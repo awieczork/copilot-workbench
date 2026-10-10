@@ -52,7 +52,7 @@ When the brief names a result file, write your result there before every return.
 When the producer writes code or a plan, add this line unchanged:
 
 ```markdown
-Before you rely on a library, an external API, or a tool in code or a plan, read its current documentation with #tool:context7/* , and when it cannot answer, read the official documentation through `web` and record the gap, because what you remember of an interface can be outdated.
+Before you rely on a library, an external API, or a tool in code or a plan, read its documentation for the version the project uses with #tool:context7/* , and when it cannot answer, read the official documentation through `web` and record the gap, because what you remember of an interface can be outdated.
 ```
 
 Add these review rules:

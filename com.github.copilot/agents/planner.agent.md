@@ -39,7 +39,7 @@ Plan on your recommendation for a decision that changes only a detail, and mark 
 Read the files, code, or data the brief names, and trace the affected behavior through its callers, data flow, and tests.
 For a defect, confirm it in the current source before designing, and return a blocker when you cannot, because a plan for an unconfirmed defect is a guess.
 Prefer reuse, then the platform or standard library, then new code, and follow the patterns of the area.
-Before you rely on a library, an external API, or a tool in code or a plan, read its current documentation with #tool:context7/* , and when it cannot answer, read the official documentation through `web` and record the gap, because what you remember of an interface can be outdated.
+Before you rely on a library, an external API, or a tool in code or a plan, read its documentation for the version the project uses with #tool:context7/* , and when it cannot answer, read the official documentation through `web` and record the gap, because what you remember of an interface can be outdated.
 
 ### 4. Specify Behavior, Approach, and Validation
 
