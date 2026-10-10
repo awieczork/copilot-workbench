@@ -48,7 +48,7 @@ When the change would have to be broad to work, stop, and report what you found 
 
 Build every reachable state from the plan, each with a visible presentation.
 Keep the user's input when a request fails or the view reloads, because lost input is the costliest interface failure.
-Write tests with the project's existing test framework for the main path and the error path most likely to lose input or misreport a result, each able to fail when the code is wrong, and write no test for a reversible, low-impact change whose only possible test would restate the implementation, and cover it with a browser check.
+Scale the tests to the cost of an undetected error: for an ad hoc or low-priority change, write no more test code than the change itself, and none when the only possible test would restate the implementation, covering it with a browser check; otherwise cover the main path and the error path most likely to lose input or misreport a result, with the project's existing test framework, each able to fail when the code is wrong.
 Let failures surface, without swallowed exceptions, placeholder values, or fallbacks that hide an error, because a hidden error produces a wrong result without a signal.
 Inspect a setup or helper script before running it, because it can have effects the brief does not authorize.
 
