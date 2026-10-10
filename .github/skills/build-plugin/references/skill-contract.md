@@ -1,21 +1,33 @@
 # Skill contract
 
-Read this before writing or changing a plugin skill that the plugin's agents may load.
+Read this before writing or changing a plugin skill.
+A plugin skill owns the access to one system or one procedure; agents load it through its `description`, name it at the point where it loads when it is core to their work, and do not restate it.
 
-## Rules
+## Own the work
 
-- When workers may load the skill, return open questions in its output instead of asking the user, because workers run as subagents, which cannot ask.
-- Leave the tone and format of replies to the user out of the skill, because entry agents define how they communicate.
-- Name a plugin skill where it applies instead of restating its rules:
+- Hold the access path, the procedure, the gate, and the traps of the system in the skill, because the agents that load it rely on it instead of restating them.
+- Leave another skill's rules to that skill, and name it only at a step that depends on it, as `redshift` names `run-python` for its runner.
+- Keep task state only through the `task-context` skill, because agents look for task state only in its folder.
+- Leave the communication style out of the skill, because entry agents own it; an output format holds only the content of the skill's result.
 
-| Need | Plugin skill |
-| --- | --- |
-| Running Python, including bundled scripts | `run-python` |
-| Keeping task state across sessions or agents | `task-context`, because agents look for task state only in its folder |
-| Writing a task for a subagent | `brief-subagent` |
-| Writing customizations in general | `copilot-customization` |
+## Subagent line
+
+When a step asks the user and the skill does not set `disable-model-invocation: true`, add this line unchanged after the opening sentence, and let the other steps say "ask the user":
+
+```markdown
+As a subagent, return each question or choice for the user to the delegating agent instead of asking the user.
+```
+
+## Content
+
+- Write a gate as an allow-list followed by the look-alikes it refuses, because a principle read loosely lets a look-alike through.
+- For a bundled script, state how to give it its input, its working directory, and every output field and limit the agent reads, because the agent cannot see the script.
+- Keep under Gotchas only traps a capable model gets wrong, without platform or shell branches, tool parameters, or catalogs of queries or commands the model writes itself.
 
 ## Check the skill contract
 
-- [ ] No step asks the user when workers may load the skill.
-- [ ] The skill names a plugin skill instead of restating it, and creates no task-state folder of its own.
+- [ ] The skill owns one system or procedure, and names another skill only at a step that depends on it.
+- [ ] A skill that asks the user and can be loaded by a model carries the subagent line unchanged after its opening sentence.
+- [ ] Task state goes only through `task-context`, and the skill carries no communication style.
+- [ ] A gate is an allow-list with its look-alikes, and a bundled script's input and output fields are stated.
+- [ ] Every gotcha is a trap a capable model gets wrong.
