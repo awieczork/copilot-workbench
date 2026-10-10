@@ -7,7 +7,7 @@ Scoped instructions are `*.instructions.md` files that VS Code attaches when the
 | Scope | Location |
 | --- | --- |
 | Workspace | `.github/instructions/<name>.instructions.md` |
-| User | VS Code profile storage for the Local agent, or `~/.copilot/instructions/` for Agent Host sessions |
+| User | `~/.copilot/instructions/`; the Local agent also reads VS Code profile storage |
 | Agent Plugins 1.0 package | `com.github.copilot/rules/<name>.instructions.md` |
 
 Use a lowercase kebab-case file name with the `.instructions.md` suffix.
@@ -30,21 +30,13 @@ applyTo: "tests/**/*.py"
 
 When a file has neither `description` nor `applyTo`, it loads only when the user attaches it manually.
 
-## Activation
-
-| Mode | Trigger | Use for |
-| --- | --- | --- |
-| `applyTo` | The agent creates or modifies a matching file | Language, framework, or folder standards |
-| `description` | The agent judges the task relevant | Task-based guidance, such as migrations or reviews |
-| Manual | The user adds the file as context | Occasional guidance |
-
 `applyTo` accepts these forms:
 
 ```yaml
 applyTo: "**/*.py"              # every Python file
 applyTo: "src/api/**/*.ts"      # one folder and extension
-applyTo: ["src/**", "lib/**"]   # several patterns, any may match
-applyTo: "**"                   # every file; use only for rules that apply everywhere
+applyTo: "src/**, lib/**"       # several patterns, comma-separated; any may match
+applyTo: "**"                   # every request, even with no file; use only for rules that apply everywhere
 ```
 
 Add a `description` as well as `applyTo` when the rules must reach a review or question that edits no file.
@@ -81,7 +73,7 @@ Add the `Example` section only when a short example shows a shape the rules desc
 ## Validate
 
 - [ ] The file sits at a documented location with the `.instructions.md` suffix.
-- [ ] Frontmatter parses, and `applyTo` is a string or an array of strings.
+- [ ] Frontmatter parses, and `applyTo` is one string; separate several globs with commas.
 - [ ] Every glob matches its intended paths and misses its near-miss paths.
 - [ ] A `description` exists when the rules must load for requests that edit no file.
 - [ ] The file covers one concern.

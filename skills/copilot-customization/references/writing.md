@@ -9,6 +9,9 @@ Write for a capable model: it handles nuance well, takes wording literally, and 
 - Leave out what the agent does by default, what one file or command shows, and generic "verify" or "think carefully" wording, and delete the whole sentence rather than trimming it.
 - Add a rule only after a correction, a failed run, or repository evidence shows the gap, and word it for the class of cases, because a fix fitted to one run fails on the next.
 - Ask for the result and its evidence rather than the reasoning steps, because current models reason internally.
+- Name the safe routine work the agent may do without asking, such as running the local tests and fixing the failures the change caused, because without that permission capable models stop to ask.
+- Let the agent ask only when the answer would change the result, and only after it has prepared a concrete, reviewable result, because an early question ends the work too soon.
+- When a step asks the user and a subagent may load the artifact, tell a subagent to return the question to the agent that delegated it, because a subagent cannot ask the user.
 
 ## Match strictness to the work
 
@@ -43,14 +46,14 @@ NEVER edit generated files.
 
 - Keep a concept's rules, caveats, and examples under one heading, and put steps before reference material.
 - Number steps only when their order changes the result, and write a step's procedure only where the model could not infer it from the goal.
-- Keep in the main file what every use needs, move what only some uses need into a resource, and link it one level deep with the exact condition for reading it.
+- Keep in the main file what every use needs, move what only some uses need into a resource, and link it one level deep from the main file with the exact condition for reading it, because a file linked only from another resource is read in part or missed.
 - Keep each rule in one place and point to it from everywhere else.
 - Split an artifact only when activation, permissions, or lifecycle differ, because overly narrow artifacts load together and conflict.
 - Wrap pasted input, an example, or a quoted document in `<input>`, `<example>`, or `<document>` tags when a heading would blur where it ends.
 
 ## Templates and examples
 
-- Give an artifact that returns a structured result a fenced output template with `{placeholder}` slots.
+- Give an artifact that returns a structured result a fenced output template with `{placeholder}` slots, because the caller reads the result by its sections.
 - Prefer a short example to a description of the same shape, and keep every detail of it one you want copied, because the agent reproduces incidental details too.
 - Write the artifact in the style its output should have, because the agent mirrors the formatting it reads.
 - Check every example presented as runnable with its parser, formatter, or type checker.
@@ -62,6 +65,7 @@ NEVER edit generated files.
 - Keep a description to two or three short sentences, without its steps or the identity its location supplies, because descriptions load on every request and an agent may follow a summary of the steps instead of the body.
 - Keep the description and the body in step: the body handles every case the description names, and the description names every case the body handles.
 - Write a tool or skill trigger as "Use X when {condition}", because "If in doubt" or "You must" wording makes the agent use X far beyond the intended cases.
+- Name a skill in an agent or instructions body only when it belongs to their core work and must load at a fixed point, such as a delegation skill before every brief, and otherwise rely on its `description`, because a named skill reads as one the agent relies on.
 - Name an artifact for what it covers.
 
 Write a tool mention in the body as `#tool:<frontmatter-tool-name>` followed by a space, including before punctuation.
@@ -69,13 +73,24 @@ Write a tool mention in the body as `#tool:<frontmatter-tool-name>` followed by 
 ## Keep the artifact portable
 
 - Bundle the resources the artifact needs and link them with relative paths.
+- Refer to a section of the same file by its heading in plain words, never by an anchor link, because the prompt diagnostics read `[x](#section)` and `[x](file.md#section)` as file paths and report them as missing.
 - Keep it usable without files or conventions that exist only where it was written, except repository facts that define its intended behavior there.
 
 ## Check the writing
 
-- [ ] Every sentence changes behavior, and nothing restates a default.
-- [ ] Strictness matches the work: direction where approaches vary, exact steps only where nothing may vary.
-- [ ] Rules state the wanted behavior in plain case, with reasons where they are not obvious.
-- [ ] Each rule lives in one place, and every resource link has an exact reading condition.
-- [ ] Every description is short, names its tasks, and matches its body.
-- [ ] No contradiction remains within the artifact or with the artifacts that load alongside it.
+Ask each question of every line, section, and file; a "no" marks a change to make.
+
+- [ ] Is each rule the principle itself, with its reason, rather than one instance of a broader principle?
+- [ ] Is each enumeration needed, or would the principle behind it steer the same way?
+- [ ] Is exact wording kept for work that tolerates no variation, such as an approval gate, a protocol, or an exact command, and is behavior that must repeat exactly left to a script?
+- [ ] Does each rule sit in the artifact that owns the work, instead of restating another instructions file, skill, or agent, or what VS Code already does?
+- [ ] Would removing the line, step, section, or file change a result?
+- [ ] Where the text would otherwise sort cases into levels or a wording scale, does one rule that scales the work to its consequence stand instead?
+- [ ] Is each skill, tool, or file the artifact names part of its core work, and does each load at a fixed point?
+- [ ] Does each slot of an output template carry something the reader acts on?
+- [ ] Is each rule stated once across the sections, the output template, and the artifacts that load with it?
+- [ ] Does a capable newcomer read each sentence one way only, with one term for each concept across the artifacts that load together?
+- [ ] Does a reason, instead of emphasis or decoration, carry the weight of each rule?
+- [ ] Do all lines pull in the same direction?
+- [ ] Does each principle still change a concrete behavior, and each qualifier change behavior at all?
+- [ ] Is every description short, does it name its tasks, and does it match its body?

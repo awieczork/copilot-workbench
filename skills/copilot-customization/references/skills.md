@@ -16,8 +16,7 @@ VS Code follows the [Agent Skills specification](https://agentskills.io/specific
 ├── SKILL.md        # required
 ├── references/     # documents the agent reads under a stated condition
 ├── scripts/        # code the agent runs
-├── assets/         # static files used without rewriting
-└── templates/      # starter files the agent adapts
+└── assets/         # templates and static files
 ```
 
 Create only the folders the skill uses.
@@ -33,7 +32,7 @@ description: "Use when writing or reviewing SQL migrations. Supplies naming, loc
 
 | Field | Required | Behavior |
 | --- | --- | --- |
-| `name` | Yes | 1–64 lowercase letters, digits, and single hyphens, not starting or ending with a hyphen, and matching the folder name; an invalid name stops the skill from loading |
+| `name` | Yes | 1–64 lowercase letters, digits, and single hyphens, not starting or ending with a hyphen, and matching the folder name; the Local agent loads a mismatched skill under its folder name, and other harnesses may reject it |
 | `description` | Yes | Up to 1024 characters; the only text the agent sees before it decides to load the skill |
 | `argument-hint` | No | Hint shown when the user runs the skill as a slash command |
 | `user-invocable` | No | `false` removes the slash command; defaults to `true` |
@@ -52,15 +51,8 @@ description: "Use when writing or reviewing SQL migrations. Supplies naming, loc
 
 ## Progressive disclosure
 
-A skill loads in three stages:
-
-1. **Discovery:** the agent sees only `name` and `description`, about 100 tokens per skill.
-2. **Instructions:** the agent reads the `SKILL.md` body once the skill matches or the user runs it.
-3. **Resources:** the agent reads a bundled file only when the body links to it and its condition applies; an unlinked file never loads.
-
 - Put everything that decides activation into the `description`, because the body is invisible until the skill loads; a `When to use` section in the body cannot trigger anything.
 - Keep `SKILL.md` under 500 lines and about 5,000 tokens; when it grows past that, move a branch into a reference rather than cutting rules.
-- Link every resource directly from `SKILL.md`, because a file linked only from another resource is read in part or missed.
 
 ## Template
 
@@ -93,23 +85,20 @@ description: "{Use when ... trigger per branch}. {What it supplies}. Not for {cl
 
 ## Gotchas
 
-- {Environment-specific fact that defies a reasonable assumption.}
+- {Trap a capable model gets wrong in this environment.}
 ````
 
 - Keep only the sections the skill uses, and add `Output format` only when the skill returns a result.
-- Keep gotchas in `SKILL.md`, and add one when a correction reveals a fact the agent could not have assumed.
-- Rely on the `description` for discovery, because an agent loads a skill whose `description` matches the task; name the skill in an agent body or instructions only when it belongs to their core work and they must load it at a fixed point, such as a delegation skill before every brief, because a named skill reads as one the agent relies on.
+- Keep in `Gotchas` only traps a capable model gets wrong in this environment, and add one when a correction reveals it; leave out platform or shell branches, tool parameters, and catalogs of queries or commands the model writes itself.
 
 ## Scripts
 
 Bundle a script when the agent would otherwise rewrite the same logic on each run, or when exact behavior and error handling matter.
 
-- List each script in `SKILL.md` with what it does and when to run it.
-- Make the script non-interactive, with arguments and `--help`.
-- Write data to standard output and diagnostics to standard error, and keep output size predictable.
-- Validate input, and state in each error message what was expected.
-- Make repeated runs safe, and provide `--dry-run` for changes to files or systems.
-- Return meaningful exit codes.
+- State each script in `SKILL.md` with what it does, when to run it, how to give it its input, its working directory, and every output field and limit the agent reads, because the agent sees only what `SKILL.md` states and cannot see the script.
+- Make the script non-interactive, taking its input from arguments or standard input, because the agent cannot answer a prompt.
+- Write the data to standard output and the diagnostics to standard error, keep the output size bounded, and state in each error message what was expected, because the agent acts only on what the run returns.
+- Make a script that changes files or systems safe to run again, and give it a dry run.
 - Declare dependencies inline or pin their versions, and keep credentials out of the code.
 
 ## Validate
@@ -117,4 +106,4 @@ Bundle a script when the agent would otherwise rewrite the same logic on each ru
 - [ ] The folder sits at a documented location and contains `SKILL.md`.
 - [ ] `name` matches the folder and its syntax, and `description` is present and under 1024 characters.
 - [ ] `SKILL.md` is under 500 lines and holds what every use needs, and every resource is linked directly from it.
-- [ ] Every script has `--help`, non-interactive arguments, clear errors, and safe repeated runs.
+- [ ] Every script is non-interactive, and `SKILL.md` states its input, working directory, output fields, and limits.

@@ -22,7 +22,7 @@ Keep plugin-specific conventions and process for human authors, such as evaluati
 
 ### Sources
 
-Product facts were last checked on 2026-10-07.
+Product facts were last checked on 2026-10-10.
 The subagent `model` and `reasoning-effort` behavior was checked in the microsoft/vscode source (`src/vs/workbench/contrib/chat/common/tools/builtinTools/runSubagentTool.ts`), because the docs do not cover effort.
 Treat a claim as stale when current documentation differs.
 
