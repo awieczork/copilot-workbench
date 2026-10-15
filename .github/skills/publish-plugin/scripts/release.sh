@@ -4,7 +4,7 @@
 #   release.sh preflight          check that a release can start; print each failed check
 #   release.sh build <version>    build and verify the package-only main snapshot in a sibling git worktree
 set -uo pipefail
-ALLOWLIST=(CHANGELOG.md README.md plugin.json mcp.json com.github.copilot skills)
+ALLOWLIST=(.github/plugin/marketplace.json CHANGELOG.md README.md plugin.json mcp.json com.github.copilot skills)
 root="$(git rev-parse --show-toplevel)"
 worktree="${root}.plugin-worktree"
 failed=0

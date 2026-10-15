@@ -18,6 +18,7 @@ import jsonschema
 import yaml
 
 PAYLOAD = [
+    ".github/plugin/marketplace.json",
     "plugin.json",
     "mcp.json",
     "skills",
@@ -50,7 +51,7 @@ def strings(value):
             yield from strings(item)
 
 
-def check_manifest(name: str) -> str | None:
+def check_manifest(name: str) -> dict | None:
     path = root / name
     if not path.exists():
         if name == "plugin.json":
@@ -60,6 +61,9 @@ def check_manifest(name: str) -> str | None:
         document = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as error:
         fail(path, f"invalid JSON: {error}")
+        return None
+    if not isinstance(document, dict):
+        fail(path, "expected a JSON object")
         return None
     schema_url = document.get("$schema", "")
     try:
@@ -73,8 +77,40 @@ def check_manifest(name: str) -> str | None:
     for value in strings(document):
         if ABSOLUTE.match(value):
             fail(path, f"absolute path {value!r}")
-    match = re.search(r"/schemas/([^/]+)/", schema_url)
-    return match.group(1) if match else None
+    return document
+
+
+def check_marketplace(plugin: dict):
+    path = root / ".github/plugin/marketplace.json"
+    try:
+        marketplace = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        fail(path, "missing")
+        return
+    except json.JSONDecodeError as error:
+        fail(path, f"invalid JSON: {error}")
+        return
+    schema = {
+        "type": "object",
+        "required": ["name", "owner", "plugins"],
+        "properties": {
+            "name": {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            },
+            "owner": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {"name": {"type": "string", "minLength": 1}},
+            },
+            "plugins": {"const": [{"name": plugin.get("name"), "source": "./"}]},
+        },
+    }
+    try:
+        jsonschema.validate(marketplace, schema)
+    except jsonschema.ValidationError as error:
+        fail(path, f"marketplace contract violation: {error.message}")
 
 
 def frontmatter(path: Path) -> dict | None:
@@ -90,13 +126,19 @@ def frontmatter(path: Path) -> dict | None:
     return data if isinstance(data, dict) else {}
 
 
-plugin_version = check_manifest("plugin.json")
-mcp_version = check_manifest("mcp.json")
-if mcp_version and plugin_version and mcp_version != plugin_version:
+plugin = check_manifest("plugin.json")
+mcp = check_manifest("mcp.json")
+plugin_version = (
+    re.search(r"/schemas/([^/]+)/", plugin.get("$schema", "")) if plugin else None
+)
+mcp_version = re.search(r"/schemas/([^/]+)/", mcp.get("$schema", "")) if mcp else None
+if mcp_version and plugin_version and mcp_version[1] != plugin_version[1]:
     fail(
         root / "mcp.json",
-        f"schema version {mcp_version} differs from plugin.json {plugin_version}",
+        f"schema version {mcp_version[1]} differs from plugin.json {plugin_version[1]}",
     )
+if plugin is not None:
+    check_marketplace(plugin)
 
 for skill in sorted((root / "skills").glob("*/SKILL.md")):
     data = frontmatter(skill)

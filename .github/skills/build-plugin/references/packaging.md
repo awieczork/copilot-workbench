@@ -1,6 +1,7 @@
 # Packaging
 
-Treat skills and Model Context Protocol (MCP) servers as portable Agent Plugins 1.0 components, and files under `com.github.copilot/` as VS Code client extensions.
+Treat skills and Model Context Protocol (MCP) servers as portable Agent Plugins 1.0 components, and files under `com.github.copilot/` as Copilot client extensions.
+Target VS Code with the Copilot harness in Agent Host; support in another Copilot client does not establish equivalent behavior.
 The [Agent Plugins specification](https://agent-plugins.org/specification) is the authority: validate against [the plugin schema](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json) and [the MCP schema](https://agent-plugins.org/schemas/1.0.0/mcp.schema.json), and follow the specification where a schema differs.
 For VS Code behavior, follow [Agent plugins in VS Code](https://code.visualstudio.com/docs/agent-customization/agent-plugins) and [Use Agent Skills in VS Code](https://code.visualstudio.com/docs/agent-customization/agent-skills).
 
@@ -15,10 +16,17 @@ For VS Code behavior, follow [Agent plugins in VS Code](https://code.visualstudi
 | Custom agent | `com.github.copilot/agents/<name>.agent.md` | |
 | Rule | `com.github.copilot/rules/<name>.instructions.md` | |
 | Package metadata | `README.md`, `CHANGELOG.md` | Plugin root; not loaded as a component |
+| Marketplace catalog | `.github/plugin/marketplace.json` | Distribution metadata; the only published file under `.github/` |
 
 For any other component, such as commands, hooks, or automations, take the path from the VS Code Agent Plugins page.
 Keep every packaged path inside the plugin root, copying a file instead of linking to it, because the specification requires a client to reject a path that leaves the package.
 Leave generated runtime state, temporary results, and repository-only inputs out of the package.
+
+## Marketplace catalog
+
+Keep one catalog entry whose `name` matches root `plugin.json` and whose `source` is `./`, because the marketplace distributes this repository's single root plugin.
+Keep the plugin version and descriptive metadata in `plugin.json` instead of duplicating them in the catalog.
+Follow [GitHub's marketplace format](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-marketplace), and publish only `.github/plugin/marketplace.json` from `.github/`, because the other files customize the authoring workspace.
 
 ## plugin.json
 
@@ -38,5 +46,5 @@ Leave generated runtime state, temporary results, and repository-only inputs out
 ## Check static conformance
 
 Run `uv run .github/skills/build-plugin/scripts/check_package.py` from the repository root after any package change, and repair each failure it prints.
-It checks the payload paths (`plugin.json`, `mcp.json`, `skills/`, `com.github.copilot/`, `README.md`, `CHANGELOG.md`): both manifests parse and validate against their declared schemas, the schema versions match, the manifests hold no absolute paths, every frontmatter block parses, each skill `name` equals its folder and meets the name rule, each skill `description` has 1 to 1,024 characters, each `com.github.copilot` file has its documented suffix, every relative link resolves inside the plugin root, and no symlink leaves it.
+It checks the payload paths (`.github/plugin/marketplace.json`, `plugin.json`, `mcp.json`, `skills/`, `com.github.copilot/`, `README.md`, `CHANGELOG.md`): both plugin manifests parse and validate against their declared schemas, the schema versions match, the manifests hold no absolute paths, the catalog has a kebab-case name and an owner name and lists only the root plugin, every frontmatter block parses, each skill `name` equals its folder and meets the name rule, each skill `description` has 1 to 1,024 characters, each `com.github.copilot` file has its documented suffix, every relative link resolves inside the plugin root, and no symlink leaves it.
 It prints one `{path}: {problem}` line per failure and exits with status 1 when any check fails, including when a schema cannot be fetched.
