@@ -38,7 +38,7 @@ After approval, set `notes_file` to an unused temporary file outside the reposit
 
 After both approvals, update only the `version` field in `plugin.json` on `develop` when the approved version differs from the current version.
 Apply the approved versioned entry from `notes_file` to `CHANGELOG.md` by the release note rules.
-Update `PROJECT-STATUS.md` to the published state by the [project status rule](../../../com.github.copilot/rules/project-status.instructions.md).
+Update `PROJECT-STATUS.md` to the published state by the [project status rule](../../../rules/project-status.instructions.md).
 Read `git diff -- plugin.json CHANGELOG.md PROJECT-STATUS.md` and require the approved changelog transition, the status update, and, when the version changed, the version bump to be the only content changes.
 Stage the changed paths by name, require `git diff --cached --name-status` to list exactly them, and create the local commit `chore(release): prepare v<version>` on `develop`.
 

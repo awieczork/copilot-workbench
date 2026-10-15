@@ -8,7 +8,7 @@ A custom agent is an `*.agent.md` file that gives a role its own instructions, t
 | --- | --- |
 | Workspace | `.github/agents/<name>.agent.md` |
 | User | `~/.copilot/agents/<name>.agent.md` |
-| Agent Plugins 1.0 package | `com.github.copilot/agents/<name>.agent.md` |
+| Copilot plugin | `agents/<name>.agent.md` |
 
 Use a lowercase kebab-case file name with the `.agent.md` suffix.
 

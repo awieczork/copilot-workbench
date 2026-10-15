@@ -2,7 +2,7 @@
 
 ## Prepare the release body
 
-Write the entry by the [changelog rule](../../../../com.github.copilot/rules/changelog.instructions.md), and treat the current `## Unreleased` bullets as working material to update, merge, or remove before approval.
+Write the entry by the [changelog rule](../../../../rules/changelog.instructions.md), and treat the current `## Unreleased` bullets as working material to update, merge, or remove before approval.
 Use one approved, final-state entry, unchanged, as both the versioned `CHANGELOG.md` entry and the GitHub Release body.
 
 ## Verify release evidence

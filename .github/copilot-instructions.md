@@ -1,6 +1,6 @@
 # copilot-workbench
 
-This public, owner-maintained repository is the authoring workspace for an Agent Plugins 1.0 package for GitHub Copilot in VS Code.
+This public, owner-maintained repository is the authoring workspace for a Copilot-format agent plugin for GitHub Copilot in VS Code.
 Keep reusable package capabilities separate from repository maintenance and local configuration.
 The owner builds the plugin for their own use and is its only user, so design, guide, and review it for its intended use, not for misuse or hypothetical users.
 
