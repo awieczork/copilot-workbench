@@ -1,13 +1,13 @@
 # Project status
 
-- State: `complete`
-- Updated: 2026-10-10
-- Objective: Prepare the first `v0.1.0` release of a private, reusable GitHub Copilot plugin.
-- Focus: The reviewed package is published as `v0.1.0` on package-only `main` with a GitHub release.
+- State: `active`
+- Updated: 2026-10-15
+- Objective: Distribute the private plugin through a marketplace for VS Code with the Copilot harness in Agent Host.
+- Focus: The marketplace catalog, publication boundary, and Context7 environment setup are prepared and statically checked on `develop`; the marketplace is not published.
 
 ## Roadmap
 
-- None.
+1. `planned` Publish the marketplace release to package-only `main` through `/publish-plugin`, then verify installation in a VS Code Copilot harness session.
 
 ## Blockers
 
