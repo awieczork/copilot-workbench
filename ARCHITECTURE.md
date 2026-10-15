@@ -1,6 +1,6 @@
 # Architecture
 
-This document gives the high-level design of `copilot-workbench`, a private [Agent Plugins 1.0](https://agent-plugins.org/) package for GitHub Copilot in VS Code; each artifact defines its own behavior.
+This document gives the high-level design of `copilot-workbench`, a private [Agent Plugins 1.0](https://agent-plugins.org/) package for GitHub Copilot in VS Code with the Copilot harness in Agent Host; each artifact defines its own behavior.
 
 ## Purpose
 
@@ -12,14 +12,15 @@ The [pillars](.github/copilot-instructions.md#pillars) set the vision for its de
 | Layer | Holds |
 | --- | --- |
 | Plugin package | The agent team, general-use skills, scoped rules, MCP configuration, and bundled resources. |
+| Marketplace catalog | Distribution metadata that lists the root plugin without duplicating its version. |
 | Workbench | Plugin-authoring skills, team contracts, publication, and project records, outside the payload. |
 | Project repository | Standalone project customizations, project instructions, source code, and durable project records. |
 | Local environment | Credentials, saved connections, service configuration, and runtime dependencies. |
 | Temporary task state | Session and delegated-work state in the layout of [`task-context`](skills/task-context/SKILL.md). |
 
-The payload is root [plugin.json](plugin.json) and [mcp.json](mcp.json), the `skills/` folders with their resources, the Copilot extensions under `com.github.copilot/`, and the package metadata `README.md` and `CHANGELOG.md`.
+The published payload is root [plugin.json](plugin.json) and [mcp.json](mcp.json), the `skills/` folders with their resources, the Copilot extensions under `com.github.copilot/`, the package metadata `README.md` and `CHANGELOG.md`, and the [marketplace catalog](.github/plugin/marketplace.json).
 The package holds no project-specific datasets, database targets, credentials, or absolute paths.
-This repository's `.github/` customizations, the other root records, temporary task state, and source references stay outside the payload.
+The catalog is the only published file under `.github/`; this repository's customizations, the other root records, temporary task state, and source references stay outside the payload.
 
 ## Agents
 
@@ -68,6 +69,8 @@ It stays outside the payload, because only the workbench builds plugin component
 ## Repository lifecycle
 
 `develop` is the authoring branch, and `main` is the package-only distribution branch and the repository default.
+The `awieczork-tools` marketplace on `main` lists the root `copilot-workbench` plugin with source `./`; the version and descriptive metadata belong to `plugin.json`.
+VS Code with the Copilot harness in Agent Host is the primary target; the shared package format does not establish equivalent behavior in other Copilot clients.
 
 ## Capability candidates
 
