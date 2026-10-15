@@ -1,6 +1,6 @@
 # Architecture
 
-This document gives the high-level design of `copilot-workbench`, a private [Agent Plugins 1.0](https://agent-plugins.org/) package for GitHub Copilot in VS Code with the Copilot harness in Agent Host; each artifact defines its own behavior.
+This document gives the high-level design of `copilot-workbench`, a public, owner-maintained [Agent Plugins 1.0](https://agent-plugins.org/) package for GitHub Copilot in VS Code with the Copilot harness in Agent Host; each artifact defines its own behavior.
 
 ## Purpose
 
@@ -71,6 +71,17 @@ It stays outside the payload, because only the workbench builds plugin component
 `develop` is the authoring branch, and `main` is the package-only distribution branch and the repository default.
 The `awieczork-tools` marketplace on `main` lists the root `copilot-workbench` plugin with source `./`; the version and descriptive metadata belong to `plugin.json`.
 VS Code with the Copilot harness in Agent Host is the primary target; the shared package format does not establish equivalent behavior in other Copilot clients.
+
+The repository is public for installation without repository credentials, not for external contributions or public support.
+The owner is the only repository collaborator; Issues, Projects, Discussions, and Wiki are disabled.
+Branch rules prevent deletion and force pushes on `main` and `develop`, without required pull requests, reviews, or status checks, so direct authoring and package publication remain available.
+Secret scanning and secret push protection are enabled.
+GitHub Actions uses read-only token permissions by default and cannot approve pull requests; workflows from all external contributors require owner approval.
+Collaborator-only interaction restrictions also block external pull requests and comments while active; GitHub limits each restriction to six months, so it must be renewed before expiry.
+
+Keep repository instructions and authoring tools under `.github/` tracked on `develop`, because they reproduce the development environment on another machine.
+Only `.github/plugin/marketplace.json` ships on `main`; `.github/context/`, editor settings, and credentials remain Git-ignored local state.
+Public visibility applies to every branch and its history, regardless of what the package includes.
 
 ## Capability candidates
 
