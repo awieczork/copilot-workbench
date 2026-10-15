@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [0.1.2] - 2026-10-15
+
+### Fixed
+
+- The plugin uses the Copilot plugin format for agent discovery in Copilot (Agent Host) sessions and agent and rule discovery in the Agent Customizations editor.
+
 ## [0.1.1] - 2026-10-15
 
 ### Added
