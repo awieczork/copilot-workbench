@@ -2,7 +2,7 @@
 
 - State: `active`
 - Updated: 2026-10-15
-- Objective: Distribute the private plugin through a marketplace for VS Code with the Copilot harness in Agent Host.
+- Objective: Distribute the public, owner-maintained plugin through a marketplace for VS Code with the Copilot harness in Agent Host.
 - Focus: The `v0.1.1` package and `awieczork-tools` marketplace catalog are published on package-only `main` with a GitHub release; live installation in VS Code remains unverified.
 
 ## Roadmap

@@ -1,7 +1,12 @@
 # copilot-workbench
 
-`copilot-workbench` is a private Agent Plugins package for GitHub Copilot in VS Code, using the Copilot harness in Agent Host.
+`copilot-workbench` is a public, owner-maintained Agent Plugins package for GitHub Copilot in VS Code, using the Copilot harness in Agent Host.
 It bundles reusable skills, custom agents, scoped rules, and Model Context Protocol (MCP) server configuration for software development and data analysis.
+
+## Maintenance
+
+The owner maintains this plugin for personal use.
+Public access supports installation without repository credentials; this repository does not accept external contributions or provide public support.
 
 ## Requirements
 
@@ -26,7 +31,7 @@ In a VS Code chat session with the **Copilot** harness selected, run these comma
 ```
 
 Review the marketplace trust prompt before you confirm installation.
-The private repository requires Git access with your own account.
+The public repository does not require GitHub authentication for read access.
 
 To update, refresh the catalog and then update the plugin:
 
