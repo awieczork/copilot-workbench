@@ -34,7 +34,7 @@ Stop until the owner resolves every flagged path.
 
 ## Reconcile the project records
 
-Before showing the commit plan, update each record that owns a fact the selected changes alter, as "Project records" in the project instructions lists them, and read the matching rule in `com.github.copilot/rules/` first for `CHANGELOG.md`, `PROJECT-STATUS.md`, and `OPEN-ISSUES.md`.
+Before showing the commit plan, update each record that owns a fact the selected changes alter, as "Project records" in the project instructions lists them, and read the matching rule in `rules/` first for `CHANGELOG.md`, `PROJECT-STATUS.md`, and `OPEN-ISSUES.md`.
 Leave a record unchanged only after confirming that the selected changes make no fact in it stale or missing.
 Keep each record update in the same commit group as the change it describes; when one update describes several groups, merge those groups or use a separate `docs:` group and state the dependency in the plan.
 

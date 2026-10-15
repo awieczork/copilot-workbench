@@ -9,7 +9,7 @@ VS Code follows the [Agent Skills specification](https://agentskills.io/specific
 | --- | --- |
 | Workspace | `.github/skills/<name>/`, `.agents/skills/<name>/`, or `.claude/skills/<name>/` |
 | User | `~/.copilot/skills/<name>/`, `~/.agents/skills/<name>/`, or `~/.claude/skills/<name>/` |
-| Agent Plugins 1.0 package | `skills/<name>/` |
+| Copilot plugin | `skills/<name>/` |
 
 ```text
 <name>/

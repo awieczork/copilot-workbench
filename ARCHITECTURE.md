@@ -1,6 +1,6 @@
 # Architecture
 
-This document gives the high-level design of `copilot-workbench`, a public, owner-maintained [Agent Plugins 1.0](https://agent-plugins.org/) package for GitHub Copilot in VS Code with the Copilot harness in Agent Host; each artifact defines its own behavior.
+This document gives the high-level design of `copilot-workbench`, a public, owner-maintained Copilot-format plugin for GitHub Copilot in VS Code with the Copilot harness in Agent Host; each artifact defines its own behavior.
 
 ## Purpose
 
@@ -18,9 +18,20 @@ The [pillars](.github/copilot-instructions.md#pillars) set the vision for its de
 | Local environment | Credentials, saved connections, service configuration, and runtime dependencies. |
 | Temporary task state | Session and delegated-work state in the layout of [`task-context`](skills/task-context/SKILL.md). |
 
-The published payload is root [plugin.json](plugin.json) and [mcp.json](mcp.json), the `skills/` folders with their resources, the Copilot extensions under `com.github.copilot/`, the package metadata `README.md` and `CHANGELOG.md`, and the [marketplace catalog](.github/plugin/marketplace.json).
+The published payload is root [plugin.json](plugin.json) and [.mcp.json](.mcp.json), the `agents/` and `rules/` folders, the `skills/` folders with their resources, the package metadata `README.md` and `CHANGELOG.md`, and the [marketplace catalog](.github/plugin/marketplace.json).
 The package holds no project-specific datasets, database targets, credentials, or absolute paths.
 The catalog is the only published file under `.github/`; this repository's customizations, the other root records, temporary task state, and source references stay outside the payload.
+
+### Package format
+
+The package uses the Copilot plugin format: a root `plugin.json` without `$schema`, with agents, rules, skills, and `.mcp.json` at the plugin root, as [packaging](.github/skills/build-plugin/references/packaging.md) defines.
+The package used [Agent Plugins 1.0](https://agent-plugins.org/) until the owner chose this format on 2026-10-15, because Agent Host did not run 1.0 Copilot extensions:
+
+- The Copilot runtime behind Agent Host discovers plugin agents itself and does not find `com.github.copilot/agents/`, so the agents could not run in Copilot sessions ([github/copilot-cli#4655](https://github.com/github/copilot-cli/issues/4655), [microsoft/vscode#334153](https://github.com/microsoft/vscode/issues/334153)).
+- The Agent Customizations editor lists a plugin's agents, skills, commands, and rules only from root folders, so it did not show 1.0 agents or rules.
+
+Both clients read the root folders of the Copilot format, which VS Code documents as supported.
+Return to Agent Plugins 1.0 when a VS Code release runs agents from `com.github.copilot/agents/` in Copilot sessions and the Agent Customizations editor lists them, as [OI-03](OPEN-ISSUES.md) tracks.
 
 ## Agents
 
@@ -51,8 +62,8 @@ Leads use strong models and workers the tier that fits their role, as defined in
 | General customization | [`copilot-customization`](skills/copilot-customization/SKILL.md) | Artifact choice, metadata, writing guidance, and review. |
 | Coordination | [`brief-subagent`](skills/brief-subagent/SKILL.md), [`task-context`](skills/task-context/SKILL.md), [`interview-me`](skills/interview-me/SKILL.md) | Self-contained assignments, temporary state, and intent clarification. |
 | Execution | [`run-python`](skills/run-python/SKILL.md), [`redshift`](skills/redshift/SKILL.md), [`sql-server`](skills/sql-server/SKILL.md) | Runtime selection and bounded, read-only database work. |
-| Scoped rules | [Markdown](com.github.copilot/rules/markdown.instructions.md), [Python](com.github.copilot/rules/python.instructions.md), [SQL](com.github.copilot/rules/sql.instructions.md) | Conventions for Markdown documents, user-run task scripts, and read-only queries. |
-| Record rules | [Changelog](com.github.copilot/rules/changelog.instructions.md), [Project status](com.github.copilot/rules/project-status.instructions.md), [Open issues](com.github.copilot/rules/open-issues.instructions.md) | The content of a project's `CHANGELOG.md`, `PROJECT-STATUS.md`, and `OPEN-ISSUES.md`. |
+| Scoped rules | [Markdown](rules/markdown.instructions.md), [Python](rules/python.instructions.md), [SQL](rules/sql.instructions.md) | Conventions for Markdown documents, user-run task scripts, and read-only queries. |
+| Record rules | [Changelog](rules/changelog.instructions.md), [Project status](rules/project-status.instructions.md), [Open issues](rules/open-issues.instructions.md) | The content of a project's `CHANGELOG.md`, `PROJECT-STATUS.md`, and `OPEN-ISSUES.md`. |
 
 General behavior belongs in agents and skills, not in language rules.
 `interview-me` is a user-only skill for starting an interview with any agent ad hoc; it is independent of `discuss`, which runs its own interview phase, so their overlapping question rules are intended.

@@ -4,6 +4,7 @@
 
 ### Changed
 
+- The plugin uses the Copilot plugin format, so its agents run in Copilot (Agent Host) sessions and the Agent Customizations editor lists its agents and rules.
 - The plugin repository provides public read access for installation without GitHub authentication and remains owner-maintained without external contributions or public support.
 
 ## [0.1.1] - 2026-10-15

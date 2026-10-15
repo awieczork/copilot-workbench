@@ -3,12 +3,12 @@
 External resources that inform the design of `copilot-workbench`.
 Use them as structural inspiration, not as tone or output templates.
 
-## Plugin standard
+## Plugin format
 
 | Resource | Relevance |
 | --- | --- |
-| [Agent Plugins](https://agent-plugins.org/) and its [specification](https://agent-plugins.org/specification) | The open, vendor-neutral 1.0 standard for packaging skills, MCP servers, and client extensions into portable plugins. |
-| [VS Code Agent Plugins](https://code.visualstudio.com/docs/agent-customization/agent-plugins) | How VS Code discovers, installs, and loads an Agent Plugins package, including its Copilot extensions. |
+| [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/cli-plugin-reference) | The Copilot plugin format: manifest fields, component locations, and loading rules of the Copilot runtime behind Agent Host. |
+| [VS Code Agent Plugins](https://code.visualstudio.com/docs/agent-customization/agent-plugins) | How VS Code discovers, installs, and loads a Copilot-format plugin. |
 | [GitHub plugin marketplaces](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-marketplace) and [marketplace reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference#marketplacejson) | Catalog location, metadata, and repository-relative plugin sources. |
 | [VS Code agent harnesses](https://code.visualstudio.com/docs/agents/run/agent-harnesses) | Copilot harness execution in Agent Host and client-dependent capabilities. |
 

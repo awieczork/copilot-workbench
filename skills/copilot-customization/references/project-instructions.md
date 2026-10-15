@@ -14,7 +14,7 @@ The Local agent also loads `CLAUDE.md` by default (`chat.useClaudeMdFile`), so a
 Nested `AGENTS.md` files in subfolders are experimental and load for the Local agent only when the user enables `chat.useNestedAgentsMdFiles`, which is off by default.
 
 For personal guidance across workspaces, use `~/.copilot/copilot-instructions.md` in Copilot Agent Host sessions, or a user-scope rule with `applyTo: "**"` for the Local agent.
-An Agent Plugins 1.0 package cannot ship either file; it ships a rule with `applyTo: "**"` instead, which VS Code attaches to every request.
+A plugin cannot ship either file; it ships a rule with `applyTo: "**"` instead, which VS Code attaches to every request.
 Project instructions take no frontmatter.
 
 ## Template

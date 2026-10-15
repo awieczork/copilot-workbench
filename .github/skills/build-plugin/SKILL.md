@@ -1,6 +1,6 @@
 ---
 name: build-plugin
-description: "Use when creating, changing, or reviewing any plugin component: an agent, a skill, a rule, plugin.json, mcp.json, or another packaged file. Supplies the authoring method, the team contracts, and the packaging rules, and points to the review questions. Not for commits or publication."
+description: "Use when creating, changing, or reviewing any plugin component: an agent, a skill, a rule, plugin.json, .mcp.json, or another packaged file. Supplies the authoring method, the team contracts, and the packaging rules, and points to the review questions. Not for commits or publication."
 ---
 
 # Build the plugin
@@ -23,7 +23,7 @@ Review a component by "Review artifacts" in `copilot-customization`, and ask eac
 - Entry agent: [entry contract](references/entry-contract.md).
 - Worker: [worker contract](references/worker-contract.md), and [model tiers](references/model-tiers.md) for its `model` list.
 - Skill: [skill contract](references/skill-contract.md).
-- `plugin.json`, `mcp.json`, the package structure, or a packaged path: [packaging](references/packaging.md).
+- `plugin.json`, `.mcp.json`, the package structure, or a packaged path: [packaging](references/packaging.md).
 
 A rule has no contract.
 
