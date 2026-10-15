@@ -1,7 +1,7 @@
 {
     "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
     "name": "copilot-workbench",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Private Agent Plugins package for GitHub Copilot in VS Code with reusable skills, agents, scoped rules, and MCP servers.",
     "repository": "https://github.com/awieczork/copilot-workbench",
     "author": {

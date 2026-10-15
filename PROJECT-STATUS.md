@@ -3,11 +3,12 @@
 - State: `active`
 - Updated: 2026-10-15
 - Objective: Distribute the private plugin through a marketplace for VS Code with the Copilot harness in Agent Host.
-- Focus: The marketplace catalog, publication boundary, and Context7 environment setup are prepared and statically checked on `develop`; the marketplace is not published.
+- Focus: The `v0.1.1` package and `awieczork-tools` marketplace catalog are published on package-only `main` with a GitHub release; live installation in VS Code remains unverified.
 
 ## Roadmap
 
-1. `planned` Publish the marketplace release to package-only `main` through `/publish-plugin`, then verify installation in a VS Code Copilot harness session.
+1. `active` Verify marketplace installation in VS Code with the Copilot harness in Agent Host.
+   1. [ ] Install `copilot-workbench@awieczork-tools` and confirm that its agents, skills, and MCP servers are available.
 
 ## Blockers
 
