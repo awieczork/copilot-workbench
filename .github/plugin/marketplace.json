@@ -1,0 +1,12 @@
+{
+    "name": "awieczork-tools",
+    "owner": {
+        "name": "Adam Wieczorkiewicz"
+    },
+    "plugins": [
+        {
+            "name": "copilot-workbench",
+            "source": "./"
+        }
+    ]
+}

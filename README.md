@@ -1,18 +1,47 @@
 # copilot-workbench
 
-`copilot-workbench` is a private Agent Plugins package for GitHub Copilot in VS Code.
+`copilot-workbench` is a private Agent Plugins package for GitHub Copilot in VS Code, using the Copilot harness in Agent Host.
 It bundles reusable skills, custom agents, scoped rules, and Model Context Protocol (MCP) server configuration for software development and data analysis.
 
 ## Requirements
 
-- VS Code with GitHub Copilot.
+- VS Code with GitHub Copilot, using the Copilot harness in Agent Host.
 - `uv` with `uvx` on `PATH` for Python execution and the Redshift MCP server.
 - Node.js with `npx` on `PATH` for the context7 MCP server.
 - The SQL Server extension `ms-mssql.mssql` or the Redshift MCP server, locally configured access, and read-only database permissions for database work.
 
 ## Installation
 
-Open the VS Code Command Palette, run `Chat: Install Plugin From Source`, and enter `https://github.com/awieczork/copilot-workbench` when VS Code asks for the repository URL.
+### Install from the marketplace
+
+The `awieczork-tools` marketplace lists this repository's root plugin.
+The catalog must be published to the default `main` branch before these commands are available; changes on `develop` are not published automatically.
+
+In a VS Code chat session with the **Copilot** harness selected, run these commands one at a time:
+
+```text
+/plugin marketplace add awieczork/copilot-workbench
+/plugin install copilot-workbench@awieczork-tools
+/plugin list
+```
+
+Review the marketplace trust prompt before you confirm installation.
+The private repository requires Git access with your own account.
+
+To update, refresh the catalog and then update the plugin:
+
+```text
+/plugin marketplace update awieczork-tools
+/plugin update copilot-workbench@awieczork-tools
+```
+
+Manage this installation through `/plugin`.
+VS Code currently keeps the `/plugin` inventory separate from the Agent Customizations editor's inventory.
+
+### Replace an installation from source
+
+If you installed the plugin with **Chat: Install Plugin From Source**, uninstall that copy in the Agent Customizations editor before installing the marketplace copy, so that both copies do not load together.
+Source installation remains available: run **Chat: Install Plugin From Source** from the Command Palette and enter `https://github.com/awieczork/copilot-workbench`.
 
 ## Package contents
 
@@ -64,10 +93,37 @@ Workers run as subagents of an allowed entry agent or producer.
 | Server | Launcher | Purpose |
 | --- | --- | --- |
 | `awslabs.redshift-mcp-server` | `uvx` | Provides Redshift query and catalog tools. |
-| `context7` | `npx` | Provides current library documentation; runs without an API key, under the service's anonymous rate limits. |
+| `context7` | `npx` | Provides current library documentation; uses `CONTEXT7_API_KEY` when set, or anonymous access with lower rate limits. |
 
 The configuration is in [mcp.json](mcp.json).
 The SQL Server tools and the Redshift fallback runner can accept writes; the skills and agents authorize read-only work, and read-only logins provide an additional boundary.
+
+## Context7 API key
+
+Create an API key in the [Context7 dashboard](https://context7.com/dashboard).
+Set `CONTEXT7_API_KEY` in the environment on the machine that runs the Context7 MCP server, before VS Code and Agent Host start.
+The packaged server reads this variable directly; no change to [mcp.json](mcp.json) is required.
+Keep the real key out of chat and repository files.
+
+For Bash on Linux or macOS, replace the placeholder with your key:
+
+```bash
+export CONTEXT7_API_KEY="your-context7-api-key"
+code .
+```
+
+For PowerShell on Windows:
+
+```powershell
+$env:CONTEXT7_API_KEY = "your-context7-api-key"
+code .
+```
+
+These commands set the variable for the current shell and processes it starts.
+For later sessions, use your operating system's user environment settings or a local shell startup file outside this repository.
+Fully quit VS Code before starting it from the configured shell, so that an existing Agent Host does not retain the old environment.
+Setting the variable in a terminal inside an already running VS Code window does not change the parent process's environment.
+For a remote connection, Windows Subsystem for Linux (WSL), or a container, configure the environment where the MCP server runs, not only on the desktop.
 
 ## Database access
 
@@ -102,4 +158,4 @@ Read-only enforcement in this workflow relies on the skill instructions and data
 | SQL Server cannot connect | Check the selected saved connection and its local authentication. |
 | Redshift MCP cannot start or access data | Check `uvx`, the configured local AWS profile, region, authentication, and server diagnostics. |
 | The Redshift fallback rejects configuration | Populate every required local variable, confirm the intended target, and check that the port is valid. |
-| context7 reports an error | Check `npx` and the server diagnostics; a rate-limit error means the anonymous quota is used up. |
+| context7 reports an error | Check `npx` and the server diagnostics; for authentication or rate-limit errors, check `CONTEXT7_API_KEY` in the MCP server's environment and restart VS Code and Agent Host after changing it. |

@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## [0.1.1] - 2026-10-15
+
+### Added
+
+- The `awieczork-tools` marketplace provides installation and updates for `copilot-workbench` through VS Code's `/plugin` commands.
+- The README explains how to set `CONTEXT7_API_KEY` in the MCP server's environment for authenticated Context7 access.
+
+### Changed
+
+- The documented VS Code setup uses the Copilot harness in Agent Host.
+
 ## [0.1.0] - 2026-10-10
 
 ### Added
