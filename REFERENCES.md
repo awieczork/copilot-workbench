@@ -9,6 +9,14 @@ Use them as structural inspiration, not as tone or output templates.
 | --- | --- |
 | [Agent Plugins](https://agent-plugins.org/) and its [specification](https://agent-plugins.org/specification) | The open, vendor-neutral 1.0 standard for packaging skills, MCP servers, and client extensions into portable plugins. |
 | [VS Code Agent Plugins](https://code.visualstudio.com/docs/agent-customization/agent-plugins) | How VS Code discovers, installs, and loads an Agent Plugins package, including its Copilot extensions. |
+| [GitHub plugin marketplaces](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-marketplace) and [marketplace reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference#marketplacejson) | Catalog location, metadata, and repository-relative plugin sources. |
+| [VS Code agent harnesses](https://code.visualstudio.com/docs/agents/run/agent-harnesses) | Copilot harness execution in Agent Host and client-dependent capabilities. |
+
+## Service configuration
+
+| Resource | Relevance |
+| --- | --- |
+| [Context7 MCP setup](https://github.com/upstash/context7/blob/master/packages/mcp/README.md) and [developer guide](https://context7.com/docs/resources/developer) | The local server reads `CONTEXT7_API_KEY` from its process environment without a packaged key or command-line argument. |
 
 ## Customization and prompting guidance
 
