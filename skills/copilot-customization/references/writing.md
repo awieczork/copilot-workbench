@@ -8,7 +8,7 @@ Ask each question below of every line, section, and file while writing and while
 - [ ] Does the text give what the agent would get wrong without it: the goal, the reason behind a non-obvious choice, the completion criterion where stopping early would change the result, and the facts it cannot find by looking, such as an unwritten convention or a gotcha?
 - [ ] Does it leave out what the agent does by default, what one file or command shows, and generic "verify" or "think carefully" wording, with the whole sentence deleted rather than trimmed?
 - [ ] Would removing each line, step, section, or file change a result?
-- [ ] Did a correction, a failed run, or repository evidence show the gap behind each guideline, and is the guideline worded for the class of cases, because a fix fitted to one run fails on the next?
+- [ ] Did a correction, a failed run, or repository evidence show the gap behind each guideline?
 - [ ] Does it ask for the result and its evidence rather than the reasoning steps, because current models reason internally?
 - [ ] Does it name the safe routine work the agent may do without asking, such as running the local tests and fixing the failures the change caused, because without that permission capable models stop to ask?
 - [ ] Does the agent ask only when the answer would change the result, and only after it has prepared a concrete, reviewable result, because an early question ends the work too soon?
@@ -16,8 +16,7 @@ Ask each question below of every line, section, and file while writing and while
 
 ## Match strictness to the work
 
-- [ ] Is each guideline the principle itself, with its reason, rather than one instance of a broader principle, because the agent generalizes from the reason to cases the text does not name?
-- [ ] Is each enumeration needed, or would the principle behind it steer the same way?
+- [ ] Is each guideline the principle itself, with its reason, rather than one instance or an enumeration of instances of a broader principle, because the agent generalizes from the reason to cases the text does not name?
 - [ ] Is exact wording kept for work that tolerates no variation, such as an approval gate, an irreversible step, an exact command, or a fixed sequence, and paired with the check that confirms it?
 - [ ] Does logic that must run the same way every time live in a script?
 - [ ] Does one guideline that scales the work to its consequence stand where the text would otherwise sort cases into levels or a wording scale?
@@ -36,8 +35,6 @@ Ask each question below of every line, section, and file while writing and while
 - [ ] Does the text describe the current state, with dates and history kept out of guidelines, because a dated statement goes wrong silently?
 - [ ] Does each guideline have a scope rather than a claim of priority over other instructions, because VS Code sets no precedence between instructions that load together, and only an agent the user selects may state that the user's explicit instructions win over a skill's?
 - [ ] Is each tool mention in the body written as `#tool:<frontmatter-tool-name>` followed by a space, including before punctuation, because VS Code reads a following `.` or `-` as part of the tool name?
-- [ ] Does each principle change a concrete behavior, and each qualifier change behavior at all?
-- [ ] Do all lines pull in the same direction?
 
 Preferred example:
 

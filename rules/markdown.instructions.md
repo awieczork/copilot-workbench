@@ -6,7 +6,7 @@ applyTo: "**/*.md"
 
 # Markdown
 
-Write every document in GitHub Flavored Markdown (GFM), and apply the rules below without fetching the GFM specification, because they hold all the GFM syntax a document needs.
+Write every document in GitHub Flavored Markdown (GFM).
 
 ## Scope
 
@@ -21,18 +21,15 @@ When a document opens with a YAML frontmatter block, leave its keys, order, and 
 
 The content column of a list item is the first column after its marker and the following space.
 
-- Write headings as ATX: one to six `#` characters followed by a space, indented no more than three spaces.
-  Never use Setext underlines, because the same `-` line makes a heading under text and a thematic break after a blank line.
+- Never use Setext heading underlines, because the same `-` line makes a heading under text and a thematic break after a blank line.
 - Start a document with one level-1 heading that names its subject, use that level once, and increase heading levels by one at a time.
-- Open a fenced code block with at least three backticks and a language identifier, and close it with the same character and at least the same count.
+- Give every fenced code block a language identifier, `text` when none fits.
   When the content contains a run of backticks, make the fence longer than that run, or fence the block with tildes instead.
-  Use `text` when no language identifier fits.
 - Indent a fenced code block inside a list item to the content column of that item; an under-indented fence ends the list item's content.
 - Never rely on a four-space indent to mark code; a reader cannot distinguish it from list continuation.
-- Give a table a header row and delimiter row with the same column count, set alignment with `:` in the delimiter row, and escape a literal pipe inside a cell as `\|`.
+- Escape a literal pipe inside a table cell as `\|`.
   Give each body row the intended column count rather than relying on GFM to insert empty cells or ignore excess cells.
   Keep the table free of blank lines, which terminate it.
-- Write a thematic break as three or more `-` characters alone on a line, preceded by a blank line.
 - Separate every heading, list, table, block quote, and fenced code block from the surrounding text with one blank line.
 
 ## Lists and block quotes
@@ -48,12 +45,10 @@ The content column of a list item is the first column after its marker and the f
 
 - Use `*` for emphasis and `**` for strong emphasis.
   Do not use `_` delimiters because GitHub Flavored Markdown treats them differently inside words.
-- Write links inline as `[descriptive text](destination)`, with no whitespace between the text and `(`.
-  Wrap a destination containing spaces in angle brackets.
+- Wrap a link destination containing spaces in angle brackets.
   Use a reference definition (`[label]: destination`) only when the same destination appears three or more times.
 - Link to a file in the same repository by a relative path that resolves from the linking document.
 - When a URL itself must remain visible, wrap it in angle brackets so that GFM autolinks it.
-- Give every image alt text that names what the image shows.
 - Escape an ASCII punctuation character with `\` when it would otherwise start markup, such as a leading `#`, `-`, or `>` on a line.
   Put a literal `<` or `&` inside backticks when it could form valid raw HTML or an entity reference.
 - Use backticks for a path, filename, command, field name, or literal value, and add a longer backtick run when the value itself contains a backtick.

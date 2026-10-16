@@ -27,4 +27,3 @@ applyTo: "OPEN-ISSUES.md"
 - Close `Decision needed` only after an explicit user decision, `Missing input` only after evidence establishes the fact, and `Verified limitation` only after evidence shows that it no longer applies.
 - Before removing a row, record its lasting effect in the record that owns it, such as `ARCHITECTURE.md`, a rule, or a skill, because the register keeps only open issues.
 - When removing a row, also remove its link from `PROJECT-STATUS.md`, because the link would point at no row.
-- When the closure evidence is absent, keep the row.

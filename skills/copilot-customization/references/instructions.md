@@ -39,8 +39,6 @@ applyTo: "src/**, lib/**"       # several patterns, comma-separated; any may mat
 applyTo: "**"                   # every request, even with no file; use only for rules that apply everywhere
 ```
 
-Add a `description` as well as `applyTo` when the rules must reach a review or question that edits no file.
-
 ## Template
 
 ````markdown

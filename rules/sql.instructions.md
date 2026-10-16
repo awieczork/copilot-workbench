@@ -8,7 +8,7 @@ applyTo: "**/*.sql"
 
 Every rule applies to both SQL Server and Redshift unless a section names one engine.
 
-Determine the target engine from the file path, the header comment, or the surrounding code before writing engine-specific SQL.
+Determine the target engine from the system the task queries, the file path, the header comment, or the surrounding code before writing engine-specific SQL.
 When none of them identifies the engine, ask the user, or return the question to the delegating agent when you run as a subagent, because a Redshift pattern silently fails on SQL Server and the reverse.
 
 ## Format and name
@@ -21,8 +21,7 @@ Format SQL so that a reader finds an entity by grep and sees the join graph with
 - Write every join explicitly, because a comma join with the condition in `WHERE` hides the join graph.
 - Name new aliases, CTEs, and column aliases in English, and spell existing schema objects exactly as the source system spells them, including non-English ERP names.
 - Target 80 characters per line and keep every line at or below 120, breaking before `AND`, `OR`, or `JOIN`, or after a comma.
-- Comment the intent, business context, or threshold reasoning, because the code already shows the mechanics.
-- Document every numeric threshold, because an undocumented magic number in feature logic is an unrecorded analytical decision.
+- Comment the intent, business context, and the reason for every numeric threshold, because the code shows only the mechanics and an undocumented threshold is an unrecorded analytical decision.
 - Divide a query with distinct analytical phases into phases with `-- === SECTION NAME ===` separators.
 - When the query is kept as a file, open it with a `/* */` header stating purpose and target engine.
 
@@ -72,13 +71,12 @@ ORDER BY ac.customer_id, ac.order_date;
 ## Bound the result
 
 - Bound a sample of an unfamiliar object to 100 rows, with `TOP 100` on SQL Server and `LIMIT 100` on Redshift, and leave the bound out when the question needs the full population.
-- Before returning rows without a bound, count them with an aggregate; when the count exceeds 100, aggregate, or ask for a narrower population.
+- Before returning rows without a bound, count them with an aggregate, because rows fill the reader's context.
 - Treat a result as complete only when its row count matches the expected count, and state whether the bound was applied.
 
 ## Keep results correct
 
 The expensive analytical failure is silent: a wrong number that looks right.
-These rules make NULL handling, join fan-out, and type coercion visible.
 
 - Handle NULL with `COALESCE` on both engines; `ISNULL` (SQL Server) and `NVL` (Redshift) do not port across them.
 - Give every `CASE` expression an explicit `ELSE` so the fallback value is visible.
@@ -88,8 +86,6 @@ These rules make NULL handling, join fan-out, and type coercion visible.
 - Cast types explicitly when operands differ or a literal's inferred type is not the intended type.
 
 ## Keep the plan fast
-
-These patterns prevent the plans that dominate analytical run time on both engines.
 
 - List the required columns in every `SELECT`; `SELECT *` reads unnecessary columns and makes the result contract depend on schema changes.
 - Keep predicates SARGable by leaving the column bare in `WHERE`; wrapping it in a function such as `YEAR(date_col)` blocks index seeks and block skipping, so rewrite the condition as a range.

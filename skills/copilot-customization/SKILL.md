@@ -12,9 +12,10 @@ As a subagent, return each question or choice for the user to the delegating age
 ## Create or change an artifact
 
 1. Determine the scope: workspace, user, or plugin package.
-   Take it from the requested path or the repository layout; when neither settles it, ask one question and stop.
+   Take it from the requested path or the repository layout.
 2. Choose the type from "Choose the artifact type" below.
-   When the requested type does not fit the need, name the mismatch, recommend the fitting type, and ask before writing.
+   When the requested type does not fit the need, name the mismatch and recommend the fitting type.
+   When the scope or the fitting type stays unsettled, draft the content first, then ask one question that covers both before writing the file.
 3. Before writing any content, read [Writing guidance](references/writing.md), then read the reference for the chosen type, linked in "Choose the artifact type" below.
 4. For an existing artifact, read the whole file and its bundled resources first, and leave unchanged every decision the request does not touch.
 5. Write the file at the path from the type reference, using its template.
