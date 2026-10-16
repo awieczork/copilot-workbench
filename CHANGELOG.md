@@ -2,6 +2,29 @@
 
 ## Unreleased
 
+### Added
+
+- The `seed-task` skill turns the current conversation, such as a forked discussion, into a task folder that an independent session starts from; only the user invokes it.
+
+### Changed
+
+- The `discuss` agent creates and edits the documentation the user asks for.
+- The `discuss` agent returns a shaped request for a lead and leaves the start of a new session to the `seed-task` skill.
+- The `lead` and `data-lead` agents keep every plan from `planner` in the task folder and keep it current with amendments and finished tasks, so that work resumes from the plan after an interruption.
+- The `lead` agent, formerly `software-lead`, takes any work in the workspace.
+- The `lead` agent briefs the `database-explorer` and `data-explorer` workers for the data facts a change depends on.
+- The `lead` and `data-lead` agents split a task into parts for workers and run the independent parts in parallel, keeping the decisions, the integration, and the conclusion.
+- The `discuss` agent gathers workspace and external evidence through workers that run in parallel.
+- The `developer` worker implements configuration and documentation changes as well as code changes.
+- The `planner` worker splits a plan into tasks with separate files or questions, so that tasks without a dependency run in parallel.
+- The `data-lead` agent takes all work that touches or rests on data and has workers run the queries.
+- The `data-lead` agent accepts a query result only when its row counts and coverage support it.
+- The `data-lead` agent challenges the framing of a result that supports a decision first and has its key figures recomputed independently.
+- The `database-explorer` and `data-explorer` workers run the analyses a brief specifies and return each result with its row counts in and out, a filter-value check, and its coverage.
+- The `developer` and `ui-developer` workers write a test only when the brief asks for one.
+- The `developer`, `ui-developer`, and `planner` workers run a review only when the brief requires one.
+- The `lead` and `data-lead` agents rerun each part's key check and one check across the parts instead of a producer's whole suite.
+
 ## [0.1.2] - 2026-10-15
 
 ### Fixed
