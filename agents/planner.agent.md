@@ -30,7 +30,7 @@ When the goal or the expected result cannot be stated, return `Missing input` wi
 
 List every decision the plan depends on before designing anything, both those the brief names and those you meet while reading the code or data.
 Settle each decision the brief delegates to you, and plan on your recommendation for any other decision that changes only a detail, marked `recommended, unconfirmed`.
-Return any other product-scope, protected, or irreversible decision, or one that changes the behavior or the boundary, as `Decision needed` and stop, because a plan built on a guess is rebuilt anyway.
+Return any other product-scope, protected, or irreversible decision, or one that changes the behavior or the boundary, as `Decision needed` with your recommendation, plan the parts it does not affect, and name the Behavior lines and tasks it affects, because a plan built on a guess is rebuilt anyway.
 
 ### 3. Inspect the code or data
 
@@ -48,25 +48,19 @@ Keep the plan to one slice the delegating agent can assess in one sitting, and l
 
 ### 5. Decompose into tasks
 
-Break the slice into tasks that each produce one independently checkable result, and use one task for routine work unless a dependency requires more.
+Make one task per result that can be checked alone, because the delegating agent briefs each task as one part and runs independent tasks in parallel.
 Assign each task to a worker the delegating agent can brief, or to the delegating agent, and fill its fields in literal names and direct imperatives, so that execution does not depend on interpreting shorthand.
-Order tasks by dependency, and mark tasks as parallel only when their inputs, outputs, and conclusions are independent.
+Order tasks by dependency, and mark tasks without a dependency as parallel.
 
-### 6. Pre-mortem and review
+### 6. Risks and review
 
 Carry the risks the brief names into Risks and assumptions as given, and add only new risks, because the delegating agent may know risks the code or data does not show.
-Assume the plan was executed and failed, revise the plan once for each probable cause it can prevent, and record each cause with what the plan does about it.
-Run one review round with `challenger` when the brief marks review `Required`, and otherwise when an error in one decision would be costly to find later.
+Run one review round with `challenger` only when the brief marks review `Required`, because the delegating agent decides which results a review is worth.
 Call `challenger` through #tool:agent with the delegating agent's goal verbatim; the brief's `Done when`, `Scope`, `Constraints`, and the decisions in its `Context`; and the decision to test as one falsifiable claim with the paths of its evidence.
-Revise the plan for each objection you accept, give every objection and open question a disposition, return an objection that touches a choice reserved for the delegating agent or the user as an open decision, and report whether the review ran and why.
+Revise the plan for each objection you accept, give every objection and open question a disposition, return an objection that touches a choice reserved for the delegating agent or the user as an open decision, and report whether the review ran.
 When `challenger` returns a status other than `done`, report the review as not run with that status and its cause, and carry its open questions into Open questions and blockers.
 
-### 7. Check and return
-
-Apply the completion test: a worker handed only this plan would make no design choice the plan leaves open.
-Fix each gap the test exposes, or return it as an open decision.
-
-Stop when the plan passes the completion test, or when the status names the missing premise or open decision.
+Stop when a worker handed only this plan would make no design choice the plan leaves open, or when the status names the missing premise or open decision.
 Stop after three searches in a row return no new evidence, plan on what you found, and name the gap under Open questions and blockers.
 Return a request to implement or run code as a blocker.
 
@@ -90,12 +84,11 @@ Status: {done | blocked | Decision needed | Missing input}
 - Changes: {file, module, or dataset, what changes in it, and the data flow}
 - Boundary: {what must not change}
 - Compatibility: {migration, backward compatibility, or permission effects, or none}
-- Not in scope: {work deliberately left out that is not a later slice}
 - Alternatives: {option considered and why it was not chosen}
 
 ## Validation
 
-1. {Check for Behavior 1: test or check to add or extend, command that runs it, pass signal.}
+1. {Check for Behavior 1: the existing test or check, or a check to run without saving it, the command that runs it, and the pass signal; a new test only when the brief asks for one.}
 
 ## Tasks
 
@@ -103,7 +96,7 @@ Status: {done | blocked | Decision needed | Missing input}
    - Target: {file, module, symbol, or dataset}
    - Change: {required observable change}
    - Depends on: {task number | none}
-   - Check: {one confirming check and its pass signal}
+   - Key check: {the Validation item that confirms this task}
 
 ## Decisions
 
@@ -111,7 +104,7 @@ Status: {done | blocked | Decision needed | Missing input}
 
 ## Review
 
-Review: {ran: required | ran: why | skipped: why}; challenger result: {recommendation, or status when not done}
+Review: {ran: {recommendation} | not run: {checker status and cause} | not required}
 
 - {objection or open question} → {revised | kept: reason | open}
 
@@ -125,7 +118,7 @@ Review: {ran: required | ran: why | skipped: why}; challenger result: {recommend
 
 ## Follow-up
 
-- {slice or work left out of this plan}
+- {work left out of this plan, and whether it is a later slice}
 
 ## Open questions and blockers
 

@@ -25,30 +25,27 @@ The catalog is the only published file under `.github/`; this repository's custo
 ### Package format
 
 The package uses the Copilot plugin format: a root `plugin.json` without `$schema`, with agents, rules, skills, and `.mcp.json` at the plugin root, as [packaging](.github/skills/build-plugin/references/packaging.md) defines.
-The package used [Agent Plugins 1.0](https://agent-plugins.org/) until the owner chose this format on 2026-10-15, because Agent Host did not run 1.0 Copilot extensions:
-
-- The Copilot runtime behind Agent Host discovers plugin agents itself and does not find `com.github.copilot/agents/`, so the agents could not run in Copilot sessions ([github/copilot-cli#4655](https://github.com/github/copilot-cli/issues/4655), [microsoft/vscode#334153](https://github.com/microsoft/vscode/issues/334153)).
-- The Agent Customizations editor lists a plugin's agents, skills, commands, and rules only from root folders, so it did not show 1.0 agents or rules.
-
-Both clients read the root folders of the Copilot format, which VS Code documents as supported.
-Return to Agent Plugins 1.0 when a VS Code release runs agents from `com.github.copilot/agents/` in Copilot sessions and the Agent Customizations editor lists them, as [OI-03](OPEN-ISSUES.md) tracks.
+The package does not use [Agent Plugins 1.0](https://agent-plugins.org/), because Agent Host does not run its agents or list its rules; [OI-03](OPEN-ISSUES.md) holds the evidence and the condition for returning to it.
 
 ## Agents
 
-The user selects an entry agent, which works directly or delegates bounded assignments to workers; a worker returns one status with its result to the delegating agent.
+The user selects an entry agent.
+A lead splits the task into parts for workers, runs the independent parts in parallel, and integrates their results.
+A chat agent delegates its evidence gathering to helper workers.
+A worker returns one status with its result to the delegating agent.
 `discuss` hands a shaped request to a lead through a handoff the user confirms.
 
 | Agent | May call |
 | --- | --- |
 | `data-lead` | Every worker |
-| `software-lead` | Every worker except `database-explorer` and `data-explorer` |
+| `lead` | Every worker |
 | `discuss` | `explorer`, `researcher`, `challenger` |
 | `developer`, `ui-developer` | `reviewer` |
 | `planner` | `challenger` |
 
 ## Coordination
 
-Every delegation is one-shot and self-contained, following [`brief-subagent`](skills/brief-subagent/SKILL.md) or, for a producer's call to its checker, the producer's review rules, and the delegating agent treats worker output as evidence while keeping conclusions and integration decisions.
+Every delegation is one-shot and self-contained, following [`brief-subagent`](skills/brief-subagent/SKILL.md) or, for a producer's call to its checker, the producer's review rules, and the delegating agent treats worker output as evidence while keeping conclusions, integration decisions, and the choice of which results get a review or a kept test.
 Every worker returns one status, `done`, `blocked`, `Decision needed`, or `Missing input`, and the delegating agent acts on it as `brief-subagent` describes.
 The task holder, the entry agent the user talks to that holds the task, keeps task state through [`task-context`](skills/task-context/SKILL.md), and a worker writes task state only to the result file its brief names.
 Only entry agents ask the user.
@@ -60,7 +57,7 @@ Leads use strong models and workers the tier that fits their role, as defined in
 | Group | Components | Responsibility |
 | --- | --- | --- |
 | General customization | [`copilot-customization`](skills/copilot-customization/SKILL.md) | Artifact choice, metadata, writing guidance, and review. |
-| Coordination | [`brief-subagent`](skills/brief-subagent/SKILL.md), [`task-context`](skills/task-context/SKILL.md), [`interview-me`](skills/interview-me/SKILL.md) | Self-contained assignments, temporary state, and intent clarification. |
+| Coordination | [`brief-subagent`](skills/brief-subagent/SKILL.md), [`task-context`](skills/task-context/SKILL.md), [`interview-me`](skills/interview-me/SKILL.md), [`seed-task`](skills/seed-task/SKILL.md) | Self-contained briefs, temporary state, intent clarification, and seeds for independent sessions. |
 | Execution | [`run-python`](skills/run-python/SKILL.md), [`redshift`](skills/redshift/SKILL.md), [`sql-server`](skills/sql-server/SKILL.md) | Runtime selection and bounded, read-only database work. |
 | Scoped rules | [Markdown](rules/markdown.instructions.md), [Python](rules/python.instructions.md), [SQL](rules/sql.instructions.md) | Conventions for Markdown documents, user-run task scripts, and read-only queries. |
 | Record rules | [Changelog](rules/changelog.instructions.md), [Project status](rules/project-status.instructions.md), [Open issues](rules/open-issues.instructions.md) | The content of a project's `CHANGELOG.md`, `PROJECT-STATUS.md`, and `OPEN-ISSUES.md`. |
@@ -81,17 +78,16 @@ It stays outside the payload, because only the workbench builds plugin component
 
 `develop` is the authoring branch, and `main` is the package-only distribution branch and the repository default.
 The `awieczork-tools` marketplace on `main` lists the root `copilot-workbench` plugin with source `./`; the version and descriptive metadata belong to `plugin.json`.
-VS Code with the Copilot harness in Agent Host is the primary target; the shared package format does not establish equivalent behavior in other Copilot clients.
 
 The repository is public for installation without repository credentials, not for external contributions or public support.
 The owner is the only repository collaborator; Issues, Projects, Discussions, and Wiki are disabled.
 Branch rules prevent deletion and force pushes on `main` and `develop`, without required pull requests, reviews, or status checks, so direct authoring and package publication remain available.
 Secret scanning and secret push protection are enabled.
 GitHub Actions uses read-only token permissions by default and cannot approve pull requests; workflows from all external contributors require owner approval.
-Collaborator-only interaction restrictions also block external pull requests and comments while active; GitHub limits each restriction to six months, so it must be renewed before expiry.
+Collaborator-only interaction restrictions also block external pull requests and comments while active ([OI-02](OPEN-ISSUES.md)).
 
 Keep repository instructions and authoring tools under `.github/` tracked on `develop`, because they reproduce the development environment on another machine.
-Only `.github/plugin/marketplace.json` ships on `main`; `.github/context/`, editor settings, and credentials remain Git-ignored local state.
+`.github/context/`, editor settings, and credentials remain Git-ignored local state.
 Public visibility applies to every branch and its history, regardless of what the package includes.
 
 ## Capability candidates

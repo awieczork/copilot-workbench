@@ -1,13 +1,13 @@
 # References
 
 External resources that inform the design of `copilot-workbench`.
-Use them as structural inspiration, not as tone or output templates.
+Use the inspiration sources for structure, not as tone or output templates.
 
 ## Plugin format
 
 | Resource | Relevance |
 | --- | --- |
-| [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/cli-plugin-reference) | The Copilot plugin format: manifest fields, component locations, and loading rules of the Copilot runtime behind Agent Host. |
+| [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference) | The Copilot plugin format: manifest fields, component locations, and loading rules of the Copilot runtime behind Agent Host. |
 | [VS Code Agent Plugins](https://code.visualstudio.com/docs/agent-customization/agent-plugins) | How VS Code discovers, installs, and loads a Copilot-format plugin. |
 | [GitHub plugin marketplaces](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-marketplace) and [marketplace reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference#marketplacejson) | Catalog location, metadata, and repository-relative plugin sources. |
 | [VS Code agent harnesses](https://code.visualstudio.com/docs/agents/run/agent-harnesses) | Copilot harness execution in Agent Host and client-dependent capabilities. |
@@ -17,6 +17,12 @@ Use them as structural inspiration, not as tone or output templates.
 | Resource | Relevance |
 | --- | --- |
 | [Context7 MCP setup](https://github.com/upstash/context7/blob/master/packages/mcp/README.md) and [developer guide](https://context7.com/docs/resources/developer) | The local server reads `CONTEXT7_API_KEY` from its process environment without a packaged key or command-line argument. |
+
+## Model choice
+
+| Resource | Relevance |
+| --- | --- |
+| [Models and pricing for GitHub Copilot](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) | Per-token prices and their context thresholds behind the order of the light ladder in `model-tiers.md`; last checked on 2026-10-16. |
 
 ## Customization and prompting guidance
 

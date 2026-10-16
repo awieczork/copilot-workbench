@@ -9,7 +9,7 @@ Pick the kind by what the worker returns.
 | Kind | Returns | Writes | Calls a checker |
 | --- | --- | --- | --- |
 | Helper | Evidence | Its result file only, when it can write | No |
-| Producer | A change or a plan | Files in the brief's scope; a planner only its result file | Yes: `reviewer`, or `challenger` for the planner's costliest decision, by "For a producer" below |
+| Producer | A change or a plan | Files in the brief's scope; a planner only its result file | Yes: `reviewer`, or `challenger` for a planner, by "For a producer" below |
 | Checker | A verdict on another worker's result | Its result file only, when it can write | No |
 
 ## Frontmatter
@@ -52,9 +52,9 @@ When the brief names a result file, write your result there before every return.
 
 Add these review rules in the role's terms:
 
-- Run one review round with the checker when the brief marks review `Required`, and otherwise when an error would be costly to find later.
+- Run one review round with the checker only when the brief marks review `Required`, because the delegating agent decides which results a review is worth.
 - Call the checker through #tool:agent with the delegating agent's goal verbatim; the brief's `Done when`, `Scope`, `Constraints`, and the decisions in its `Context`; and what to check: the changed paths, or for a plan, the decision to test as one falsifiable claim with the paths of its evidence.
-- Fix each defect or objection the producer accepts, give every defect, objection, and open question a disposition, and report whether the review ran and why.
+- Fix each defect or objection the producer accepts, give every defect, objection, and open question a disposition, and report whether the review ran.
 - When the checker returns a status other than `done`, report the review as not run with that status and its cause, and carry its open questions into Open questions and blockers.
 
 For a producer that implements code, add this block unchanged to its Constraints, because both implementing producers need the same limits and gate:
@@ -64,6 +64,7 @@ For a producer that implements code, add this block unchanged to its Constraints
 - Change only what the brief requires, without refactors, cleanups, restyling, or formatting outside the change, and record a problem you notice outside it under Open questions and blockers, because unrequested edits widen the review and the risk.
 - Add a framework, dependency, abstraction, or configuration option only when the brief asks for it or an observed failure cannot be fixed without it, and return `Decision needed` when a loaded rule forbids it, because each addition is lasting maintenance the brief did not approve.
 - Let failures surface, without swallowed exceptions, placeholder values, or fallbacks that hide an error, because a hidden error produces a wrong result without a signal.
+- Write a test only when the brief asks for one, in the project's existing test framework, and confirm the rest of the change with checks you run without saving them, because the delegating agent decides which tests the project keeps.
 - Inspect a setup or helper script before running it, because it can have effects the brief does not authorize.
 - Edit files inside the brief's scope, and run local builds, tests, linters, and the app without asking; return the following to the delegating agent instead, unless the brief names the operation and its scope, because tool access is not authorization:
   - committing, pushing, or changing a branch or history;
@@ -75,4 +76,4 @@ For a producer that implements code, add this block unchanged to its Constraints
 
 ## Output format
 
-Give a fenced output template that starts, after its title, with `Status: {done | blocked | Decision needed | Missing input}`, keeps a checker's verdict in its own slot, gives slots in the role's terms that the delegating agent acts on, most important first, and ends with an `Open questions and blockers` slot in which each entry names its cause and what would remove it.
+Give a fenced output template that starts, after its title, with `Status: {done | blocked | Decision needed | Missing input}`, keeps a checker's verdict in its own slot, gives an implementing producer a `Key check:` slot that names the one check the delegating agent reruns, gives slots in the role's terms that the delegating agent acts on, most important first, and ends with an `Open questions and blockers` slot in which each entry names its cause and what would remove it.

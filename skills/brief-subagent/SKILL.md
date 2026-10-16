@@ -51,8 +51,8 @@ Required
 {What the result must add to the worker's output format}
 ```
 
-- **Review** is optional and applies only to a producer, a worker that calls a checker on its own work: write `Required` to enforce one review round, and leave it out to leave the review to the producer.
-- **Result file** is optional: include it when the result must survive the session and the worker holds `edit` or `edit/createFile`, with the path chosen by the `task-context` skill; for a worker without either, save the returned result yourself.
+- **Review** is optional and applies only to a producer: write `Required` to have it run one review round.
+- **Result file** is optional: include it when the result is a plan, must survive the session, or can exceed the rows the worker returns inline, and the worker holds `edit` or `edit/createFile`, with the path chosen by the `task-context` skill; for a worker without either, save the returned result yourself.
 - **Return** is optional: include it only when the result needs content that the worker's output format lacks.
 
 ## Rules
@@ -65,17 +65,15 @@ Required
 - Leave out instructions the worker's own body already holds, such as its tools, its role, or its output format.
 - For a follow-up brief, include the essentials of the earlier result, state what changes and what stays the same, and name what is still missing, because the new worker did not see the earlier run.
 - Write the brief in plain words that a newcomer reads one way, because the worker cannot ask what a shorthand means.
-- When you brief `challenger` while running on a model of its default's family, pass a model of the other family in the call, because one family shares its blind spots.
+- When parts that change files run in parallel, add a constraint that names the files the other parts change at the same time and tells the worker to report, not repair, a failure or a change that traces to them, because parallel workers share one working tree and a producer passes its brief's `Constraints` to its reviewer.
+- When a check must be independent of its author, such as `challenger`, a review of a change you wrote, or a recomputation, pass a model of the other family than the author's in the call, because one family shares its blind spots; this is not an escalation.
 
 ## Read the result
 
-Treat a returned result as a claim from a worker that cannot be asked again, and choose the next step from its `Status`:
+Choose the next step from the result's `Status`:
 
 - `done`: check the result against the brief's `Done when` before building on it, and give each finding that a producer left unfixed or a checker returned a disposition: a fix or correction brief, acceptance with a reason, or a question to the user.
-- `blocked`: act on the cause the worker reports:
-  - When a correction can remove the cause, send a correction brief with the failure evidence and unchanged scope.
-  - When the approach was wrong, change the approach.
-  - When only the user or the environment can remove the cause, report the blocker to the user without retrying.
+- `blocked`: send a correction brief with the failure evidence and unchanged scope when a correction can remove the cause, change the approach when it was wrong, and otherwise report the blocker to the user without retrying.
 - `Decision needed`: settle the decision when it is yours, ask the user when it is theirs, and meanwhile continue only the work that does not depend on it.
 - `Missing input`: run the cheapest read-only check that could settle the premise and send a new complete brief with it, or carry `Missing input` forward when it stays unsettled.
 
