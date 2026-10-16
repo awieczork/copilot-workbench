@@ -5,100 +5,38 @@ argument-hint: "[release goal or version]"
 disable-model-invocation: true
 ---
 
-# Publish an approved plugin release
+# Publish a plugin release
 
-Publish from `develop` to package-only `main` only the paths that `bash .github/skills/publish-plugin/scripts/release.sh allowlist` prints.
-This skill publishes one release from a clean state and does not resume an interrupted run; when a check finds leftover release state, report the state, the branches and commits that hold it, and the manual recovery it needs, without repairing it.
+Publish one release from `develop` to package-only `main`, and keep every public effect behind one confirmation from the owner.
+Run `bash .github/skills/publish-plugin/scripts/release.sh <command>` from the repository root; it holds the package paths and the checks, so do not repeat them.
 Ask the owner each question through #tool:vscode/askQuestions .
 
-## Stop on preflight failure
+## Procedure
 
-Run `bash .github/skills/publish-plugin/scripts/release.sh preflight` from the repository root.
-It checks that `develop` is checked out with a clean working tree and no unfinished operation; fetches `origin`; requires `origin/develop` and `origin/main`, a local `develop` that contains `origin/develop`, no git worktree with `main` checked out, an absent sibling path `<repo>.plugin-worktree`, a local `main` equal to `origin/main` when it exists, and no unpushed `chore(release):` commit; runs `gh auth status`; and runs the package conformance check of `build-plugin`.
-It prints one `FAIL:` line per failed check and exits with status 1; stop and report those lines before asking for a version.
+1. **Preflight:** run `preflight`, and stop and report its `FAIL:` lines.
+   For a `PENDING:` line, an unpushed release commit from an earlier run at the tip of `develop`, ask the owner whether to publish its version, continuing at `build` in step 3, or to drop it with `git reset --keep <commit>~1`; both stay local until the push.
+2. **Version and notes:** propose the next semantic version from the `## Unreleased` bullets, greater than the newest `v*` tag and not yet tagged.
+   Reconcile the `## Unreleased` bullets by the [changelog rule](../../../rules/changelog.instructions.md), and check each bullet against `git diff --name-status origin/main develop -- $(bash .github/skills/publish-plugin/scripts/release.sh allowlist)`.
+   Note each user-visible change in that diff that no bullet covers.
+3. **Commit and build:** move the entry under a `## [<version>] - <YYYY-MM-DD>` heading above the previous entries, keep an empty `## Unreleased` heading, set `version` in `plugin.json`, and update `PROJECT-STATUS.md` to the released state by the [project status rule](../../../rules/project-status.instructions.md).
+   Commit them with `git commit -m "chore(release): prepare v<version>" -- plugin.json CHANGELOG.md PROJECT-STATUS.md`, which leaves other staged paths out, then run `build <version>`, which prints the snapshot commit, or a `FAIL:` line or Git's error with a non-zero exit.
+4. **Confirm once:** show the version, the output of `notes <version>`, the uncovered changes, and both commits, and ask one question that covers creating the annotated tag `v<version>` on `main`, pushing `develop`, `main`, and the tag to `origin`, and creating the GitHub release.
+   When the owner corrects the notes, amend the release commit with `git commit --amend --no-edit -- CHANGELOG.md`, rerun `build`, and ask again; when the owner declines, run `clean` and keep the local commits, which the next run offers to publish or drop.
+5. **Publish:**
 
-## Ask for the version
+   ```bash
+   git tag -a "v<version>" main -m "Release v<version>"
+   git push --atomic origin develop main "v<version>" || { git tag -d "v<version>"; exit 1; }
+   bash .github/skills/publish-plugin/scripts/release.sh notes <version> | gh release create "v<version>" --verify-tag --title "v<version>" --notes-file -
+   ```
 
-Read the current `version` from `plugin.json` on `develop`, show it, and ask the owner for the approved semantic version without a leading `v`.
-Accept a valid semantic version that has no `v<version>` tag locally or on `origin`, is greater than the newest `v*` tag when one exists, and is not lower than the current version; stop otherwise.
+   Then run `clean`, and report the version, the commits, the tag, the release result, and `git status --short --branch`.
 
-## Draft and approve release notes
+The release is done when the atomic push and the GitHub release report success.
 
-Read the [release note rules](references/release-notes.md) before drafting, because they hold the evidence classification and the entry shape.
-Run `git diff --name-status origin/main develop -- $(bash .github/skills/publish-plugin/scripts/release.sh allowlist)`, and inspect the changed paths and the behavior they implement.
-Draft the versioned entry from the `## Unreleased` section and that diff.
+## Rules
 
-Ask the owner to approve the exact draft, with the proposed version and the complete note body in the question.
-Revise the draft when the owner requests a change and ask for approval of the complete replacement.
-Stop without release changes when the owner rejects or does not approve the draft.
-
-After approval, set `notes_file` to an unused temporary file outside the repository, write the complete approved versioned entry to it, and require `test -s "$notes_file"` to succeed.
-
-## Prepare the source commit
-
-After both approvals, update only the `version` field in `plugin.json` on `develop` when the approved version differs from the current version.
-Apply the approved versioned entry from `notes_file` to `CHANGELOG.md` by the release note rules.
-Update `PROJECT-STATUS.md` to the published state by the [project status rule](../../../rules/project-status.instructions.md).
-Read `git diff -- plugin.json CHANGELOG.md PROJECT-STATUS.md` and require the approved changelog transition, the status update, and, when the version changed, the version bump to be the only content changes.
-Stage the changed paths by name, require `git diff --cached --name-status` to list exactly them, and create the local commit `chore(release): prepare v<version>` on `develop`.
-
-## Build and verify the package tree
-
-Run `bash .github/skills/publish-plugin/scripts/release.sh build <version>`.
-It creates the sibling git worktree `<repo>.plugin-worktree` on local `main`, from `origin/main` when local `main` is absent, replaces its tree with the allowlist from `develop`, commits `chore(release): publish v<version>`, checks that the snapshot equals `develop` over the allowlist and holds no other path, and prints the snapshot commit.
-A non-zero exit prints the failed check.
-
-## Handle pre-publication failure
-
-When a check or command fails after preflight and before the push confirmation, report the failed command, the source commit when present, and every remaining path, then continue to "Clean the plugin git worktree" and stop; create no tag and push nothing.
-
-## Get one push confirmation
-
-Verify that the local `main` tip is the snapshot commit, and create no tag before this confirmation.
-Show the owner the version, both commit identifiers, the passing build checks, and ask one question that covers all of these actions:
-
-- create annotated tag `v<version>` on local `main`;
-- push `develop`, `main`, and `v<version>` to `origin`;
-- create the GitHub release with `gh release create --notes-file`.
-
-When the owner declines, continue to "Clean the plugin git worktree", report the retained local source and snapshot commits with their branches, identifiers, and version, state that a later run stops until the owner resolves them, and do not claim that publication completed.
-
-The confirmation gate is complete only when one explicit approval covers the exact tag, branches, remote, and GitHub release.
-
-## Push and publish
-
-After the confirmation, create the annotated tag on the local `main` commit:
-
-```bash
-git tag -a "v<version>" main -m "Release v<version>"
-```
-
-Push the branches and the tag as one all-or-nothing update:
-
-```bash
-git push --atomic origin develop main "v<version>"
-```
-
-Use `--atomic`, because without it a partial failure leaves one branch or the tag pushed and the rest behind.
-
-Create the GitHub release from the approved notes file:
-
-```bash
-gh release create "v<version>" \
-  --title "v<version>" \
-  --notes-file "$notes_file"
-```
-
-Do not force-push, move an existing tag, or retry a rejected push automatically.
-When a push fails on authentication, report it and leave the GitHub CLI authentication unchanged, because the owner set up the credential helper.
-When a tag, push, or GitHub CLI command fails, report the exact completed effects, run "Clean the plugin git worktree", and stop for the owner to decide the next step.
-
-The publication is complete only when the atomic push and the GitHub release report success.
-
-## Clean the plugin git worktree
-
-Remove `notes_file` when it exists.
-When `git worktree add` succeeded, run `git -C "$plugin_worktree" status --short --ignored`, where `plugin_worktree` is `"$(git rev-parse --show-toplevel).plugin-worktree"`, and remove the git worktree with `git worktree remove "$plugin_worktree"` when the status is empty; keep the path and stop when the status reports a path or the removal fails.
-
-Run `git status --short --branch`, `git worktree list`, and `git show --stat --oneline main` as the final checks.
-Report the published version, the source and snapshot commits when present, the tag, the GitHub release result, and the final git worktree state.
+- Push only with `--atomic`, and create the GitHub release only with `--verify-tag`, because a partial push or a release that creates its own tag publishes the wrong commit.
+- Never force-push, move a published tag, or retry a rejected push, and leave the GitHub CLI authentication unchanged, because each of these acts on shared state the owner controls.
+- When a step before the push fails, report the failed command and the effects already completed, run `clean`, and stop; every effect is local, so the next run recovers from it.
+- When `gh release create` fails after the push succeeded, report that the tag and branches are public, and give the owner the release command from step 5 to run again.
