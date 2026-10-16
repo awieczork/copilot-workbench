@@ -32,7 +32,7 @@ description: "Use when writing or reviewing SQL migrations. Supplies naming, loc
 
 | Field | Required | Behavior |
 | --- | --- | --- |
-| `name` | Yes | 1–64 lowercase letters, digits, and single hyphens, not starting or ending with a hyphen, and matching the folder name; the docs say a mismatched skill is not loaded, while the Local agent loads it under its folder name, so keep the two equal |
+| `name` | Yes | 1–64 lowercase letters, digits, and single hyphens, not starting or ending with a hyphen, and matching the folder name, because a mismatched skill may not load or may load under another name |
 | `description` | Yes | Up to 1024 characters; with `name`, the only text the agent sees before it decides to load the skill |
 | `argument-hint` | No | Hint shown when the user runs the skill as a slash command |
 | `user-invocable` | No | `false` removes the slash command; defaults to `true` |
@@ -45,7 +45,7 @@ description: "Use when writing or reviewing SQL migrations. Supplies naming, loc
 ## Progressive disclosure
 
 - Put everything that decides activation into the `description`, because the body is invisible until the skill loads; a `When to use` section in the body cannot trigger anything.
-- Keep `SKILL.md` under 500 lines and about 5,000 tokens; when it grows past that, move a branch into a reference rather than cutting rules.
+- Keep `SKILL.md` under 500 lines and about 5,000 tokens; when it grows past that, move a branch into a reference.
 
 ## Template
 
@@ -82,7 +82,7 @@ description: "{Use when ... trigger per branch}. {What it supplies}. Not for {cl
 ````
 
 - Keep only the sections the skill uses, and add `Output format` only when the skill returns a result.
-- Keep in `Gotchas` only traps a capable model gets wrong in this environment, and add one when a correction reveals it; leave out platform or shell branches, tool parameters, and catalogs of queries or commands the model writes itself.
+- Add a gotcha only when a correction reveals it, and leave out platform or shell branches, tool parameters, and catalogs of queries or commands the model writes itself.
 
 ## Scripts
 

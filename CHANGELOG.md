@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## [0.1.3] - 2026-10-16
+
+### Added
+
+- **Continue a discussion in another session.** Invoke `seed-task` to turn the part of a conversation you choose into a task you can start separately. You confirm what it carries, then receive a start prompt so the next session has the context it needs.
+
+### Changed
+
+- **Use one lead for workspace changes.** Select `lead`, which replaces `software-lead`, for code, documentation, configuration, or a change that needs data evidence. It coordinates specialists, runs independent work in parallel, and checks that the parts work together before delivering the result.
+- **Resume planned work after an interruption.** When `lead` or `data-lead` uses a plan, it saves the accepted plan with its amendments and completed tasks. A resumed session follows that current plan rather than reconstructing progress from the conversation.
+- **See what supports a data answer.** Use `data-lead` for work that uses or depends on data. Analysis results include row counts, filter checks, and coverage; before an analysis supports a decision, the lead also checks its framing and has key figures recomputed independently.
+- **Develop an idea and its documentation in one discussion.** Ask `discuss` to investigate an idea, create or edit documentation, and shape a request for a lead. Use `seed-task` when you want to carry the discussion into a new session instead of continuing through a handoff.
+- **Review a draft before settling customization choices.** When the scope or type of an agent customization is unclear, `copilot-customization` shows proposed content before asking you to choose, so the decision rests on a concrete draft.
+- **Use the Redshift fallback without confirming its target by hand.** The fallback reports the host and database it used, and results from another target are rejected. Scripts that call the runner must handle exit status `1` for input, connection, and query errors instead of the former separate error codes.
+
 ## [0.1.2] - 2026-10-15
 
 ### Fixed
