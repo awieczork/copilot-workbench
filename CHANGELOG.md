@@ -2,35 +2,20 @@
 
 ## Unreleased
 
+## [0.1.3] - 2026-10-16
+
 ### Added
 
-- The `seed-task` skill turns the current conversation, such as a forked discussion, into a task folder that an independent session starts from; only the user invokes it.
+- **Continue a discussion in another session.** Invoke `seed-task` to turn the part of a conversation you choose into a task you can start separately. You confirm what it carries, then receive a start prompt so the next session has the context it needs.
 
 ### Changed
 
-- The `sql-server` skill keeps each statement within the server and databases the user names.
-- The Redshift fallback runner reports its connected host and database so the `redshift` skill can discard results from another target without prior user confirmation.
-- The Redshift fallback runner uses exit status `1` for input, connection, and query errors.
-- The `redshift` skill uses `svv_redshift_columns` when access to `svv_all_columns` is denied.
-- The `copilot-customization` skill drafts content before asking the user to settle an unresolved artifact scope or type.
-- The `changelog` rule reconciles all changes since the release baseline when the request names no paths.
-- The `sql` rule requires a row count before returning unbounded results without a fixed 100-row threshold.
-- The `discuss` agent creates and edits the documentation the user asks for.
-- The `discuss` agent returns a shaped request for a lead and leaves the start of a new session to the `seed-task` skill.
-- The `lead` and `data-lead` agents keep every plan from `planner` in the task folder and keep it current with amendments and finished tasks, so that work resumes from the plan after an interruption.
-- The `lead` agent, formerly `software-lead`, takes any work in the workspace.
-- The `lead` agent briefs the `database-explorer` and `data-explorer` workers for the data facts a change depends on.
-- The `lead` and `data-lead` agents split a task into parts for workers and run the independent parts in parallel, keeping the decisions, the integration, and the conclusion.
-- The `discuss` agent gathers workspace and external evidence through workers that run in parallel.
-- The `developer` worker implements configuration and documentation changes as well as code changes.
-- The `planner` worker splits a plan into tasks with separate files or questions, so that tasks without a dependency run in parallel.
-- The `data-lead` agent takes all work that touches or rests on data and has workers run the queries.
-- The `data-lead` agent accepts a query result only when its row counts and coverage support it.
-- The `data-lead` agent challenges the framing of a result that supports a decision first and has its key figures recomputed independently.
-- The `database-explorer` and `data-explorer` workers run the analyses a brief specifies and return each result with its row counts in and out, a filter-value check, and its coverage.
-- The `developer` and `ui-developer` workers write a test only when the brief asks for one.
-- The `developer`, `ui-developer`, and `planner` workers run a review only when the brief requires one.
-- The `lead` and `data-lead` agents rerun each part's key check and one check across the parts instead of a producer's whole suite.
+- **Use one lead for workspace changes.** Select `lead`, which replaces `software-lead`, for code, documentation, configuration, or a change that needs data evidence. It coordinates specialists, runs independent work in parallel, and checks that the parts work together before delivering the result.
+- **Resume planned work after an interruption.** When `lead` or `data-lead` uses a plan, it saves the accepted plan with its amendments and completed tasks. A resumed session follows that current plan rather than reconstructing progress from the conversation.
+- **See what supports a data answer.** Use `data-lead` for work that uses or depends on data. Analysis results include row counts, filter checks, and coverage; before an analysis supports a decision, the lead also checks its framing and has key figures recomputed independently.
+- **Develop an idea and its documentation in one discussion.** Ask `discuss` to investigate an idea, create or edit documentation, and shape a request for a lead. Use `seed-task` when you want to carry the discussion into a new session instead of continuing through a handoff.
+- **Review a draft before settling customization choices.** When the scope or type of an agent customization is unclear, `copilot-customization` shows proposed content before asking you to choose, so the decision rests on a concrete draft.
+- **Use the Redshift fallback without confirming its target by hand.** The fallback reports the host and database it used, and results from another target are rejected. Scripts that call the runner must handle exit status `1` for input, connection, and query errors instead of the former separate error codes.
 
 ## [0.1.2] - 2026-10-15
 
