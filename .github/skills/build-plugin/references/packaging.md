@@ -1,8 +1,7 @@
 # Packaging
 
 Package the plugin in the Copilot plugin format: a root `plugin.json` without `$schema`, with every component in its folder at the plugin root.
-Target VS Code with the Copilot harness in Agent Host; support in another Copilot client does not establish equivalent behavior.
-The [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/cli-plugin-reference) is the authority for the manifest and the component locations, because the Copilot runtime behind Agent Host loads the plugin.
+The [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference) is the authority for the manifest and the component locations, because the Copilot runtime behind Agent Host loads the plugin.
 For VS Code behavior, follow [Agent plugins in VS Code](https://code.visualstudio.com/docs/agent-customization/agent-plugins) and [Use Agent Skills in VS Code](https://code.visualstudio.com/docs/agent-customization/agent-skills).
 The [`ARCHITECTURE.md` package format note](../../../../ARCHITECTURE.md) gives the reason for this format and the condition for a change to Agent Plugins 1.0.
 
@@ -27,14 +26,14 @@ Leave generated runtime state, temporary results, and repository-only inputs out
 
 Keep one catalog entry whose `name` matches root `plugin.json` and whose `source` is `./`, because the marketplace distributes this repository's single root plugin.
 Keep the plugin version and descriptive metadata in `plugin.json` instead of duplicating them in the catalog.
-Follow [GitHub's marketplace format](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-marketplace), and publish only `.github/plugin/marketplace.json` from `.github/`, because the other files customize the authoring workspace.
+Follow [GitHub's marketplace format](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-marketplace).
 
 ## plugin.json
 
 - Write only fields that the GitHub Copilot CLI plugin reference documents; only `name` is required.
 - Leave out `$schema`, because a root `plugin.json` with the Agent Plugins schema switches VS Code and the Copilot CLI to Agent Plugins 1.0, which ignores the root component folders.
 - Declare `agents`, `skills`, and `mcpServers` with relative paths in the reference's form (`"agents/"`, `"skills/"`, `".mcp.json"`), so that the manifest states where each component is.
-- Leave rules to the `rules/` default folder, because no official page documents a manifest field for rules.
+- Leave rules to the `rules/` default folder, because no official page documents a manifest field for rules and VS Code with Agent Host loads that folder from an installed plugin.
 
 ## .mcp.json
 
@@ -48,5 +47,4 @@ Follow [GitHub's marketplace format](https://docs.github.com/en/copilot/how-tos/
 ## Check static conformance
 
 Run `uv run .github/skills/build-plugin/scripts/check_package.py` from the repository root after any package change, and repair each failure it prints.
-It checks the payload paths (`.github/plugin/marketplace.json`, `plugin.json`, `.mcp.json`, `agents/`, `rules/`, `skills/`, `README.md`, `CHANGELOG.md`): both manifests parse, have no `$schema`, and meet the local contract, each `plugin.json` path field resolves inside the plugin root, the manifests hold no absolute paths, the catalog has a kebab-case name and an owner name and lists only the root plugin, every frontmatter block parses, each skill `name` equals its folder and meets the name rule, each skill `description` has 1 to 1,024 characters, each agent and rule file has its documented suffix, every relative link resolves inside the plugin root, and no symlink leaves it.
-It prints one `{path}: {problem}` line per failure and exits with status 1 when any check fails.
+It prints `ok`, or one `{path}: {problem}` line per failure and exits with status 1; it does not check tool names, model names, or the `README.md` inventory, so check those by hand.
