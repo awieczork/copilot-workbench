@@ -1,15 +1,13 @@
 # Project status
 
-- State: `active`
+- State: `complete`
 - Updated: 2026-10-16
 - Objective: Distribute the public, owner-maintained plugin through a marketplace for VS Code with the Copilot harness in Agent Host.
-- Focus: The team redesign (orchestrating leads, the review and test gate, living plans, seeds, and leaner commit and release skills) is ready to commit and release as the next version.
+- Focus: Version `0.1.3` delivers the team redesign through the marketplace on package-only `main` with a GitHub release.
 
 ## Roadmap
 
-1. `active` Release the team redesign.
-   1. [ ] Commit the working tree with `/commit-dev`.
-   2. [ ] Publish the next version with `/publish-plugin`.
+- None.
 
 ## Blockers
 
