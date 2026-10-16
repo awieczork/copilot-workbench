@@ -15,7 +15,7 @@ As a subagent, return each question or choice for the user to the delegating age
 2. Connect through the saved connection for that server; when the server has none, report the missing saved connection and stop, because the saved connection holds the credentials.
 3. Before the first query, confirm the server and database with #tool:ms-mssql.mssql/mssql_get_connection_details , because the connection can land on the server's default database; when the database differs, switch and confirm again.
 4. Run each statement after it passes the read-only gate below.
-5. Disconnect when the task finishes or stops after a connection exists.
+5. When you connected, disconnect when the task ends.
 
 ## Read-only gate
 
@@ -23,7 +23,7 @@ As a subagent, return each question or choice for the user to the delegating age
 
 - Send one query expression built from `SELECT`, optional common table expressions, and set operators such as `UNION ALL`.
 - Refuse anything else, including statements that look like a read but write or reach another source, such as `SELECT INTO`, `OPENROWSET`, and `OPENQUERY`, and report a request for them as outside this skill.
-- Keep the user's server and database for every statement, because access to another source does not make it the one the user meant.
+- Keep the server and the databases the user named for every statement, because access to another source does not make it the one the user meant.
 
 ## Rules
 
