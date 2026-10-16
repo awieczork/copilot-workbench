@@ -8,6 +8,9 @@
 
 ### Changed
 
+- The `copilot-customization` skill drafts content before asking the user to settle an unresolved artifact scope or type.
+- The `changelog` rule reconciles all changes since the release baseline when the request names no paths.
+- The `sql` rule requires a row count before returning unbounded results without a fixed 100-row threshold.
 - The `discuss` agent creates and edits the documentation the user asks for.
 - The `discuss` agent returns a shaped request for a lead and leaves the start of a new session to the `seed-task` skill.
 - The `lead` and `data-lead` agents keep every plan from `planner` in the task folder and keep it current with amendments and finished tasks, so that work resumes from the plan after an interruption.

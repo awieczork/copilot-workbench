@@ -39,4 +39,3 @@ Keep it to current and planned work, because git and `CHANGELOG.md` keep the his
 - When a task or phase finishes, record its lasting effect in the record that owns it, such as `CHANGELOG.md` or `ARCHITECTURE.md`, then remove the task or phase.
 - Under `Blockers`, link only the `OPEN-ISSUES.md` rows that block an active task, and write `- None.` when nothing blocks.
 - When the project is complete, set `State` to `complete` and write `- None.` under `Roadmap`.
-- Keep temporary task detail in the task folder that the `task-context` skill keeps, instead of in this file.

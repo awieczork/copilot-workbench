@@ -24,7 +24,7 @@ Target the Python version the project declares, and Python 3.11 when it declares
 
 Do not add classes, a command-line interface, configuration objects, plugin registries, dependency injection, or a logging framework to a script.
 These layers cost more to read than the analysis they wrap, and a constant at the top of the file replaces most of them.
-When the task appears to need one, report `Decision needed` with the purpose and the minimum shape, and do not add it.
+When the task appears to need one, report `Decision needed` with the purpose and the minimum shape.
 
 Write a test for a task script only when an undetected error would cost more than the test, because the script answers one bounded question.
 
@@ -46,9 +46,7 @@ Write a test for a task script only when an undetected error would cost more tha
 - Use `polars` for tabular work.
 - Add `pandas` only for a reason the brief or the user names, because a second frame library doubles the conversions and idioms a reader must follow.
 - Express transformations as Polars expressions instead of `iter_rows()`, `map_elements()`, or Python row loops.
-- Read Parquet for a lazy workflow with `pl.scan_parquet()`.
-- End a lazy chain with `sink_parquet()` when the result goes to Parquet, and with `.collect()` when the next step needs the frame in memory.
-- Use `pl.read_parquet()` only when the next operation requires an eager frame, because `read_parquet()` materializes the file and loses scan-level optimizations even when followed by `.lazy()`.
+- Keep Parquet work lazy: `pl.scan_parquet()` in, `sink_parquet()` or `.collect()` out, and `pl.read_parquet()` only when the next operation needs an eager frame, because an eager read loses the scan-level optimizations even when followed by `.lazy()`.
 - Prefix DataFrame variables with `df_`.
 - Convert to NumPy or another representation only at the boundary of a library that requires it.
 
