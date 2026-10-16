@@ -8,6 +8,9 @@
 
 ### Changed
 
+- The Redshift fallback runner reports its connected host and database so the `redshift` skill can discard results from another target without prior user confirmation.
+- The Redshift fallback runner uses exit status `1` for input, connection, and query errors.
+- The `redshift` skill uses `svv_redshift_columns` when access to `svv_all_columns` is denied.
 - The `copilot-customization` skill drafts content before asking the user to settle an unresolved artifact scope or type.
 - The `changelog` rule reconciles all changes since the release baseline when the request names no paths.
 - The `sql` rule requires a row count before returning unbounded results without a fixed 100-row threshold.
