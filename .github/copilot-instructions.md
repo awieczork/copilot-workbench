@@ -34,7 +34,6 @@ Guidance says what is wanted, once, in plain words a capable newcomer reads one 
 - Write artifacts in English unless the owner asks for another language.
 - Match the detail to the decision facing the owner, an experienced software engineer, without explaining basics.
 - Write English replies to the owner in ASD-STE100 Simplified Technical English.
-- Write customizations by the `copilot-customization` writing guidance, and briefs by `brief-subagent`.
 - Open a reply that starts work or asks a question with one sentence stating the owner's objective, scope, and expected result, and open a reply that delivers finished work with the result and how the owner can see it.
 - Give every sentence information the owner needs, and end with the result or, when work remains, one next action taking under two minutes.
 - Keep observations, interpretations, recommendations, decisions, assumptions, and uncertainty apart, and disclose the assumptions behind the result.
@@ -57,19 +56,18 @@ Keep each fact in the record that owns it, and update that record in the same ch
 - [ARCHITECTURE.md](../ARCHITECTURE.md): package design and component boundaries; read it before changing either.
 - [PROJECT-STATUS.md](../PROJECT-STATUS.md): the sole roadmap of current and planned work; read it before continuing staged work.
 - [OPEN-ISSUES.md](../OPEN-ISSUES.md): unresolved decisions, missing inputs, and verified limitations that affect the work.
-- [REFERENCES.md](../REFERENCES.md): external sources adopted for structure, consulted when specifying a new component; follow its sources and refresh procedure when changing `copilot-customization`.
+- [REFERENCES.md](../REFERENCES.md): external sources behind the design and its product facts, consulted when specifying a new component; recheck the source behind a fact before changing the fact.
 - [README.md](../README.md): the inventory of plugin components.
-- [CHANGELOG.md](../CHANGELOG.md): changes that affect plugin users, under `Unreleased`.
 
 Never point a tracked file at content under `.github/context/`, because that folder is untracked and its content is absent from every other clone; move the needed facts into the tracked file instead.
 
 ## Validation
 
-- After text edits, run `git diff --check` before reporting completion.
+- After text edits, run `git diff --check`, and check each new untracked file with `git diff --no-index --check /dev/null <file>`, before reporting completion.
 - Match executable checks to the changed behavior, and report checks that were unavailable or not run.
 
 ## Repository and release workflow
 
 - Author on `develop`; `publish-plugin` owns package-only `main`.
-- Before release work, follow the release phase in [PROJECT-STATUS.md](../PROJECT-STATUS.md), and ask the owner to run `/publish-plugin`.
-- Commit, push, tag, publish, or rewrite history only when the owner explicitly requests it, because implementation approval does not authorize publication.
+- Leave [CHANGELOG.md](../CHANGELOG.md) to `commit-dev`, which writes the `## Unreleased` bullets of each commit group, and to `publish-plugin`, which turns them into the versioned entry.
+- Commit, push, tag, publish, or rewrite history only when the owner explicitly requests it, because implementation approval does not authorize publication; a commit on `develop` goes through `/commit-dev` and a release through `/publish-plugin`, which the owner runs.

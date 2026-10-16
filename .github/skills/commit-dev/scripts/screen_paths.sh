@@ -7,7 +7,6 @@ set -euo pipefail
     case "${path##*/}" in
       .env | .env.* | credentials* | *secret* | *.pem | *.key)
         printf '%s\tsecret\n' "$path"
-        continue
         ;;
     esac
     if [ -f "$path" ] && [ "$(stat -c %s -- "$path")" -gt 5000000 ]; then
