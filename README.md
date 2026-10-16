@@ -20,7 +20,6 @@ Public access supports installation without repository credentials; this reposit
 ### Install from the marketplace
 
 The `awieczork-tools` marketplace lists this repository's root plugin.
-The catalog must be published to the default `main` branch before these commands are available; changes on `develop` are not published automatically.
 
 In a VS Code chat session with the **Copilot** harness selected, run these commands one at a time:
 
@@ -30,9 +29,6 @@ In a VS Code chat session with the **Copilot** harness selected, run these comma
 /plugin list
 ```
 
-Review the marketplace trust prompt before you confirm installation.
-The public repository does not require GitHub authentication for read access.
-
 To update, refresh the catalog and then update the plugin:
 
 ```text
@@ -41,7 +37,6 @@ To update, refresh the catalog and then update the plugin:
 ```
 
 Manage this installation through `/plugin`.
-VS Code currently keeps the `/plugin` inventory separate from the Agent Customizations editor's inventory.
 
 ### Replace an installation from source
 
@@ -59,26 +54,27 @@ Source installation remains available: run **Chat: Install Plugin From Source** 
 | `interview-me` | Clarifies the user's intent before work continues; only the user invokes it. |
 | `redshift` | Runs read-only queries against user-provided Redshift targets, with an MCP-first workflow and a bounded Python fallback. |
 | `run-python` | Runs Python scripts and inline code through `uv`, with or without the project environment. |
+| `seed-task` | Turns the current conversation, such as a forked discussion, into a task folder that an independent session starts from; only the user invokes it. |
 | `sql-server` | Runs read-only SQL Server queries against user-provided targets through saved connections. |
 | `task-context` | Keeps one task's state in a Git-ignored task folder that the task holder maintains, with a result file for a delegated result that must survive the session. |
 
 ### Agents
 
-User-facing agents appear in the agent picker.
+Entry agents appear in the agent picker.
 Workers run as subagents of an allowed entry agent or producer.
 
 | Agent | Kind | Purpose |
 | --- | --- | --- |
-| `software-lead` | Lead | Delivers or plans software changes by deciding the approach, briefing workers, and judging results. |
-| `data-lead` | Lead | Answers data-science questions with evidence and owns the conclusion. |
-| `discuss` | Chat | Shapes an unfinished idea into a request for a lead or a prompt for a new session. |
+| `lead` | Lead | Delivers or plans any work in the workspace by deciding the approach, splitting it into parts for workers, and judging results. |
+| `data-lead` | Lead | Handles work that touches or rests on data: frames the question, has workers run the queries, and owns the interpretation and the conclusion. |
+| `discuss` | Chat | Shapes an unfinished idea into a request for a lead, and edits the documentation the user asks for. |
 | `explorer` | Helper | Searches the workspace for one question and returns locations with findings. |
-| `database-explorer` | Helper | Finds and profiles the SQL Server and Redshift objects and join paths for one data question, drafts read-only queries, and returns the queries it ran. |
-| `data-explorer` | Helper | Finds and profiles the local dataset files for one data question without changing them. |
+| `database-explorer` | Helper | Finds and profiles the SQL Server and Redshift objects and join paths for one data question, drafts and runs read-only queries. |
+| `data-explorer` | Helper | Finds and profiles the local dataset files for one data question and runs the analyses a brief specifies without changing the files. |
 | `researcher` | Helper | Gathers sourced external evidence for one bounded question. |
-| `planner` | Producer | Produces an executable plan for a change or an analysis with dependent steps or open design decisions, and calls `challenger` when an error in a decision would be costly to find later. |
-| `developer` | Producer | Implements a change with tests scaled to the cost of an undetected error, and calls `reviewer` when the brief requires it or an error would be costly to find later. |
-| `ui-developer` | Producer | Implements an interface change, checks it in the running app in a browser, and calls `reviewer` when the brief requires it or an error would be costly to find later. |
+| `planner` | Producer | Produces an executable plan for a change or an analysis with dependent steps or open design decisions. |
+| `developer` | Producer | Implements a change to code, tests, configuration, documentation, build, dependencies, or CI. |
+| `ui-developer` | Producer | Implements an interface change, checks it in the running app in a browser. |
 | `reviewer` | Checker | Assesses a finished result against its goal without repairing it. |
 | `challenger` | Helper | Tests one decision or framing with the strongest objection, the cheapest settling check, and a recommendation. |
 
@@ -110,25 +106,7 @@ Set `CONTEXT7_API_KEY` in the environment on the machine that runs the Context7 
 The packaged server reads this variable directly; no change to [.mcp.json](.mcp.json) is required.
 Keep the real key out of chat and repository files.
 
-For Bash on Linux or macOS, replace the placeholder with your key:
-
-```bash
-export CONTEXT7_API_KEY="your-context7-api-key"
-code .
-```
-
-For PowerShell on Windows:
-
-```powershell
-$env:CONTEXT7_API_KEY = "your-context7-api-key"
-code .
-```
-
-These commands set the variable for the current shell and processes it starts.
-For later sessions, use your operating system's user environment settings or a local shell startup file outside this repository.
-Fully quit VS Code before starting it from the configured shell, so that an existing Agent Host does not retain the old environment.
-Setting the variable in a terminal inside an already running VS Code window does not change the parent process's environment.
-For a remote connection, Windows Subsystem for Linux (WSL), or a container, configure the environment where the MCP server runs, not only on the desktop.
+Set it in the environment that Agent Host starts from, and fully quit and restart VS Code after a change; for a remote, Windows Subsystem for Linux (WSL), or container session, set it where the MCP server runs.
 
 ## Database access
 
@@ -152,15 +130,5 @@ REDSHIFT_PORT=
 REDSHIFT_DATABASE=
 ```
 
-Confirm that the fallback settings identify the requested target before execution.
+The runner reports the host and database it connected to, and the skill discards a result from another target.
 The runner returns at most 100 rows and reports truncation.
-Read-only enforcement in this workflow relies on the skill instructions and database permissions; the runner is not a SQL authorization parser.
-
-## Troubleshooting
-
-| Symptom | Action |
-| --- | --- |
-| SQL Server cannot connect | Check the selected saved connection and its local authentication. |
-| Redshift MCP cannot start or access data | Check `uvx`, the configured local AWS profile, region, authentication, and server diagnostics. |
-| The Redshift fallback rejects configuration | Populate every required local variable, confirm the intended target, and check that the port is valid. |
-| context7 reports an error | Check `npx` and the server diagnostics; for authentication or rate-limit errors, check `CONTEXT7_API_KEY` in the MCP server's environment and restart VS Code and Agent Host after changing it. |

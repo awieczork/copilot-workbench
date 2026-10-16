@@ -41,7 +41,7 @@ A rule has no contract.
 
 ## Add a component
 
-1. Draft a specification of the component: `name`, `description`, and kind; tools, `agents`, `model`, and `handoffs`; what proceeds without asking; workflow phases and output slots; its connections; and the components it overlaps.
+1. Draft a specification of the component: every part its contract defines, its connections, and the components it overlaps.
 2. Present it to the owner with only the questions whose answers change it, and recommend extending an overlapping component that covers the need.
 3. After the owner confirms, write the component at the path [packaging](references/packaging.md) gives for its kind, and connect it by "Connect the component" below.
 
@@ -50,8 +50,8 @@ A rule has no contract.
 When you add, rename, or change the role of a component, keep its connections current:
 
 - A worker sits in the `agents` list and the `Route the work` table of each lead that delegates to it, in the `agents` list and workflow of each chat agent that calls it, and, for a checker, in the `agents` list and review phase of each producer that calls it.
-- A renamed worker is renamed wherever another agent's body names it.
-- A lead lists in `agents` every worker its routing table names, and a lead that receives shaped requests is a `handoffs` target of each chat agent.
+- A renamed component is renamed wherever another component names it, including `agents`, `handoffs`, and bodies.
+- A lead that receives shaped requests is a `handoffs` target of each chat agent.
 
 ## Validate
 
