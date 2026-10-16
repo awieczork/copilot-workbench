@@ -8,6 +8,7 @@
 
 ### Changed
 
+- The `sql-server` skill keeps each statement within the server and databases the user names.
 - The Redshift fallback runner reports its connected host and database so the `redshift` skill can discard results from another target without prior user confirmation.
 - The Redshift fallback runner uses exit status `1` for input, connection, and query errors.
 - The `redshift` skill uses `svv_redshift_columns` when access to `svv_all_columns` is denied.
