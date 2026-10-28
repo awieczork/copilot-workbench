@@ -1,31 +1,38 @@
 # Architecture
 
-This document gives the high-level design of `copilot-workbench`, a public, owner-maintained Copilot-format plugin for GitHub Copilot in VS Code with the Copilot harness in Agent Host; each artifact defines its own behavior.
+This document gives the high-level design of `copilot-workbench`, a public, owner-maintained marketplace for GitHub Copilot in VS Code with the Copilot harness in Agent Host; each artifact defines its own behavior.
 
 ## Purpose
 
-The package supports the owner's data science, scientific exploration, and hobby software projects, with Python as the general-purpose stack and other technologies chosen per project.
+The `agent-team` package supports the owner's data science, scientific exploration, and hobby software projects, with Python as the general-purpose stack and other technologies chosen per project.
+The planned `agent-plugin-dev` package provides reusable plugin authoring, validation, and development lifecycle capabilities.
 The [pillars](.github/copilot-instructions.md#pillars) set the vision for its development.
 
 ## Boundaries
 
 | Layer | Holds |
 | --- | --- |
-| Plugin package | The agent team, general-use skills, scoped rules, MCP configuration, and bundled resources. |
-| Marketplace catalog | Distribution metadata that lists the root plugin without duplicating its version. |
-| Workbench | Plugin-authoring skills, team contracts, publication, and project records, outside the payload. |
+| `agent-team` package | The agent team, supporting skills, scoped rules, Model Context Protocol (MCP) configuration, and bundled resources under `plugins/agent-team/`. |
+| Planned `agent-plugin-dev` package | Reusable plugin-development capabilities and their resources under `plugins/agent-plugin-dev/`; not yet created. |
+| Marketplace catalog | Distribution metadata that lists each package by its repository-relative source without duplicating its version. |
+| Workbench | Repository instructions, team-specific authoring contracts, discovery pointers, and project records, outside package payloads; the current authoring skills move to the development package in the next slice. |
 | Project repository | Standalone project customizations, project instructions, source code, and durable project records. |
 | Local environment | Credentials, saved connections, service configuration, and runtime dependencies. |
-| Temporary task state | Session and delegated-work state in the layout of [`task-context`](skills/task-context/SKILL.md). |
+| Temporary task state | Session and delegated-work state in the layout of [`task-context`](plugins/agent-team/skills/task-context/SKILL.md). |
 
-The published payload is root [plugin.json](plugin.json) and [.mcp.json](.mcp.json), the `agents/` and `rules/` folders, the `skills/` folders with their resources, the package metadata `README.md` and `CHANGELOG.md`, and the [marketplace catalog](.github/plugin/marketplace.json).
-The package holds no project-specific datasets, database targets, credentials, or absolute paths.
-The catalog is the only published file under `.github/`; this repository's customizations, the other root records, temporary task state, and source references stay outside the payload.
+On `repo/marketplace-migration`, the `agent-team` payload is [plugin.json](plugins/agent-team/plugin.json), [mcp.json](plugins/agent-team/mcp.json), `com.github.copilot/agents/`, `com.github.copilot/rules/`, `skills/` with their resources, and package [README.md](plugins/agent-team/README.md) and [CHANGELOG.md](plugins/agent-team/CHANGELOG.md).
+The [marketplace catalog](.github/plugin/marketplace.json) lists this package with source `./plugins/agent-team`; it does not yet list the planned development package.
+Each package has one purpose and bundles the resources it needs, without requiring the other package.
+Packages hold no project-specific datasets, database targets, credentials, or absolute paths.
+Repository records and `.github/` authoring files stay outside package payloads, even when the full repository becomes the distribution source.
 
 ### Package format
 
-The package uses the Copilot plugin format: a root `plugin.json` without `$schema`, with agents, rules, skills, and `.mcp.json` at the plugin root, as [packaging](.github/skills/build-plugin/references/packaging.md) defines.
-The package does not use [Agent Plugins 1.0](https://agent-plugins.org/), because Agent Host does not run its agents or list its rules; [OI-03](OPEN-ISSUES.md) holds the evidence and the condition for returning to it.
+The migration branch adopts [Agent Plugins 1.0](https://agent-plugins.org/): each package has a root `plugin.json` with the canonical `$schema`, portable `skills/`, optional root `mcp.json`, and Copilot-specific components under `com.github.copilot/`.
+The current `agent-team` version remains `0.1.3` during relocation; release preparation is a later phase.
+Published `main` retains the root Copilot-format `copilot-workbench` package until runtime verification passes and the owner authorizes integration.
+[OI-03](OPEN-ISSUES.md) remains open: schema and path checks do not prove Agent Host runtime support.
+The existing workbench [packaging guide](.github/skills/build-plugin/references/packaging.md) and checker still describe the old format; their adaptation belongs to the development-package slice.
 
 ## Agents
 
@@ -45,9 +52,9 @@ A worker returns one status with its result to the delegating agent.
 
 ## Coordination
 
-Every delegation is one-shot and self-contained, following [`brief-subagent`](skills/brief-subagent/SKILL.md) or, for a producer's call to its checker, the producer's review rules, and the delegating agent treats worker output as evidence while keeping conclusions, integration decisions, and the choice of which results get a review or a kept test.
+Every delegation is one-shot and self-contained, following [`brief-subagent`](plugins/agent-team/skills/brief-subagent/SKILL.md) or, for a producer's call to its checker, the producer's review rules, and the delegating agent treats worker output as evidence while keeping conclusions, integration decisions, and the choice of which results get a review or a kept test.
 Every worker returns one status, `done`, `blocked`, `Decision needed`, or `Missing input`, and the delegating agent acts on it as `brief-subagent` describes.
-The task holder, the entry agent the user talks to that holds the task, keeps task state through [`task-context`](skills/task-context/SKILL.md), and a worker writes task state only to the result file its brief names.
+The task holder, the entry agent the user talks to that holds the task, keeps task state through [`task-context`](plugins/agent-team/skills/task-context/SKILL.md), and a worker writes task state only to the result file its brief names.
 Only entry agents ask the user.
 Each role receives only the tools it needs, and read-only roles rest on instructions, because query and execution tools can also write.
 Leads use strong models and workers the tier that fits their role, as defined in the [entry contract](.github/skills/build-plugin/references/entry-contract.md) and the [worker model tiers](.github/skills/build-plugin/references/model-tiers.md).
@@ -56,28 +63,32 @@ Leads use strong models and workers the tier that fits their role, as defined in
 
 | Group | Components | Responsibility |
 | --- | --- | --- |
-| General customization | [`copilot-customization`](skills/copilot-customization/SKILL.md) | Artifact choice, metadata, writing guidance, and review. |
-| Coordination | [`brief-subagent`](skills/brief-subagent/SKILL.md), [`task-context`](skills/task-context/SKILL.md), [`interview-me`](skills/interview-me/SKILL.md), [`seed-task`](skills/seed-task/SKILL.md) | Self-contained briefs, temporary state, intent clarification, and seeds for independent sessions. |
-| Execution | [`run-python`](skills/run-python/SKILL.md), [`redshift`](skills/redshift/SKILL.md), [`sql-server`](skills/sql-server/SKILL.md) | Runtime selection and bounded, read-only database work. |
-| Scoped rules | [Markdown](rules/markdown.instructions.md), [Python](rules/python.instructions.md), [SQL](rules/sql.instructions.md) | Conventions for Markdown documents, user-run task scripts, and read-only queries. |
-| Record rules | [Changelog](rules/changelog.instructions.md), [Project status](rules/project-status.instructions.md), [Open issues](rules/open-issues.instructions.md) | The content of a project's `CHANGELOG.md`, `PROJECT-STATUS.md`, and `OPEN-ISSUES.md`. |
+| General customization | [`copilot-customization`](plugins/agent-team/skills/copilot-customization/SKILL.md) | Artifact choice, metadata, writing guidance, and review; moves to `agent-plugin-dev` in the next slice. |
+| Coordination | [`brief-subagent`](plugins/agent-team/skills/brief-subagent/SKILL.md), [`task-context`](plugins/agent-team/skills/task-context/SKILL.md), [`interview-me`](plugins/agent-team/skills/interview-me/SKILL.md), [`seed-task`](plugins/agent-team/skills/seed-task/SKILL.md) | Self-contained briefs, temporary state, intent clarification, and seeds for independent sessions. |
+| Execution | [`run-python`](plugins/agent-team/skills/run-python/SKILL.md), [`redshift`](plugins/agent-team/skills/redshift/SKILL.md), [`sql-server`](plugins/agent-team/skills/sql-server/SKILL.md) | Runtime selection and bounded, read-only database work. |
+| Scoped rules | [Markdown](plugins/agent-team/com.github.copilot/rules/markdown.instructions.md), [Python](plugins/agent-team/com.github.copilot/rules/python.instructions.md), [SQL](plugins/agent-team/com.github.copilot/rules/sql.instructions.md) | Conventions for Markdown documents, user-run task scripts, and read-only queries. |
+| Record rules | [Changelog](plugins/agent-team/com.github.copilot/rules/changelog.instructions.md), [Project status](plugins/agent-team/com.github.copilot/rules/project-status.instructions.md), [Open issues](plugins/agent-team/com.github.copilot/rules/open-issues.instructions.md) | The content of a project's `CHANGELOG.md`, `PROJECT-STATUS.md`, and `OPEN-ISSUES.md`. |
 
 General behavior belongs in agents and skills, not in language rules.
 `interview-me` is a user-only skill for starting an interview with any agent ad hoc; it is independent of `discuss`, which runs its own interview phase, so their overlapping question rules are intended.
 
 ## Plugin authoring
 
-The plugin changes only in this repository, the workbench.
-A project may hold its own skills, agents, and instructions written with [`copilot-customization`](skills/copilot-customization/SKILL.md), but nothing in a project joins the plugin's team; a capability that should work with the leads goes into the plugin.
+The packages change only in this repository, the workbench.
+A project may hold its own skills, agents, and instructions written with [`copilot-customization`](plugins/agent-team/skills/copilot-customization/SKILL.md), but nothing in a project joins the plugin's team; a capability that should work with the leads goes into `agent-team`.
 
 The repository skill [`build-plugin`](.github/skills/build-plugin/SKILL.md) holds the authoring method, the team contracts, and the packaging rules, and points to `copilot-customization` for the writing and the review questions.
-It stays outside the payload, because only the workbench builds plugin components.
-`copilot-customization` stays plugin-independent, so plugin conventions stay in `build-plugin`.
+It currently stays outside the payload; the next slice moves reusable authoring skills into `agent-plugin-dev`, leaves only discovery pointers under repository `.github/skills/`, and keeps team-specific contracts in repository-scoped instructions.
+`copilot-customization` stays plugin-independent.
 
 ## Repository lifecycle
 
-`develop` is the authoring branch, and `main` is the package-only distribution branch and the repository default.
-The `awieczork-tools` marketplace on `main` lists the root `copilot-workbench` plugin with source `./`; the version and descriptive metadata belong to `plugin.json`.
+`repo/marketplace-migration` holds the local migration, based on the recorded `main` commit with the archived `develop` tree transferred without merging unrelated histories.
+`develop` is frozen and preserved by the published annotated tag `archive/develop-before-marketplace`; the branch is not yet retired.
+`main` remains the package-only distribution branch and repository default, with the original `copilot-workbench` catalog entry until verified integration.
+After runtime acceptance and separate owner authorization, `main` will fast-forward to the full migration tree; later development uses cycle branches and squash integration.
+Commits, pushes, integration, releases, and branch retirement require separate authorization.
+Legacy tags and releases remain unchanged; future package versions belong to their manifests and use package-specific release tags.
 
 The repository is public for installation without repository credentials, not for external contributions or public support.
 The owner is the only repository collaborator; Issues, Projects, Discussions, and Wiki are disabled.
@@ -86,7 +97,7 @@ Secret scanning and secret push protection are enabled.
 GitHub Actions uses read-only token permissions by default and cannot approve pull requests; workflows from all external contributors require owner approval.
 Collaborator-only interaction restrictions also block external pull requests and comments while active ([OI-02](OPEN-ISSUES.md)).
 
-Keep repository instructions and authoring tools under `.github/` tracked on `develop`, because they reproduce the development environment on another machine.
+Keep repository instructions and authoring tools under `.github/` tracked in the full repository, because they reproduce the development environment on another machine.
 `.github/context/`, editor settings, and credentials remain Git-ignored local state.
 Public visibility applies to every branch and its history, regardless of what the package includes.
 
