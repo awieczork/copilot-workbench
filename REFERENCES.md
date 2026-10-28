@@ -11,6 +11,19 @@ Use the inspiration sources for structure, not as tone or output templates.
 | [VS Code Agent Plugins](https://code.visualstudio.com/docs/agent-customization/agent-plugins) | How VS Code discovers, installs, and loads a Copilot-format plugin. |
 | [GitHub plugin marketplaces](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-marketplace) and [marketplace reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference#marketplacejson) | Catalog location, metadata, and repository-relative plugin sources. |
 | [VS Code agent harnesses](https://code.visualstudio.com/docs/agents/run/agent-harnesses) | Copilot harness execution in Agent Host and client-dependent capabilities. |
+| [VS Code plugin authoring reference](https://code.visualstudio.com/docs/agents/reference/agent-plugin-reference) | Agent Plugins 1.0 root manifest, portable skills and MCP configuration, and Copilot-specific namespace locations. |
+| [Agent Plugins 1.0 manifest schema](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json) and [MCP schema](https://agent-plugins.org/schemas/1.0.0/mcp.schema.json) | Canonical identifiers and JSON Schema validation for both migration packages. |
+
+The 1.0 layout and schema sources were checked on 2026-10-28 for the migration.
+They define static contracts, not evidence that the installed Copilot harness runs namespaced components; OI-03 remains open.
+This check does not refresh the separate customization facts below.
+
+## Development tools
+
+| Resource | Relevance |
+| --- | --- |
+| [PyYAML documentation](https://pyyaml.org/wiki/PyYAMLDocumentation) | `safe_load` parses standard YAML types for static frontmatter validation without constructing arbitrary Python objects. |
+| [GitHub CLI release creation](https://cli.github.com/manual/gh_release_create) and [release listing](https://cli.github.com/manual/gh_release_list) | Selected-tag publication with `--verify-tag` and notes from standard input; a limited release list is not proof of complete absence. Checked on 2026-10-28. |
 
 ## Service configuration
 
@@ -22,11 +35,11 @@ Use the inspiration sources for structure, not as tone or output templates.
 
 | Resource | Relevance |
 | --- | --- |
-| [Models and pricing for GitHub Copilot](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) | Per-token prices and their context thresholds behind the order of the light ladder in `model-tiers.md`; last checked on 2026-10-16. |
+| [Models and pricing for GitHub Copilot](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) | Per-token prices and their context thresholds behind the order of the light ladder in the [model tiers](.github/instructions/model-tiers.instructions.md); last checked on 2026-10-16. |
 
 ## Customization and prompting guidance
 
-The plugin skill [`copilot-customization`](skills/copilot-customization/SKILL.md) ships without its authoring process, so its sources and refresh procedure live here.
+The plugin skill [`copilot-customization`](plugins/agent-plugin-dev/skills/copilot-customization/SKILL.md) ships without its authoring process, so its sources and refresh procedure live here.
 
 ### Sources
 
