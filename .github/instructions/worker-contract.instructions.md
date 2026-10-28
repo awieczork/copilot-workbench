@@ -1,3 +1,8 @@
+---
+description: "Use when authoring agent-team workers. Defines the existing helper, producer, and checker contracts. Not for entry agents or other packages."
+applyTo: "plugins/agent-team/com.github.copilot/agents/challenger.agent.md,plugins/agent-team/com.github.copilot/agents/data-explorer.agent.md,plugins/agent-team/com.github.copilot/agents/database-explorer.agent.md,plugins/agent-team/com.github.copilot/agents/developer.agent.md,plugins/agent-team/com.github.copilot/agents/explorer.agent.md,plugins/agent-team/com.github.copilot/agents/planner.agent.md,plugins/agent-team/com.github.copilot/agents/researcher.agent.md,plugins/agent-team/com.github.copilot/agents/reviewer.agent.md,plugins/agent-team/com.github.copilot/agents/ui-developer.agent.md"
+---
+
 # Worker contract
 
 A worker is a hidden subagent that performs one specialized task from a self-contained brief and returns one result to the delegating agent.
@@ -43,7 +48,7 @@ When the brief names a result file, write your result there before every return.
 
 - Write numbered phases in the role's terms.
 - Name the skill that holds access or procedure at the point where it loads, and do not restate its rules.
-- When the worker writes code, a query, or a plan, add the documentation line from `build-plugin`.
+- When the worker writes code, a query, or a plan, add the documentation line from [team conventions](team.instructions.md).
 - End with the completion condition.
 - Add a stop, in the role's terms, after three attempts at the same step without progress, that reports what was tried and what remains.
 - Return an out-of-role request as a blocker.

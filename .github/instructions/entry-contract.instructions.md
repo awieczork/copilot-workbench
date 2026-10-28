@@ -1,3 +1,8 @@
+---
+description: "Use when authoring agent-team entry agents. Defines the existing lead and chat contracts. Not for worker agents or other packages."
+applyTo: "plugins/agent-team/com.github.copilot/agents/lead.agent.md,plugins/agent-team/com.github.copilot/agents/data-lead.agent.md,plugins/agent-team/com.github.copilot/agents/discuss.agent.md"
+---
+
 # Entry contract
 
 An entry agent is an agent the user starts a conversation with: a lead that handles a task by delegating to workers, or a chat agent that shapes a request and hands it to a lead.
@@ -70,7 +75,7 @@ Add the role's domain phases where they run:
    Rerun the key check of each part, and when the change has several parts, run one check that exercises them together, without rerunning a producer's suite, because a check of one part does not see how it interacts with the others.
 5. **Deliver:** report in the output format, and stop at a condition stated in the role's terms under which the user has what they need.
 
-In the phase where the lead plans or builds the work, add the documentation line from `build-plugin`.
+In the phase where the lead plans or builds the work, add the documentation line from [team conventions](team.instructions.md).
 
 In the delegation phase, add these rules:
 
