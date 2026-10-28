@@ -7,6 +7,10 @@
         {
             "name": "agent-team",
             "source": "./plugins/agent-team"
+        },
+        {
+            "name": "agent-plugin-dev",
+            "source": "./plugins/agent-plugin-dev"
         }
     ]
 }

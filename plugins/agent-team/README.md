@@ -50,7 +50,6 @@ Source installation remains available: run **Chat: Install Plugin From Source** 
 | Skill | Purpose |
 | --- | --- |
 | `brief-subagent` | Supplies self-contained briefs for one-shot delegation and how to act on the status each worker returns. |
-| `copilot-customization` | Guides writing and reviewing Copilot instructions, skills, and agents. |
 | `interview-me` | Clarifies the user's intent before work continues; only the user invokes it. |
 | `redshift` | Runs read-only queries against user-provided Redshift targets, with an MCP-first workflow and a bounded Python fallback. |
 | `run-python` | Runs Python scripts and inline code through `uv`, with or without the project environment. |
