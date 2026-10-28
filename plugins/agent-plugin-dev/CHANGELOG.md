@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## [0.1.0] - 2026-10-28
+
+Runtime verification is waived by the owner; skill discovery, package coexistence, and repository pointer selection remain unverified in a real client.
+
 ### Added
 
 - The `copilot-customization` skill guides choosing, writing, and reviewing Copilot instructions, custom agents, and skills.
