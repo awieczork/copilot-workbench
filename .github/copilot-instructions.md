@@ -68,9 +68,8 @@ Never point a tracked file at content under `.github/context/`, because that fol
 
 ## Repository and release workflow
 
-- Keep `develop` frozen under `archive/develop-before-marketplace`; branch retirement requires separate authorization.
-- Continue the migration on `repo/marketplace-migration`. Published `main` keeps its old package until separately authorized fast-forward integration; follow [OI-03](../OPEN-ISSUES.md) for runtime-verification risk, and do not apply the later squash workflow to that migration.
-- After migration, use `/start-dev` for `plugin/<exact-name>` or `repo/<lowercase-kebab-topic>` cycles and `/merge-dev` for verified squash integration. Keep normal hooks and named effect permissions.
+- Preserve `archive/develop-before-marketplace`; local and remote `develop` are retired.
+- Use `/start-dev` for `plugin/<exact-name>` or `repo/<lowercase-kebab-topic>` cycles and `/merge-dev` for verified squash integration. Keep normal hooks and named effect permissions.
 - Keep canonical reusable skills in `plugins/agent-plugin-dev/`; `.github/skills/` holds only six matching discovery pointers. The four `.github/instructions/` contracts apply only to `agent-team` authoring.
 - Leave root and package Unreleased bullets to explicit `/commit-dev` requests. Prepare a package version and its versioned notes on the cycle before integration; `/publish-plugin` selects one package from clean full-repository `main` without creating a preparation commit.
 - Commit, push, integrate, tag, publish, delete a branch, or rewrite history only when the owner explicitly requests that effect, because implementation approval authorizes none of them. A release uses the selected package's `<name>/v<version>` tag and notes, with legacy `v*` version awareness only for `agent-team`.
