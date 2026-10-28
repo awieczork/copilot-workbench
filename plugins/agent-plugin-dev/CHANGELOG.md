@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- The package README identifies version `0.1.0` as published while retaining the unverified runtime warning.
+
 ## [0.1.0] - 2026-10-28
 
 Runtime verification is waived by the owner; skill discovery, package coexistence, and repository pointer selection remain unverified in a real client.
