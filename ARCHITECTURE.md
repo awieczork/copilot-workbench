@@ -29,8 +29,9 @@ Repository records and `.github/` authoring files stay outside package payloads,
 ### Package format
 
 The migration branch adopts [Agent Plugins 1.0](https://agent-plugins.org/): each package has a root `plugin.json` with the canonical `$schema`, portable `skills/`, optional root `mcp.json`, and Copilot-specific components under `com.github.copilot/`.
-The current `agent-team` version remains `0.1.3`; the development package starts at `0.1.0` without a release tag or versioned changelog entry. Release preparation is a later phase.
-Published `main` retains the root Copilot-format `copilot-workbench` package until runtime verification passes and the owner authorizes integration.
+Release preparation sets `agent-team` to `0.2.0` and `agent-plugin-dev` to `0.1.0`, each with versioned changelog notes; neither release is published.
+Published `main` retains the root Copilot-format `copilot-workbench` package until the owner separately authorizes integration.
+The owner waived runtime verification on 2026-10-28; the selected Agent Plugins 1.0 format remains unchanged and runtime support stays unverified.
 [OI-03](OPEN-ISSUES.md) remains open: schema and path checks do not prove Agent Host runtime support.
 The canonical [packaging guide](plugins/agent-plugin-dev/skills/build-plugin/references/packaging.md) and checker define static 1.0 checks; they do not prove runtime support.
 
@@ -89,8 +90,8 @@ Static checks cover package isolation, component identity collisions, and pointe
 
 `repo/marketplace-migration` holds the local migration, based on the recorded `main` commit with the archived `develop` tree transferred without merging unrelated histories.
 `develop` is frozen and preserved by the published annotated tag `archive/develop-before-marketplace`; the branch is not yet retired.
-`main` remains the package-only distribution branch and repository default, with the original `copilot-workbench` catalog entry until verified integration.
-After runtime acceptance and separate owner authorization, `main` will fast-forward to the full migration tree; later development uses cycle branches and squash integration.
+`main` remains the package-only distribution branch and repository default, with the original `copilot-workbench` catalog entry until authorized integration.
+After separate owner authorization, `main` will fast-forward to the full migration tree with runtime support still unverified; later development uses cycle branches and squash integration.
 Later cycles use `plugin/<exact-name>` or `repo/<lowercase-kebab-topic>`; local creation requires local `main` to equal cached `origin/main`, and dirty carry-over needs explicit permission.
 Commits use exact scoped paths and normal hooks; a commit request does not authorize a push.
 The later squash workflow verifies recorded base and source IDs, the expected tree, and the sole parent before a normal `main` push. Cleanup needs named deletion permission and remote-absence proof.

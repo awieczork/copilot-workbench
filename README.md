@@ -7,12 +7,12 @@ Each package has one purpose and bundles the resources it needs without requirin
 
 | Package | Purpose | Migration state |
 | --- | --- | --- |
-| [agent-team](plugins/agent-team/README.md) | Agents for software development and data analysis, with supporting skills, rules, and Model Context Protocol (MCP) configuration. | Relocated locally to `plugins/agent-team/`; runtime verification is pending. |
-| [agent-plugin-dev](plugins/agent-plugin-dev/README.md) | Six reusable customization, build, and development lifecycle skills. | Implemented locally at `plugins/agent-plugin-dev/`; runtime verification is pending. |
+| [agent-team](plugins/agent-team/README.md) | Agents for software development and data analysis, with supporting skills, rules, and Model Context Protocol (MCP) configuration. | Version `0.2.0` is prepared locally; unpublished and runtime support unverified. |
+| [agent-plugin-dev](plugins/agent-plugin-dev/README.md) | Six reusable customization, build, and development lifecycle skills. | Version `0.1.0` is prepared locally; unpublished and runtime support unverified. |
 
 The [catalog](.github/plugin/marketplace.json) lists the packages present on this branch.
 The `agent-team` README holds its component inventory and runtime requirements.
-It also gives package-specific installation steps, gated on runtime verification and publication; this root guide owns the repository migration instructions.
+It also gives package-specific installation steps, gated on authorized publication with runtime support still unverified; this root guide owns the repository migration instructions.
 The development-package README lists its six skills and execution requirements.
 
 ## Migration status
@@ -20,11 +20,13 @@ The development-package README lists its six skills and execution requirements.
 The local `repo/marketplace-migration` branch adopts Agent Plugins 1.0; it is not a published replacement for the existing plugin.
 Published `main` still serves the root Copilot-format `copilot-workbench` package.
 [OI-03](OPEN-ISSUES.md) remains open until the agents and rules pass checks in a real Copilot Agent Host session.
+The owner waived runtime verification on 2026-10-28 and continued release preparation without changing the selected format.
+This waiver is not evidence of runtime support; namespaced agent and rule loading, skill discovery, package coexistence, and repository pointer selection remain unverified.
 See [Project status](PROJECT-STATUS.md) for the remaining phases and [Architecture](ARCHITECTURE.md) for package boundaries.
 
 ## Installation after publication
 
-Use the following steps only after runtime verification and authorized integration publish the packages on `main`.
+Use the following steps only after separately authorized integration publishes the packages on `main`, with runtime support still unverified.
 Run each command separately in a VS Code chat session with the **Copilot** harness selected.
 
 1. Uninstall the original `copilot-workbench` before installing `agent-team`, so both copies do not load together.
@@ -34,7 +36,8 @@ Run each command separately in a VS Code chat session with the **Copilot** harne
    /plugin uninstall copilot-workbench@awieczork-tools
    ```
 
-   For an installation made through the Agent Customizations editor, uninstall it there instead; that editor and `/plugin` use separate inventories.
+   For an installation made through the Extensions view, the Agent Customizations editor, or **Chat: Install Plugin From Source**, uninstall it in the **Agent Plugins - Installed** view or the Agent Customizations editor.
+   The editor and `/plugin` use separate inventories; manage an installation through the interface where you installed it.
 1. Register the marketplace if it is not already registered, then refresh it:
 
    ```text
