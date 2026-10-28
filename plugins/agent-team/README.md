@@ -96,14 +96,14 @@ Workers run as subagents of an allowed entry agent or producer.
 | `awslabs.redshift-mcp-server` | `uvx` | Provides Redshift query and catalog tools. |
 | `context7` | `npx` | Provides current library documentation; uses `CONTEXT7_API_KEY` when set, or anonymous access with lower rate limits. |
 
-The configuration is in [.mcp.json](.mcp.json).
+The configuration is in [mcp.json](mcp.json).
 The SQL Server tools and the Redshift fallback runner can accept writes; the skills and agents authorize read-only work, and read-only logins provide an additional boundary.
 
 ## Context7 API key
 
 Create an API key in the [Context7 dashboard](https://context7.com/dashboard).
 Set `CONTEXT7_API_KEY` in the environment on the machine that runs the Context7 MCP server, before VS Code and Agent Host start.
-The packaged server reads this variable directly; no change to [.mcp.json](.mcp.json) is required.
+The packaged server reads this variable directly; no change to [mcp.json](mcp.json) is required.
 Keep the real key out of chat and repository files.
 
 Set it in the environment that Agent Host starts from, and fully quit and restart VS Code after a change; for a remote, Windows Subsystem for Linux (WSL), or container session, set it where the MCP server runs.
