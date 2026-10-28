@@ -1,7 +1,7 @@
 # agent-plugin-dev
 
 `agent-plugin-dev` provides reusable plugin development skills in the Agent Plugins 1.0 format.
-Version `0.1.0` is prepared on the migration branch, not yet published or verified in a real client.
+Version `0.1.0` is published in the `awieczork-tools` marketplace with the `agent-plugin-dev/v0.1.0` tag and GitHub release; runtime support remains unverified.
 The owner waived runtime verification on 2026-10-28; skill discovery, package coexistence, and repository pointer selection remain unverified.
 
 ## Skills
