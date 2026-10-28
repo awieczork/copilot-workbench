@@ -1,3 +1,8 @@
+---
+description: "Use when choosing agent-team worker models. Preserves the existing worker model tiers. Not for entry agents or other packages."
+applyTo: "plugins/agent-team/com.github.copilot/agents/challenger.agent.md,plugins/agent-team/com.github.copilot/agents/data-explorer.agent.md,plugins/agent-team/com.github.copilot/agents/database-explorer.agent.md,plugins/agent-team/com.github.copilot/agents/developer.agent.md,plugins/agent-team/com.github.copilot/agents/explorer.agent.md,plugins/agent-team/com.github.copilot/agents/planner.agent.md,plugins/agent-team/com.github.copilot/agents/researcher.agent.md,plugins/agent-team/com.github.copilot/agents/reviewer.agent.md,plugins/agent-team/com.github.copilot/agents/ui-developer.agent.md"
+---
+
 # Model tiers
 
 A worker's `model` list puts its default model first; VS Code runs the first available entry, so every later entry is also an availability fallback.
