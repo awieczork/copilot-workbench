@@ -1,7 +1,13 @@
-# copilot-workbench
+# agent-team
 
-`copilot-workbench` is a public, owner-maintained Copilot-format plugin for GitHub Copilot in VS Code, using the Copilot harness in Agent Host.
+`agent-team` is a public, owner-maintained Agent Plugins 1.0 package for GitHub Copilot in VS Code, using the Copilot harness in Agent Host.
 It bundles reusable skills, custom agents, scoped rules, and Model Context Protocol (MCP) server configuration for software development and data analysis.
+
+## Migration status
+
+This package is present on the `repo/marketplace-migration` branch; it is not a published replacement for the original `copilot-workbench` plugin.
+Published `main` still serves the original root Copilot-format package.
+Agent Host loading of this package's namespaced agents and rules remains unverified; static package checks do not establish client compatibility.
 
 ## Maintenance
 
@@ -15,17 +21,31 @@ Public access supports installation without repository credentials; this reposit
 - Node.js with `npx` on `PATH` for the context7 MCP server.
 - The SQL Server extension `ms-mssql.mssql` or the Redshift MCP server, locally configured access, and read-only database permissions for database work.
 
-## Installation
+## Installation after publication
+
+Use these steps only after runtime verification passes and separately authorized integration publishes this package on `main`.
+Run each `/plugin` command separately in a VS Code chat session with the **Copilot** harness selected.
+
+### Replace the original plugin
+
+Uninstall the original `copilot-workbench` before installing `agent-team`, so both copies do not load together.
+For an installation made through `/plugin`, run:
+
+```text
+/plugin uninstall copilot-workbench@awieczork-tools
+```
+
+For an installation made through the Extensions view, the Agent Customizations editor, or **Chat: Install Plugin From Source**, uninstall it in the **Agent Plugins - Installed** view or the Agent Customizations editor.
+The editor and `/plugin` use separate plugin inventories; manage an installation through the interface where you installed it.
 
 ### Install from the marketplace
 
-The `awieczork-tools` marketplace lists this repository's root plugin.
-
-In a VS Code chat session with the **Copilot** harness selected, run these commands one at a time:
+Register the marketplace if it is not already registered, then refresh it and install the package:
 
 ```text
 /plugin marketplace add awieczork/copilot-workbench
-/plugin install copilot-workbench@awieczork-tools
+/plugin marketplace update awieczork-tools
+/plugin install agent-team@awieczork-tools
 /plugin list
 ```
 
@@ -33,15 +53,11 @@ To update, refresh the catalog and then update the plugin:
 
 ```text
 /plugin marketplace update awieczork-tools
-/plugin update copilot-workbench@awieczork-tools
+/plugin update agent-team@awieczork-tools
 ```
 
 Manage this installation through `/plugin`.
-
-### Replace an installation from source
-
-If you installed the plugin with **Chat: Install Plugin From Source**, uninstall that copy in the Agent Customizations editor before installing the marketplace copy, so that both copies do not load together.
-Source installation remains available: run **Chat: Install Plugin From Source** from the Command Palette and enter `https://github.com/awieczork/copilot-workbench`.
+The [VS Code plugin documentation](https://code.visualstudio.com/docs/agent-customization/agent-plugins) describes plugin management and its client requirements.
 
 ## Package contents
 
@@ -59,8 +75,8 @@ Source installation remains available: run **Chat: Install Plugin From Source** 
 
 ### Agents
 
-Entry agents appear in the agent picker.
-Workers run as subagents of an allowed entry agent or producer.
+The intended runtime behavior is for entry agents to appear in the agent picker and workers to run as subagents of an allowed entry agent or producer.
+Agent Host loading of these packaged agents remains unverified.
 
 | Agent | Kind | Purpose |
 | --- | --- | --- |

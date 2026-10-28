@@ -6,6 +6,10 @@
 
 - The `agent-team` package excludes `copilot-customization`; the separate `agent-plugin-dev` package supplies the skill.
 
+### Fixed
+
+- The `agent-team` README identifies the migration package and gates installation and updates on runtime verification and publication.
+
 ## [0.1.3] - 2026-10-16
 
 ### Added
