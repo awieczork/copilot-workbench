@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- The package README identifies version `0.2.0` as published while retaining the unverified runtime warning.
+
 ## [0.2.0] - 2026-10-28
 
 ### Changed

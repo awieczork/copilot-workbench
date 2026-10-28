@@ -3,10 +3,10 @@
 `agent-team` is a public, owner-maintained Agent Plugins 1.0 package for GitHub Copilot in VS Code, using the Copilot harness in Agent Host.
 It bundles reusable skills, custom agents, scoped rules, and Model Context Protocol (MCP) server configuration for software development and data analysis.
 
-## Migration status
+## Publication status
 
-Version `0.2.0` is prepared on the `repo/marketplace-migration` branch; it is not a published replacement for the original `copilot-workbench` plugin.
-Published `main` still serves the original root Copilot-format package.
+Version `0.2.0` is published in the `awieczork-tools` marketplace with the `agent-team/v0.2.0` tag and GitHub release.
+Published `main` serves this package in place of the original root Copilot-format `copilot-workbench` package.
 Agent Host loading of this package's namespaced agents and rules remains unverified; static package checks do not establish client compatibility.
 The owner waived runtime verification on 2026-10-28, not the runtime risk.
 VS Code 1.142.0 did not run namespaced plugin agents or list namespaced agents and rules in the editor ([runtime issue](https://github.com/github/copilot-cli/issues/4655), [editor issue](https://github.com/microsoft/vscode/issues/334153)); this package has not been tested in a later client.
@@ -23,9 +23,9 @@ Public access supports installation without repository credentials; this reposit
 - Node.js with `npx` on `PATH` for the context7 MCP server.
 - The SQL Server extension `ms-mssql.mssql` or the Redshift MCP server, locally configured access, and read-only database permissions for database work.
 
-## Installation after publication
+## Installation
 
-Use these steps only after separately authorized integration publishes this package on `main`, with runtime support still unverified.
+The following steps manage the published package; runtime support remains unverified.
 Run each `/plugin` command separately in a VS Code chat session with the **Copilot** harness selected.
 
 ### Replace the original plugin
