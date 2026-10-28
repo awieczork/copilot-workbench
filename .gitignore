@@ -1,0 +1,10 @@
+/CLAUDE.md
+/.vscode/
+/.env
+.env.*
+/.github/context/
+
+.venv/
+__pycache__/
+*.py[cod]
+.ruff_cache/
