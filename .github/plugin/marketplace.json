@@ -5,8 +5,8 @@
     },
     "plugins": [
         {
-            "name": "copilot-workbench",
-            "source": "./"
+            "name": "agent-team",
+            "source": "./plugins/agent-team"
         }
     ]
 }
