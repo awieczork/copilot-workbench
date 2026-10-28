@@ -5,9 +5,11 @@ It bundles reusable skills, custom agents, scoped rules, and Model Context Proto
 
 ## Migration status
 
-This package is present on the `repo/marketplace-migration` branch; it is not a published replacement for the original `copilot-workbench` plugin.
+Version `0.2.0` is prepared on the `repo/marketplace-migration` branch; it is not a published replacement for the original `copilot-workbench` plugin.
 Published `main` still serves the original root Copilot-format package.
 Agent Host loading of this package's namespaced agents and rules remains unverified; static package checks do not establish client compatibility.
+The owner waived runtime verification on 2026-10-28, not the runtime risk.
+VS Code 1.142.0 did not run namespaced plugin agents or list namespaced agents and rules in the editor ([runtime issue](https://github.com/github/copilot-cli/issues/4655), [editor issue](https://github.com/microsoft/vscode/issues/334153)); this package has not been tested in a later client.
 
 ## Maintenance
 
@@ -23,7 +25,7 @@ Public access supports installation without repository credentials; this reposit
 
 ## Installation after publication
 
-Use these steps only after runtime verification passes and separately authorized integration publishes this package on `main`.
+Use these steps only after separately authorized integration publishes this package on `main`, with runtime support still unverified.
 Run each `/plugin` command separately in a VS Code chat session with the **Copilot** harness selected.
 
 ### Replace the original plugin
