@@ -20,17 +20,16 @@ The [pillars](.github/copilot-instructions.md#pillars) set the vision for its de
 | Local environment | Credentials, saved connections, service configuration, and runtime dependencies. |
 | Temporary task state | Session and delegated-work state in the layout of [`task-context`](plugins/agent-team/skills/task-context/SKILL.md). |
 
-On `repo/marketplace-migration`, the `agent-team` payload is [plugin.json](plugins/agent-team/plugin.json), [mcp.json](plugins/agent-team/mcp.json), `com.github.copilot/agents/`, `com.github.copilot/rules/`, `skills/` with their resources, and package [README.md](plugins/agent-team/README.md) and [CHANGELOG.md](plugins/agent-team/CHANGELOG.md).
+The `agent-team` payload is [plugin.json](plugins/agent-team/plugin.json), [mcp.json](plugins/agent-team/mcp.json), `com.github.copilot/agents/`, `com.github.copilot/rules/`, `skills/` with their resources, and package [README.md](plugins/agent-team/README.md) and [CHANGELOG.md](plugins/agent-team/CHANGELOG.md).
 The [marketplace catalog](.github/plugin/marketplace.json) lists `agent-team` and `agent-plugin-dev` with sources `./plugins/agent-team` and `./plugins/agent-plugin-dev`.
 Each package has one purpose and bundles the resources it needs, without requiring the other package.
 Packages hold no project-specific datasets, database targets, credentials, or absolute paths.
-Repository records and `.github/` authoring files stay outside package payloads, even when the full repository becomes the distribution source.
+Repository records and `.github/` authoring files stay outside package payloads in the full-repository distribution source.
 
 ### Package format
 
-The migration branch adopts [Agent Plugins 1.0](https://agent-plugins.org/): each package has a root `plugin.json` with the canonical `$schema`, portable `skills/`, optional root `mcp.json`, and Copilot-specific components under `com.github.copilot/`.
-Release preparation sets `agent-team` to `0.2.0` and `agent-plugin-dev` to `0.1.0`, each with versioned changelog notes; neither release is published.
-Published `main` retains the root Copilot-format `copilot-workbench` package until the owner separately authorizes integration.
+Both packages use [Agent Plugins 1.0](https://agent-plugins.org/): each has a root `plugin.json` with the canonical `$schema`, portable `skills/`, optional root `mcp.json`, and Copilot-specific components under `com.github.copilot/`.
+Published `main` serves `agent-team` `0.2.0` and `agent-plugin-dev` `0.1.0`, each with its own versioned changelog notes, namespaced tag, and GitHub release.
 The owner waived runtime verification on 2026-10-28; the selected Agent Plugins 1.0 format remains unchanged and runtime support stays unverified.
 [OI-03](OPEN-ISSUES.md) remains open: schema and path checks do not prove Agent Host runtime support.
 The canonical [packaging guide](plugins/agent-plugin-dev/skills/build-plugin/references/packaging.md) and checker define static 1.0 checks; they do not prove runtime support.
@@ -88,13 +87,13 @@ Static checks cover package isolation, component identity collisions, and pointe
 
 ## Repository lifecycle
 
-`repo/marketplace-migration` holds the local migration, based on the recorded `main` commit with the archived `develop` tree transferred without merging unrelated histories.
-`develop` is frozen and preserved by the published annotated tag `archive/develop-before-marketplace`; the branch is not yet retired.
-`main` remains the package-only distribution branch and repository default, with the original `copilot-workbench` catalog entry until authorized integration.
-After separate owner authorization, `main` will fast-forward to the full migration tree with runtime support still unverified; later development uses cycle branches and squash integration.
-Later cycles use `plugin/<exact-name>` or `repo/<lowercase-kebab-topic>`; local creation requires local `main` to equal cached `origin/main`, and dirty carry-over needs explicit permission.
+The migration transferred the archived `develop` tree without merging unrelated histories and fast-forwarded `main` to the reviewed full-repository commit `4b91750ca6db1e51b7972b7f6dda6e3853a7c581` under explicit owner authorization.
+Both package release tags point to that commit; later record-only commits do not move those tags.
+Local and remote `develop` are retired; the published annotated tag `archive/develop-before-marketplace` preserves their frozen tip.
+`main` is the full-repository distribution branch and repository default; the catalog lists only `agent-team` and `agent-plugin-dev`, with no legacy package alias.
+Development cycles use `plugin/<exact-name>` or `repo/<lowercase-kebab-topic>` and squash integration; local creation requires local `main` to equal cached `origin/main`, and dirty carry-over needs explicit permission.
 Commits use exact scoped paths and normal hooks; a commit request does not authorize a push.
-The later squash workflow verifies recorded base and source IDs, the expected tree, and the sole parent before a normal `main` push. Cleanup needs named deletion permission and remote-absence proof.
+The squash workflow verifies recorded base and source IDs, the expected tree, and the sole parent before a normal `main` push. Cleanup needs named deletion permission and remote-absence proof.
 Prepare package versions and versioned notes on the cycle before integration, because the marketplace serves `main` immediately.
 Publication selects one catalog package from clean full-repository `main`, uses `<package>/v<version>` tags and that package's notes, and requires separate confirmation for tags, pushes, and releases.
 Release versions must increase; only `agent-team` also inherits the legacy `v*` version floor. The root changelog owns repository changes, and package changelogs own package history.
@@ -103,7 +102,8 @@ Legacy tags and releases remain unchanged; future package versions belong to the
 
 The repository is public for installation without repository credentials, not for external contributions or public support.
 The owner is the only repository collaborator; Issues, Projects, Discussions, and Wiki are disabled.
-Branch rules prevent deletion and force pushes on `main` and `develop`, without required pull requests, reviews, or status checks, so direct authoring and package publication remain available.
+Branch rules prevent deletion and force pushes on `main`, without required pull requests, reviews, or status checks, so direct authoring and package publication remain available.
+The authorized retirement removed only the `develop` selector from ruleset `25154483`; `main` protection is unchanged.
 Secret scanning and secret push protection are enabled.
 GitHub Actions uses read-only token permissions by default and cannot approve pull requests; workflows from all external contributors require owner approval.
 Collaborator-only interaction restrictions also block external pull requests and comments while active ([OI-02](OPEN-ISSUES.md)).
