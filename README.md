@@ -12,7 +12,7 @@ Each package has one purpose and bundles the resources it needs without requirin
 
 The [catalog](.github/plugin/marketplace.json) lists the packages present on this branch.
 The `agent-team` README holds its component inventory and runtime requirements.
-Its legacy installation text is preserved until the team-documentation slice; use this root guide for the migration.
+It also gives package-specific installation steps, gated on runtime verification and publication; this root guide owns the repository migration instructions.
 The development-package README lists its six skills and execution requirements.
 
 ## Migration status

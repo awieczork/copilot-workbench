@@ -81,7 +81,7 @@ A project may hold its own skills, agents, and instructions written with [`copil
 The canonical [`build-plugin`](plugins/agent-plugin-dev/skills/build-plugin/SKILL.md) owns general authoring, package checks, and generic skill guidance, and uses `copilot-customization` for writing and review.
 Repository `.github/skills/` contains only six discovery pointers to the development package, with matching discovery metadata and one link per file; implementations, scripts, tests, and references stay canonical in that package.
 The scoped [team conventions](.github/instructions/team.instructions.md), [entry contract](.github/instructions/entry-contract.instructions.md), [worker contract](.github/instructions/worker-contract.instructions.md), and [model tiers](.github/instructions/model-tiers.instructions.md) govern only `agent-team` authoring.
-No package depends on those workbench instructions to run. Team behavior remains unchanged in this slice; semantic alignment is a later phase.
+No package depends on those workbench instructions to run. Static conformance checks found no mismatch with these contracts, and `agent-team` behavior remains unchanged.
 `copilot-customization` stays plugin-independent.
 Static checks cover package isolation, component identity collisions, and pointer shape; real discovery and co-installed selection remain client-runtime checks.
 
