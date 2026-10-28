@@ -11,7 +11,7 @@ applyTo: "OPEN-ISSUES.md"
 ## Classify an issue
 
 - Add an issue only when repository evidence or a user decision shows that it is unresolved.
-- Add it only when it affects work beyond the active task, because the [`task-context`](../skills/task-context/SKILL.md) task folder holds the rest.
+- Add it only when it affects work beyond the active task, because the [`task-context`](../../skills/task-context/SKILL.md) task folder holds the rest.
 - Use `Decision needed` for an unresolved user decision, `Missing input` for a working fact that the lowest-cost read-only check could not establish, and `Verified limitation` for a confirmed constraint that still applies.
 
 ## Record a row
