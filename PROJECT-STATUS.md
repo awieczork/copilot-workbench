@@ -3,14 +3,14 @@
 - State: `active`
 - Updated: 2026-10-28
 - Objective: Migrate `copilot-workbench` to the `awieczork-tools` marketplace with self-contained `agent-team` and `agent-plugin-dev` Agent Plugins 1.0 packages for VS Code with the Copilot harness in Agent Host.
-- Focus: Obtain separate authorization for an optional push of the accepted Slice 3 documentation commits; `agent-team` behavior and package configuration are preserved. Published `main` remains unchanged, and [OI-03](OPEN-ISSUES.md) still requires real-client runtime verification before integration.
+- Focus: Obtain the exact effect permissions for fast-forward integration and publication of `agent-team` `0.2.0` and `agent-plugin-dev` `0.1.0`. The owner waived runtime verification, but runtime support stays unverified and [OI-03](OPEN-ISSUES.md) remains open.
 
 ## Roadmap
 
-1. `active` Slice 3: confirm contract alignment and correct package documentation without changing `agent-team` behavior.
-	1. [ ] Push `repo/marketplace-migration` only if separately authorized; this step is optional.
-1. `planned` Slice 4: verify each package alone, both packages together, and repository pointer discovery in a real client; resolve OI-03 from the results.
-1. `planned` Slice 5: prepare package releases and refresh migration documentation before integration into `main`, then verify marketplace installation and updates under separate publication permissions.
+1. `active` Slice 5: integrate and publish the prepared packages with the runtime-verification waiver and separate effect permissions.
+	1. [ ] Fast-forward `main` to the migration tree and push only after separate authorization.
+	1. [ ] Publish each selected package's tag and release only after separate authorization.
+	1. [ ] Check marketplace installation and updates only after separate client-effect authorization; do not treat unrun checks as passed.
 1. `planned` Slice 6: retire `develop` after archive verification and separate ruleset and branch-deletion authorization.
 
 ## Blockers
