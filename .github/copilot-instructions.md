@@ -1,6 +1,6 @@
 # copilot-workbench
 
-This public, owner-maintained repository is the authoring workspace for a Copilot-format agent plugin for GitHub Copilot in VS Code.
+This public, owner-maintained repository is the authoring workspace for two Agent Plugins 1.0 packages in the `awieczork-tools` marketplace for GitHub Copilot in VS Code.
 Keep reusable package capabilities separate from repository maintenance and local configuration.
 The owner builds the plugin for their own use and is its only user, so design, guide, and review it for its intended use, not for misuse or hypothetical users.
 
@@ -57,7 +57,7 @@ Keep each fact in the record that owns it, and update that record in the same ch
 - [PROJECT-STATUS.md](../PROJECT-STATUS.md): the sole roadmap of current and planned work; read it before continuing staged work.
 - [OPEN-ISSUES.md](../OPEN-ISSUES.md): unresolved decisions, missing inputs, and verified limitations that affect the work.
 - [REFERENCES.md](../REFERENCES.md): external sources behind the design and its product facts, consulted when specifying a new component; recheck the source behind a fact before changing the fact.
-- [README.md](../README.md): the inventory of plugin components.
+- [README.md](../README.md): the marketplace package inventory; each package README owns its component inventory.
 
 Never point a tracked file at content under `.github/context/`, because that folder is untracked and its content is absent from every other clone; move the needed facts into the tracked file instead.
 
@@ -68,6 +68,9 @@ Never point a tracked file at content under `.github/context/`, because that fol
 
 ## Repository and release workflow
 
-- Author on `develop`; `publish-plugin` owns package-only `main`.
-- Leave [CHANGELOG.md](../CHANGELOG.md) to `commit-dev`, which writes the `## Unreleased` bullets of each commit group, and to `publish-plugin`, which turns them into the versioned entry.
-- Commit, push, tag, publish, or rewrite history only when the owner explicitly requests it, because implementation approval does not authorize publication; a commit on `develop` goes through `/commit-dev` and a release through `/publish-plugin`, which the owner runs.
+- Keep `develop` frozen under `archive/develop-before-marketplace`; branch retirement requires separate authorization.
+- Continue the migration on `repo/marketplace-migration`. Published `main` keeps its old package until runtime acceptance and separately authorized fast-forward integration; do not apply the later squash workflow to that migration.
+- After migration, use `/start-dev` for `plugin/<exact-name>` or `repo/<lowercase-kebab-topic>` cycles and `/merge-dev` for verified squash integration. Keep normal hooks and named effect permissions.
+- Keep canonical reusable skills in `plugins/agent-plugin-dev/`; `.github/skills/` holds only six matching discovery pointers. The four `.github/instructions/` contracts apply only to `agent-team` authoring.
+- Leave root and package Unreleased bullets to explicit `/commit-dev` requests. Prepare a package version and its versioned notes on the cycle before integration; `/publish-plugin` selects one package from clean full-repository `main` without creating a preparation commit.
+- Commit, push, integrate, tag, publish, delete a branch, or rewrite history only when the owner explicitly requests that effect, because implementation approval authorizes none of them. A release uses the selected package's `<name>/v<version>` tag and notes, with legacy `v*` version awareness only for `agent-team`.
