@@ -2,13 +2,20 @@
 
 ## Unreleased
 
+## [0.2.0] - 2026-10-28
+
+### Changed
+
+- The `agent-team` package replaces `copilot-workbench` in the `awieczork-tools` marketplace with the Agent Plugins 1.0 layout and preserved team and database behavior.
+- Agent Host loading of the namespaced agents and rules remains unverified under the owner's runtime-verification waiver.
+
 ### Removed
 
 - The `agent-team` package excludes `copilot-customization`; the separate `agent-plugin-dev` package supplies the skill.
 
 ### Fixed
 
-- The `agent-team` README identifies the migration package and gates installation and updates on runtime verification and publication.
+- The `agent-team` README identifies the migration package, states the unverified runtime risk, and gates installation and updates on authorized publication.
 
 ## [0.1.3] - 2026-10-16
 
