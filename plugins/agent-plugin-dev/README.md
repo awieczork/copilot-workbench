@@ -22,7 +22,7 @@ Lifecycle commands use Git; merge verification requires `git merge-tree --write-
 Path screening uses Bash and GNU `stat`; the release wrapper uses Bash, and confirmed publication uses GitHub CLI (`gh`) with existing local authentication.
 Tests use disposable repositories and local bare remotes, not the owner's services or credentials.
 
-This package ships no agents, scoped rules, or Model Context Protocol (MCP) configuration and does not require `agent-team`.
+This package ships no agents, scoped rules, or Model Context Protocol (MCP) configuration and does not require another plugin.
 Use the tools of the current agent for documentation lookup.
 
 ## Maintenance

@@ -21,16 +21,26 @@ Review the changed component within the package as well as on its own, and updat
 1. Select one explicitly requested package under `plugins/<name>/` and inspect its catalog entry before editing. For an existing package, confirm the matching entry; for a new package, add the matching `./plugins/<name>` entry to `.github/plugin/marketplace.json` in the same change.
 2. Read [packaging](references/packaging.md) when changing a manifest, package layout, or component path.
 3. Read [the skill contract](references/skill-contract.md) when creating or revising a skill.
-4. Put the portable root manifest at `plugins/<name>/plugin.json`, portable skills in `skills/`, and MCP configuration in `mcp.json`.
-5. Put Copilot-specific agents and rules under `com.github.copilot/agents/` and `com.github.copilot/rules/`; keep optional commands and hooks under the same namespace.
-6. Keep package resources inside the selected plugin directory and link to local files with paths that resolve from the linking file.
-7. Resolve [the checker](scripts/check_package.py) from this skill's loaded location, then run `uv run --no-project` with that absolute script path from the target repository. An optional final argument selects another repository root. Run the tests in [test_check_package.py](tests/test_check_package.py) with `uv run --no-project --with pyyaml python -m unittest discover -s` followed by the absolute test-directory path.
+4. Complete and validate one component before starting the next, using the loaded contracts for its location and content.
+
+## Static validation
+
+Resolve [the checker](scripts/check_package.py) from this skill's loaded location, not from the target repository.
+From the target repository root, run `uv run --no-project` followed by the checker's absolute path; an optional final argument selects another repository root.
+The script declares Python and PyYAML dependencies inline.
+
+Exit `0` prints a static-check success message; it does not establish client installation or runtime compatibility.
+Exit `1` prints up to 50 `path: message` errors to standard output, with each message limited to 240 characters and a count of omitted errors.
+Exit `2` reports incorrect arguments to standard error.
+Repair failures caused by the change and rerun the checker.
+
+When changing the checker, run [its tests](tests/test_check_package.py) with `uv run --no-project --with pyyaml python -m unittest discover -s` followed by the absolute test-directory path.
 
 ## Boundaries
 
 - Keep edits to an existing package scoped to that package. Creating an explicitly requested new plugin also includes its matching catalog entry in the same change.
 - Do not add a root `plugin.json` or an unrequested sample or placeholder package. A catalog must list at least one real package.
-- Treat the checker as a local static scaffold check; a successful run does not establish client installation or runtime compatibility.
+- Keep required resources inside the selected package and use relative links that resolve from the linking file.
 - Use one package's own authoring contracts and do not impose a team, worker, or model taxonomy on other plugins.
 
 The work is complete when the selected package passes the static checker and every requested component is present at its Agent Plugins 1.0 location.

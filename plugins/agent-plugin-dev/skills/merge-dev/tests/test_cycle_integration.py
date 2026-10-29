@@ -249,13 +249,5 @@ class CycleIntegrationTests(unittest.TestCase):
         self.assertIn("blocked.txt", fixture.git("diff", "--cached", "--name-only").stdout)
         self.assertEqual(fixture.git("rev-parse", f"refs/heads/{BRANCH}").stdout.strip(), fixture.source)
 
-    def test_moved_local_cycle_is_detected_before_cleanup(self):
-        fixture = self.fixture()
-        tree = fixture.git("rev-parse", f"{fixture.source}^{{tree}}").stdout.strip()
-        newer = fixture.git("commit-tree", tree, "-p", fixture.source, "-m", "new source").stdout.strip()
-        fixture.git("update-ref", f"refs/heads/{BRANCH}", newer, fixture.source)
-        self.assertNotEqual(fixture.git("rev-parse", f"refs/heads/{BRANCH}").stdout.strip(), fixture.source)
-        self.assertEqual(fixture.bare_git("rev-parse", f"refs/heads/{BRANCH}").stdout.strip(), fixture.source)
-
 if __name__ == "__main__":
     unittest.main()

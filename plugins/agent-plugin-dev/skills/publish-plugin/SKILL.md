@@ -7,7 +7,8 @@ disable-model-invocation: true
 
 # Publish one plugin
 
-Prepare or publish exactly one selected catalog plugin from a clean, committed `main` branch.
+Check readiness or publish exactly one selected catalog plugin from a clean, committed `main` branch.
+As a subagent, return required owner questions to the delegating agent.
 
 Prepare versions and versioned notes on the cycle before integration, using the bundled [versioned-notes format](references/versioned-notes.md).
 If preparation changes the project roadmap, use [the status format](references/project-status.md) on that cycle; do not record a release as complete before publication is verified.
@@ -16,40 +17,44 @@ This publication procedure does not prepare a commit or change records on `main`
 ## Procedure
 
 1. Require one exact plugin name from `.github/plugin/marketplace.json`; refuse an empty catalog, an unlisted name, or an all-plugin request.
-2. Use [build-plugin](../build-plugin/SKILL.md) for static package validation of the target repository; stop on a reported failure.
-3. Obtain owner authorization for the repository's normal remote refresh/review and confirm it has updated local `refs/remotes/origin/main`; the helper checks this cached ref only and cannot establish live remote freshness.
+2. Resolve the [package checker](../build-plugin/scripts/check_package.py) from this skill's loaded location, then run `uv run --no-project` with its absolute path from the target repository root. Stop on failure; this is static validation, not the `build-plugin` authoring workflow.
+3. Obtain owner authorization for `git fetch origin` and review the fetched state before using cached `refs/remotes/origin/main`; the helper checks this cached ref only and cannot establish live remote freshness.
 4. Resolve [release.sh](scripts/release.sh) from this skill's loaded location, then run `bash` with its absolute path and `preflight <plugin-name>` from the target repository root. Stop on failure.
-5. Run the same installed wrapper with `notes <plugin-name>` and show the selected version, `<plugin-name>/v<version>` tag, full `main` commit ID, and package-local notes for review.
-6. With authorized read-only remote access, require live remote `main` to equal the reviewed commit. Query remote tags successfully and require the selected tag to be absent and the version to exceed every selected-package version tag; include legacy `vMAJOR.MINOR.PATCH` tags only for `agent-team`. Establish release absence through a successful complete release listing, not a failed query or an incomplete first page. Stop if freshness, identity, or absence is unknown. Obtain explicit owner confirmation naming the plugin, version, reviewed commit, local tag creation, that tag's push, and GitHub release creation before any publication effect.
-7. Recheck clean `main`, commit equality, and tag/release absence after confirmation. Create an annotated tag on that recorded full commit ID without `--force`, push only the exact tag with automatic tag following disabled, and create the GitHub release with `--verify-tag` and the reviewed package notes.
-8. If tag creation, push, or release creation fails, report the completed effects and stop; never delete, move, force, or silently retry a tag or release.
+5. Run the same installed wrapper with `notes <plugin-name>` to capture the package-local notes. Read the version from the selected package's manifest and resolve the current full commit ID with `git rev-parse --verify HEAD^{commit}`. Show that version, `<plugin-name>/v<version>` tag, full commit ID, and captured notes for review. For a preflight-only request, report local checks and any unverified remote state, then stop without requesting publication permissions.
+6. For an explicit publication request, read [publication](references/publication.md) after preflight and before remote publication checks or effects. Require confirmation naming local tag creation, that exact tag's push, and GitHub release creation; preflight alone authorizes none of them.
 
-For the confirmed publication, capture the notes before creating the tag, because the read-only helper rejects a tag that already exists locally:
+## Read-only helper
 
-```bash
-plugin='<plugin-name>'
-version='<version>'
-tag="$plugin/v$version"
-release_script='<absolute path to this installed skill>/scripts/release.sh'
-release_commit='<reviewed full commit ID>'
-notes="$(bash "$release_script" notes "$plugin")" &&
-git tag -a "$tag" "$release_commit" -m "Release $plugin v$version" &&
-git -c push.followTags=false push origin "refs/tags/$tag:refs/tags/$tag" &&
-printf '%s\n' "$notes" | gh release create "$tag" --verify-tag --title "$plugin v$version" --notes-file -
-```
+The [wrapper](scripts/release.sh) requires Bash and `uv`; its Python helper requires Python 3.11+ and Git.
+Run it from the target repository root with exactly `preflight <plugin-name>` or `notes <plugin-name>`; neither action has a default plugin or all-plugin mode.
+Both actions enforce the same checks below.
+`preflight` prints one status line with the selected plugin and version, local tag availability, and cached-main parity.
+`notes` prints only the selected versioned notes; its output is not capped.
+Exit `0` means checks passed; exit `2` means invalid arguments or plugin-name syntax, and other validation failures exit `1` with `FAIL: ...` on standard error.
+
+- Require current branch `main`, an existing commit, a clean worktree without an unfinished operation, one listed package, matching manifest and directory names, numeric `MAJOR.MINOR.PATCH`, a strictly increasing version, selected package versioned notes, and an unused local tag. Version ordering includes legacy `v*` tags only for `agent-team`.
+- Version and notes come only from `plugins/<plugin-name>/plugin.json` and `plugins/<plugin-name>/CHANGELOG.md`; another package's version or changelog is never selected.
+- The helper checks only local Git refs: main parity uses cached `refs/remotes/origin/main`; it does not fetch or establish live remote freshness, and it does not check remote tag or release state.
+- The helper does not create commits or tags, push, call GitHub, fetch, switch branches, build snapshots, or claim client installation/runtime compatibility.
+
+When changing the helper, run [its tests](tests/test_release_helper.py) with `uv run --no-project python -m unittest discover -s` followed by this skill's absolute test-directory path.
+The tests use disposable local repositories and do not test live service permissions or publication.
 
 ## Safety and scope
 
-- The helper is read-only and accepts only `preflight <plugin-name>` or `notes <plugin-name>`; it has no default plugin or all-plugin mode.
-- Preflight requires current branch `main`, an existing commit, a clean worktree without an unfinished operation, one listed package, matching manifest and directory names, numeric `MAJOR.MINOR.PATCH`, a strictly increasing version, selected package versioned notes, and an unused local tag. Version ordering includes legacy `v*` tags only for `agent-team`.
-- Version and notes come only from `plugins/<plugin-name>/plugin.json` and `plugins/<plugin-name>/CHANGELOG.md`; another package's version or changelog is never selected.
-- The helper checks only local Git refs: main parity uses cached `refs/remotes/origin/main`; it does not fetch or establish live remote freshness, and it does not check remote tag or release state.
 - This repository keeps its full tree on `main`; the plugin tag points to a whole-repository commit and is not a filtered package archive.
-- The helper does not create commits or tags, push, call GitHub, fetch, switch branches, build snapshots, or claim client installation/runtime compatibility.
 - If package changes are not already committed on `main`, stop; this skill does not create commits or move changes between branches.
 - Never change credentials or authentication, bypass a Git hook, force-push, or rewrite shared history; on an authentication or hook failure, report the failure and stop.
 
-The release is complete only when the owner-approved tag push and GitHub release both succeed.
+## Completion
 
-Run the [helper tests](tests/test_release_helper.py) with `uv run --no-project python -m unittest discover -s` followed by this skill's absolute test-directory path.
-The tests use disposable local repositories and do not test live service permissions or publication.
+A preflight request is complete when the selected package's checks and notes are reported without publication effects.
+A publication request is complete only when the owner-approved tag push and GitHub release both succeed.
+
+```markdown
+- Plugin and version: {selected package and version}
+- Commit: {reviewed full commit ID}
+- Checks: {static, local preflight, and authorized remote results; unresolved checks}
+- Tag creation and push: {exact tag and completed effects | not requested}
+- GitHub release: {verified URL | not requested | failure and completed effects}
+```

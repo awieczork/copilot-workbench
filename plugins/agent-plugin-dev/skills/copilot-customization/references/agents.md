@@ -8,8 +8,10 @@ A custom agent is an `*.agent.md` file that gives a role its own instructions, t
 | --- | --- |
 | Workspace | `.github/agents/<name>.agent.md` |
 | User | `~/.copilot/agents/<name>.agent.md` |
-| Copilot plugin | `agents/<name>.agent.md` |
+| Copilot-format plugin | `agents/<name>.agent.md` |
+| Agent Plugins 1.0 | `com.github.copilot/agents/<name>.agent.md` |
 
+For plugin scope, read the root manifest to select the declared [plugin format](https://code.visualstudio.com/docs/agents/reference/agent-plugin-reference#plugin-formats) before choosing a location.
 Use a lowercase kebab-case file name with the `.agent.md` suffix.
 
 ## Frontmatter

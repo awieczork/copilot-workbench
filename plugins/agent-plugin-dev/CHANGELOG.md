@@ -2,9 +2,17 @@
 
 ## Unreleased
 
+### Changed
+
+- The development skills state script prerequisites, inputs, outputs, failure results, and completion reports while distinguishing static checks from client verification.
+- The `copilot-customization` skill reads resources that control the requested behavior and distinguishes Copilot-format and Agent Plugins 1.0 component locations.
+- The `merge-dev` and `publish-plugin` skills load branch-cleanup and publication procedures only for the requested stage while retaining separate effect permissions.
+
 ### Fixed
 
 - The package README identifies version `0.1.0` as published while retaining the unverified runtime warning.
+- The `start-dev` skill requests permission to carry newly discovered dirty paths without changing them.
+- The `merge-dev` skill repeats the successful remote-absence check immediately before deleting a local cycle branch.
 
 ## [0.1.0] - 2026-10-28
 

@@ -222,7 +222,6 @@ class PackageChecker:
             return
 
         seen = set()
-        checked = set()
         for index, entry in enumerate(entries):
             if not isinstance(entry, dict):
                 self.fail(catalog_path, f"plugins[{index}] must be an object")
@@ -276,13 +275,11 @@ class PackageChecker:
 
             manifest_path = package_root / "plugin.json"
             self.expected_manifests.add(manifest_path)
-            if name not in checked:
-                checked.add(name)
-                manifest = self.validate_manifest(package_root, name)
-                if manifest is not None:
-                    self.packages.append((name, package_root, manifest))
-                self.check_package_layout(package_root)
-                self.check_package_links(package_root)
+            manifest = self.validate_manifest(package_root, name)
+            if manifest is not None:
+                self.packages.append((name, package_root))
+            self.check_package_layout(package_root)
+            self.check_package_links(package_root)
 
     def check_package_layout(self, package_root: Path) -> None:
         for name in sorted(LEGACY_PACKAGE_PATHS):
@@ -593,7 +590,7 @@ class PackageChecker:
 
     def check_component_identities(self):
         owners = {}
-        for package_name, package_root, manifest in self.packages:
+        for package_name, package_root in self.packages:
             identities = []
             for path in (package_root / "skills").glob("*/SKILL.md"):
                 metadata, body = self.read_frontmatter(path)
@@ -628,7 +625,7 @@ class PackageChecker:
         if not directory.exists():
             return
         canonical_skills = {}
-        for package_name, package_root, manifest in self.packages:
+        for package_name, package_root in self.packages:
             for target in (package_root / "skills").glob("*/SKILL.md"):
                 canonical_skills[target.resolve()] = target
         represented = set()
