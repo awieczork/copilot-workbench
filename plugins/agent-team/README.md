@@ -5,10 +5,10 @@ It bundles reusable skills, custom agents, scoped rules, and Model Context Proto
 
 ## Publication status
 
-Version `0.2.0` is published in the `awieczork-tools` marketplace with the `agent-team/v0.2.0` tag and GitHub release.
-The inventory below describes the working tree; published `0.2.0` additionally includes the changelog, open-issues, and project-status rules.
-Their extraction from this package is not yet published.
-Published `main` serves this package in place of the original root Copilot-format `copilot-workbench` package.
+Version `0.3.0` is the package manifest version in the `awieczork-tools` marketplace catalog.
+The [versioned notes](CHANGELOG.md) describe this version; [GitHub releases](https://github.com/awieczork/copilot-workbench/releases) record published tags.
+The former `0.2.0` release includes the changelog, open-issues, and project-status rules; `0.3.0` excludes them.
+The catalog serves the full-repository `main` branch independently of release-tag creation.
 Agent Host loading of this package's namespaced agents and rules remains unverified; static package checks do not establish client compatibility.
 The owner waived runtime verification on 2026-10-28, not the runtime risk.
 VS Code 1.142.0 did not run namespaced plugin agents or list namespaced agents and rules in the editor ([runtime issue](https://github.com/github/copilot-cli/issues/4655), [editor issue](https://github.com/microsoft/vscode/issues/334153)); this package has not been tested in a later client.
@@ -27,7 +27,7 @@ Public access supports installation without repository credentials; this reposit
 
 ## Installation
 
-The following steps manage the published package; runtime support remains unverified.
+The following steps manage the marketplace package; runtime support remains unverified.
 Run each `/plugin` command separately in a VS Code chat session with the **Copilot** harness selected.
 
 ### Replace the original plugin

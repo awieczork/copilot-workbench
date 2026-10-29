@@ -31,9 +31,10 @@ Repository records and `.github/` authoring files stay outside package payloads 
 ### Package format
 
 All packages use [Agent Plugins 1.0](https://agent-plugins.org/): each has a root `plugin.json` with the canonical `$schema`, portable `skills/`, optional root `mcp.json`, and Copilot-specific components under `com.github.copilot/`.
-Published `main` serves `agent-team` `0.2.0` and `agent-plugin-dev` `0.1.0`, each with its own versioned changelog notes, namespaced tag, and GitHub release.
-The working tree extracts the three record rules from `agent-team` into `project-records` `0.1.0`; this extraction and the new package are not published.
-Prepare an updated `agent-team` release before distributing both packages together, because published `agent-team` `0.2.0` still contains the same record-rule identities.
+The verified releases before the `0.3.0` preparation are `agent-team` `0.2.0` and `agent-plugin-dev` `0.1.0`, each with its own versioned changelog notes, namespaced tag, and GitHub release.
+The `agent-team` manifest and versioned notes are prepared at `0.3.0`, with the three record rules extracted into `project-records` `0.1.0`; tagged publication of these changes is pending.
+The catalog serves full-repository `main`, so a push exposes package changes independently of tag or GitHub release creation.
+Use the split with `agent-team` `0.3.0`, because an older installed `0.2.0` still contains the same record-rule identities.
 The owner waived runtime verification on 2026-10-28; the selected Agent Plugins 1.0 format remains unchanged and runtime support stays unverified.
 [OI-03](OPEN-ISSUES.md) remains open: schema and path checks do not prove Agent Host runtime support.
 The canonical [packaging guide](plugins/agent-plugin-dev/skills/build-plugin/references/packaging.md) and checker define static 1.0 checks; they do not prove runtime support.
