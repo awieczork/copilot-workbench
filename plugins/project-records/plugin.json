@@ -1,0 +1,10 @@
+{
+    "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+    "name": "project-records",
+    "version": "0.1.0",
+    "description": "Project status, open issues, and changelog conventions with coordinated, evidence-based record updates.",
+    "repository": "https://github.com/awieczork/copilot-workbench",
+    "author": {
+        "name": "Adam Wieczorkiewicz"
+    }
+}

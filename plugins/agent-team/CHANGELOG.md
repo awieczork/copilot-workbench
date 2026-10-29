@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Removed
+
+- The `agent-team` package excludes the changelog, open-issues, and project-status rules so project-record conventions can be installed independently.
+
 ### Fixed
 
 - The package README identifies version `0.2.0` as published while retaining the unverified runtime warning.

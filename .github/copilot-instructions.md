@@ -1,6 +1,6 @@
 # copilot-workbench
 
-This public, owner-maintained repository is the authoring workspace for two Agent Plugins 1.0 packages in the `awieczork-tools` marketplace for GitHub Copilot in VS Code.
+This public, owner-maintained repository is the authoring workspace for three Agent Plugins 1.0 packages in the `awieczork-tools` marketplace for GitHub Copilot in VS Code.
 Keep reusable package capabilities separate from repository maintenance and local configuration.
 The owner builds the plugin for their own use and is its only user, so design, guide, and review it for its intended use, not for misuse or hypothetical users.
 
@@ -70,6 +70,6 @@ Never point a tracked file at content under `.github/context/`, because that fol
 
 - Preserve `archive/develop-before-marketplace`; local and remote `develop` are retired.
 - Use `/start-dev` for `plugin/<exact-name>` or `repo/<lowercase-kebab-topic>` cycles and `/merge-dev` for verified squash integration. Keep normal hooks and named effect permissions.
-- Keep canonical reusable skills in `plugins/agent-plugin-dev/`; `.github/skills/` holds only six matching discovery pointers. The four `.github/instructions/` contracts apply only to `agent-team` authoring.
+- Keep canonical plugin-authoring and lifecycle skills in `plugins/agent-plugin-dev/`; `.github/skills/` holds only six matching discovery pointers. The four `.github/instructions/` contracts apply only to `agent-team` authoring.
 - Leave root and package Unreleased bullets to explicit `/commit-dev` requests. Prepare a package version and its versioned notes on the cycle before integration; `/publish-plugin` selects one package from clean full-repository `main` without creating a preparation commit.
 - Commit, push, integrate, tag, publish, delete a branch, or rewrite history only when the owner explicitly requests that effect, because implementation approval authorizes none of them. A release uses the selected package's `<name>/v<version>` tag and notes, with legacy `v*` version awareness only for `agent-team`.
