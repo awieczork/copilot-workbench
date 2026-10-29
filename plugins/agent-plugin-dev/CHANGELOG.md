@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## [0.1.1] - 2026-10-29
+
+Runtime support remains unverified under the owner's waiver; static checks do not establish client compatibility.
+
 ### Changed
 
 - The development skills state script prerequisites, inputs, outputs, failure results, and completion reports while distinguishing static checks from client verification.
@@ -10,7 +14,7 @@
 
 ### Fixed
 
-- The package README identifies version `0.1.0` as published while retaining the unverified runtime warning.
+- The package README distinguishes the current manifest from tagged releases while retaining the unverified runtime warning.
 - The `start-dev` skill requests permission to carry newly discovered dirty paths without changing them.
 - The `merge-dev` skill repeats the successful remote-absence check immediately before deleting a local cycle branch.
 
