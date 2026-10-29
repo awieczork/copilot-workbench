@@ -31,8 +31,7 @@ Repository records and `.github/` authoring files stay outside package payloads 
 ### Package format
 
 All packages use [Agent Plugins 1.0](https://agent-plugins.org/): each has a root `plugin.json` with the canonical `$schema`, portable `skills/`, optional root `mcp.json`, and Copilot-specific components under `com.github.copilot/`.
-The verified releases before the `0.3.0` preparation are `agent-team` `0.2.0` and `agent-plugin-dev` `0.1.0`, each with its own versioned changelog notes, namespaced tag, and GitHub release.
-The `agent-team` manifest and versioned notes are prepared at `0.3.0`, with the three record rules extracted into `project-records` `0.1.0`; tagged publication of these changes is pending.
+The published releases are `agent-team` `0.3.0`, `agent-plugin-dev` `0.1.1`, and `project-records` `0.1.0`, each with its own versioned changelog notes, annotated namespaced tag, and public GitHub release.
 The catalog serves full-repository `main`, so a push exposes package changes independently of tag or GitHub release creation.
 Use the split with `agent-team` `0.3.0`, because an older installed `0.2.0` still contains the same record-rule identities.
 The owner waived runtime verification on 2026-10-28; the selected Agent Plugins 1.0 format remains unchanged and runtime support stays unverified.
@@ -97,7 +96,7 @@ Static checks cover package isolation, component identity collisions, and pointe
 ## Repository lifecycle
 
 The migration transferred the archived `develop` tree without merging unrelated histories and fast-forwarded `main` to the reviewed full-repository commit `4b91750ca6db1e51b7972b7f6dda6e3853a7c581` under explicit owner authorization.
-Both package release tags point to that commit; later record-only commits do not move those tags.
+The `agent-team/v0.2.0` and `agent-plugin-dev/v0.1.0` release tags point to that commit; later record-only commits do not move those tags.
 Local and remote `develop` are retired; the published annotated tag `archive/develop-before-marketplace` preserves their frozen tip.
 `main` is the full-repository distribution branch and repository default; the working-tree catalog lists `agent-team`, `agent-plugin-dev`, and `project-records`, with no legacy package alias.
 Development cycles use `plugin/<exact-name>` or `repo/<lowercase-kebab-topic>` and squash integration; local creation requires local `main` to equal cached `origin/main`, and dirty carry-over needs explicit permission.

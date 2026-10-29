@@ -8,9 +8,9 @@ Each package has one purpose and bundles the resources it needs without requirin
 
 | Package | Purpose | Publication state |
 | --- | --- | --- |
-| [agent-team](plugins/agent-team/README.md) | Agents for software development and data analysis, with supporting skills, rules, and Model Context Protocol (MCP) configuration. | Version `0.3.0` is prepared; tagged publication pending; runtime support unverified. |
-| [agent-plugin-dev](plugins/agent-plugin-dev/README.md) | Six reusable customization, build, and development lifecycle skills. | Version `0.1.0` is published; runtime support unverified. |
-| [project-records](plugins/project-records/README.md) | Three project-record rules and an automatically selectable skill for evidence-based updates. | Version `0.1.0` is in development, not published; runtime support unverified. |
+| [agent-team](plugins/agent-team/README.md) | Agents for software development and data analysis, with supporting skills, rules, and Model Context Protocol (MCP) configuration. | Version [0.3.0](https://github.com/awieczork/copilot-workbench/releases/tag/agent-team/v0.3.0) is published; runtime support unverified. |
+| [agent-plugin-dev](plugins/agent-plugin-dev/README.md) | Six reusable customization, build, and development lifecycle skills. | Version [0.1.1](https://github.com/awieczork/copilot-workbench/releases/tag/agent-plugin-dev/v0.1.1) is published; runtime support unverified. |
+| [project-records](plugins/project-records/README.md) | Three project-record rules and an automatically selectable skill for evidence-based updates. | Version [0.1.0](https://github.com/awieczork/copilot-workbench/releases/tag/project-records/v0.1.0) is published; runtime support unverified. |
 
 The [catalog](.github/plugin/marketplace.json) lists the packages present on this branch.
 The `agent-team` README holds its component inventory and runtime requirements.
@@ -21,9 +21,7 @@ The records-package README owns its three-rule and one-skill inventory.
 ## Publication status
 
 The catalog uses full-repository `main` as its source; a push changes the available package files independently of tag or GitHub release creation.
-The `agent-team` manifest and versioned notes are prepared at `0.3.0`; its tagged publication is pending.
-The verified releases before this preparation are `agent-team` `0.2.0` and `agent-plugin-dev` `0.1.0`.
-The catalog includes `project-records` `0.1.0`; its first tagged release has not been created.
+The package versions listed above have annotated `<package>/v<version>` tags and public GitHub releases.
 Do not load the new package beside published `agent-team` `0.2.0`, because that version contains the same three rule identities.
 The split requires `agent-team` `0.3.0`, which excludes those rules, rather than an older installed copy.
 The catalog no longer lists the original root Copilot-format `copilot-workbench` package.
