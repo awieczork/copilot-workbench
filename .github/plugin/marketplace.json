@@ -11,6 +11,10 @@
         {
             "name": "agent-plugin-dev",
             "source": "./plugins/agent-plugin-dev"
+        },
+        {
+            "name": "project-records",
+            "source": "./plugins/project-records"
         }
     ]
 }

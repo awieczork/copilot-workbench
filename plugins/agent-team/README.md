@@ -6,6 +6,8 @@ It bundles reusable skills, custom agents, scoped rules, and Model Context Proto
 ## Publication status
 
 Version `0.2.0` is published in the `awieczork-tools` marketplace with the `agent-team/v0.2.0` tag and GitHub release.
+The inventory below describes the working tree; published `0.2.0` additionally includes the changelog, open-issues, and project-status rules.
+Their extraction from this package is not yet published.
 Published `main` serves this package in place of the original root Copilot-format `copilot-workbench` package.
 Agent Host loading of this package's namespaced agents and rules remains unverified; static package checks do not establish client compatibility.
 The owner waived runtime verification on 2026-10-28, not the runtime risk.
@@ -99,10 +101,7 @@ Agent Host loading of these packaged agents remains unverified.
 
 | Rule | Scope |
 | --- | --- |
-| `changelog` | The Keep a Changelog entries of a project's `CHANGELOG.md`. |
 | `markdown` | Markdown documents; customization files get only its syntax rules. |
-| `open-issues` | A project's `OPEN-ISSUES.md` register of unresolved decisions, missing inputs, and verified limitations. |
-| `project-status` | A project's `PROJECT-STATUS.md` state, roadmap, and blockers. |
 | `python` | User-run task scripts; reusable code follows its project conventions. |
 | `sql` | Read-only SQL Server or Redshift queries: schema reading, result bounding, and query text; connection handling and execution safety belong to the database skills. |
 

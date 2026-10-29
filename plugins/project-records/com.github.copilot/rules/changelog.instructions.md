@@ -18,12 +18,13 @@ applyTo: "CHANGELOG.md"
 ```markdown
 ### Added
 
-- The `explorer` worker locates workspace evidence for one question.
-- The Redshift MCP server runs read-only queries.
+- The report includes a summary of excluded records.
+- The CSV export includes column headers.
 ```
 
 ## Reconcile with the current result
 
 - Take the existing bullets and versioned entries from `CHANGELOG.md`, the prior baseline from the latest versioned entry or release tag, and the changes from the paths the current request covers, including their staged, unstaged, and untracked changes.
-- When the request names no paths, take every change since the baseline, and state that assumption in your result.
+- Use the established task scope when the request names no paths; include every change since the baseline only for an explicit whole-project reconciliation request, and state that broader scope in the result.
+- When the scope cannot be established, leave the affected entries unchanged and report `Missing input`.
 - Compare each proposed bullet with the existing bullets and the baseline before writing it: update a bullet that a later change extends, merge bullets that produce one final result, remove a bullet whose behavior was replaced or no longer appears, and keep separate bullets for independent results.
