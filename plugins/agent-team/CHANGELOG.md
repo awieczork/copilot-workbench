@@ -2,13 +2,17 @@
 
 ## Unreleased
 
+## [0.3.0] - 2026-10-29
+
+Runtime support remains unverified under the owner's waiver; static checks do not establish client compatibility.
+
 ### Removed
 
 - The `agent-team` package excludes the changelog, open-issues, and project-status rules so project-record conventions can be installed independently.
 
 ### Fixed
 
-- The package README identifies version `0.2.0` as published while retaining the unverified runtime warning.
+- The package README distinguishes the current manifest from tagged releases while retaining the unverified runtime warning.
 
 ## [0.2.0] - 2026-10-28
 

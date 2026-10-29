@@ -1,13 +1,16 @@
 # Project status
 
-- State: `complete`
+- State: `active`
 - Updated: 2026-10-29
-- Objective: Extract project-record conventions and maintenance into an independent `project-records` Agent Plugins 1.0 package.
-- Focus: The working tree contains three independent packages, with three record rules and the automatically selectable `update-project-records` skill in `project-records` `0.1.0`. The extraction is not published; runtime support remains unverified and [OI-03](OPEN-ISSUES.md) remains open.
+- Objective: Publish `agent-team` `0.3.0` with the project-record rules extracted, while retaining the unverified runtime status.
+- Focus: The selected package's manifest and versioned notes are prepared on `main`; readiness checks and confirmation of tag and GitHub release effects remain. Runtime support is unverified and [OI-03](OPEN-ISSUES.md) remains open.
 
 ## Roadmap
 
-- None.
+1. `active` Verify and publish the selected `agent-team` release.
+	1. [ ] Verify readiness for `agent-team` `0.3.0`.
+	1. [ ] Obtain confirmation for the reviewed commit, local tag creation, exact tag push, and GitHub release creation.
+	1. [ ] Publish and verify the selected release.
 
 ## Blockers
 

@@ -8,7 +8,7 @@ Each package has one purpose and bundles the resources it needs without requirin
 
 | Package | Purpose | Publication state |
 | --- | --- | --- |
-| [agent-team](plugins/agent-team/README.md) | Agents for software development and data analysis, with supporting skills, rules, and Model Context Protocol (MCP) configuration. | Version `0.2.0` is published; runtime support unverified. |
+| [agent-team](plugins/agent-team/README.md) | Agents for software development and data analysis, with supporting skills, rules, and Model Context Protocol (MCP) configuration. | Version `0.3.0` is prepared; tagged publication pending; runtime support unverified. |
 | [agent-plugin-dev](plugins/agent-plugin-dev/README.md) | Six reusable customization, build, and development lifecycle skills. | Version `0.1.0` is published; runtime support unverified. |
 | [project-records](plugins/project-records/README.md) | Three project-record rules and an automatically selectable skill for evidence-based updates. | Version `0.1.0` is in development, not published; runtime support unverified. |
 
@@ -20,10 +20,12 @@ The records-package README owns its three-rule and one-skill inventory.
 
 ## Publication status
 
-Published `main` serves `agent-team` and `agent-plugin-dev` as Agent Plugins 1.0 packages, with separate namespaced tags and GitHub releases.
-The working tree adds `project-records` and extracts the three record rules from `agent-team`; neither change is published.
+The catalog uses full-repository `main` as its source; a push changes the available package files independently of tag or GitHub release creation.
+The `agent-team` manifest and versioned notes are prepared at `0.3.0`; its tagged publication is pending.
+The verified releases before this preparation are `agent-team` `0.2.0` and `agent-plugin-dev` `0.1.0`.
+The catalog includes `project-records` `0.1.0`; its first tagged release has not been created.
 Do not load the new package beside published `agent-team` `0.2.0`, because that version contains the same three rule identities.
-Prepare an updated `agent-team` release before distributing the split packages together.
+The split requires `agent-team` `0.3.0`, which excludes those rules, rather than an older installed copy.
 The catalog no longer lists the original root Copilot-format `copilot-workbench` package.
 [OI-03](OPEN-ISSUES.md) remains open until the agents and rules pass checks in a real Copilot Agent Host session.
 The owner waived runtime verification on 2026-10-28 and authorized publication without changing the selected format.
@@ -94,7 +96,7 @@ Run each command separately in chat, not in the terminal:
 ```
 
 Skip the add command if the marketplace is already registered.
-Confirm the source when prompted and check that `agent-team` version `0.2.0` is installed and enabled.
+Confirm the source when prompted and check that `agent-team` version `0.3.0` is installed and enabled.
 Manage this installation through `/plugin`.
 
 ### 4. Configure Local on Windows
