@@ -1,7 +1,8 @@
 # agent-plugin-dev
 
 `agent-plugin-dev` provides reusable plugin development skills in the Agent Plugins 1.0 format.
-Version `0.1.0` is published in the `awieczork-tools` marketplace with the `agent-plugin-dev/v0.1.0` tag and GitHub release; runtime support remains unverified.
+Version `0.1.1` is the package manifest version in the `awieczork-tools` marketplace catalog; runtime support remains unverified.
+The [versioned notes](CHANGELOG.md) describe this version; [GitHub releases](https://github.com/awieczork/copilot-workbench/releases) record published tags.
 The owner waived runtime verification on 2026-10-28; skill discovery, package coexistence, and repository pointer selection remain unverified.
 
 ## Skills
