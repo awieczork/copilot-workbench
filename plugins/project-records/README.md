@@ -5,7 +5,8 @@ It is a self-contained Agent Plugins 1.0 package with no dependency on another p
 
 ## Publication status
 
-Version `0.1.0` is in development and has not been published.
+Version `0.1.0` is the package manifest version in the `awieczork-tools` marketplace catalog.
+The [versioned notes](CHANGELOG.md) describe this version; [GitHub releases](https://github.com/awieczork/copilot-workbench/releases) record published tags.
 Static checks do not establish client compatibility; rule discovery, skill selection, and execution remain unverified in a real client.
 
 ## Components
