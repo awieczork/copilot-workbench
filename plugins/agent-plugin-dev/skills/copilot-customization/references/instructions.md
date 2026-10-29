@@ -8,8 +8,10 @@ Scoped instructions are `*.instructions.md` files that VS Code attaches when the
 | --- | --- |
 | Workspace | `.github/instructions/<name>.instructions.md` |
 | User | VS Code profile storage for the Local agent; `~/.copilot/instructions/` for Copilot Agent Host sessions |
-| Copilot plugin | `rules/<name>.instructions.md` |
+| Copilot-format plugin | `rules/<name>.instructions.md` |
+| Agent Plugins 1.0 | `com.github.copilot/rules/<name>.instructions.md` |
 
+For plugin scope, read the root manifest to select the declared [plugin format](https://code.visualstudio.com/docs/agents/reference/agent-plugin-reference#plugin-formats) before choosing a location.
 Use a lowercase kebab-case file name with the `.instructions.md` suffix.
 
 ## Frontmatter

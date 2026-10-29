@@ -43,7 +43,9 @@ The plugin skill [`copilot-customization`](plugins/agent-plugin-dev/skills/copil
 
 ### Sources
 
-Product facts were last checked on 2026-10-10.
+Product facts were last checked on 2026-10-10, except for the plugin component locations below.
+Agent and rule locations were rechecked on 2026-10-29 against the [VS Code plugin authoring reference](https://code.visualstudio.com/docs/agents/reference/agent-plugin-reference).
+Agent Plugins 1.0 uses `com.github.copilot/agents/` and `com.github.copilot/rules/`; the root `agents/` and `rules/` locations belong to the Copilot format.
 The microsoft/vscode source alone confirms these facts, because the docs do not cover them or state them differently:
 
 - a subagent call takes a per-call `model` and has no reasoning-effort parameter: `src/vs/workbench/contrib/chat/common/tools/builtinTools/runSubagentTool.ts`;
