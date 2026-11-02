@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [0.1.4] - 2026-11-02
+
+### Changed
+
+- The package README includes marketplace installation and concise runtime requirements.
+
 ## [0.1.3] - 2026-11-02
 
 ### Changed

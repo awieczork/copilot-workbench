@@ -1,13 +1,14 @@
 # project-records
 
-`project-records` maintains a project's durable status, open issues, and changelog for GitHub Copilot in VS Code.
-It is a self-contained Agent Plugins 1.0 package with no dependency on another plugin.
+`project-records` provides rules and a skill for maintaining a project's status, open issues, and changelog in GitHub Copilot for VS Code.
+The package is independent and uses the Local harness in an editor window.
 
-## Publication status
+## Install
 
-Version `0.1.0` is the package manifest version in the `awieczork-tools` marketplace catalog.
-The [versioned notes](CHANGELOG.md) describe this version; [GitHub releases](https://github.com/awieczork/copilot-workbench/releases) record published tags.
-Static checks do not establish client compatibility; rule discovery, skill selection, and execution remain unverified in a real client.
+In a VS Code editor window, select the **Local** harness and run **Chat: Open Customizations**.
+Under **Browse**, select **Configure Marketplaces**, add `awieczork/copilot-workbench`, and install `project-records`.
+
+Do not install it beside `agent-team` `0.2.0`, which contains the same record rules; use `agent-team` `0.3.0` or newer.
 
 ## Components
 
@@ -21,18 +22,16 @@ Static checks do not establish client compatibility; rule discovery, skill selec
 
 ### Skill
 
-[update-project-records](skills/update-project-records/SKILL.md) coordinates record updates when completed work, a phase change, an accepted decision, or a confirmed or resolved blocker changes the project's durable state.
-It also handles an explicit request to reconcile project records.
-Only records with an evidenced change are updated, and their rules are read when selected.
+[update-project-records](skills/update-project-records/SKILL.md) updates records when established results change the project's durable state, or when the user requests reconciliation.
+It reads the rules for affected records and changes only records supported by evidence.
 
-The model may select the skill automatically; manual invocation remains available.
-Automatic selection is not a post-task hook and does not guarantee invocation after every task.
-Project permissions and update timing still apply, including any restriction on changelog edits.
+The model may select the skill automatically, or the user can invoke it.
+Automatic selection is not a post-task hook; project permissions and update timing still apply.
 
-## Scope
+## Good to know
 
-The package maintains durable project records, not transient task or session state.
-It uses existing records and creates missing ones only when the request or project instructions calls for them.
-It does not invent objectives, priorities, decisions, or completion.
-Git history supplies previous changelog baselines and issue identifiers when the rules require them.
-The package bundles no agents, Model Context Protocol (MCP) configuration, or runtime scripts.
+- The package maintains durable records, not transient task state, and creates missing records only when requested or required by project instructions.
+- The package does not invent objectives, priorities, decisions, or completion; its rules use Git history when needed.
+- The [manifest](plugin.json) holds the package version; [release notes](CHANGELOG.md) and [GitHub releases](https://github.com/awieczork/copilot-workbench/releases) record its history.
+- Static checks do not prove client compatibility; rule discovery, skill selection, and execution remain unverified in a real client.
+- The package bundles no agents, Model Context Protocol (MCP) configuration, or runtime scripts.

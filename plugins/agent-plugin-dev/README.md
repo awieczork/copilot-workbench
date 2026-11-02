@@ -1,9 +1,12 @@
 # agent-plugin-dev
 
-`agent-plugin-dev` provides reusable plugin development skills in the Agent Plugins 1.0 format.
-The package manifest in this checkout declares version `0.1.3`; runtime support remains unverified.
-The [versioned notes](CHANGELOG.md) describe this version; [GitHub releases](https://github.com/awieczork/copilot-workbench/releases) record published tags.
-The owner waived runtime verification on 2026-10-28; skill discovery, package coexistence, and repository pointer selection remain unverified.
+`agent-plugin-dev` provides skills for authoring, checking, and releasing plugins for GitHub Copilot in VS Code.
+The package is independent and uses the Local harness in an editor window.
+
+## Install
+
+In a VS Code editor window, select the **Local** harness and run **Chat: Open Customizations**.
+Under **Browse**, select **Configure Marketplaces**, add `awieczork/copilot-workbench`, and install `agent-plugin-dev`.
 
 ## Skills
 
@@ -18,15 +21,15 @@ The owner waived runtime verification on 2026-10-28; skill discovery, package co
 
 ## Runtime requirements
 
-The checker and Python helpers use `uv` and Python 3.11 or later; the checker declares its PyYAML dependency.
-Lifecycle commands use Git; merge verification requires `git merge-tree --write-tree`.
-Path screening uses Bash and GNU `stat`; the release wrapper uses Bash, and confirmed publication uses GitHub CLI (`gh`) with existing local authentication.
+- `uv` and Python 3.11 or later for the checker and Python helpers; the checker declares its PyYAML dependency.
+- Git for lifecycle commands, including `git merge-tree --write-tree` for merge verification.
+- Bash and GNU `stat` for path screening; Bash and GitHub CLI (`gh`) with local authentication for publication.
+
 Tests use disposable repositories and local bare remotes, not the owner's services or credentials.
 
-This package ships no agents, scoped rules, or Model Context Protocol (MCP) configuration and does not require another plugin.
-Use the tools of the current agent for documentation lookup.
+## Good to know
 
-## Maintenance
-
-The owner maintains this package for personal use.
-Public access supports installation without repository credentials; no public support or external contribution workflow is provided.
+- The [manifest](plugin.json) holds the package version; [release notes](CHANGELOG.md) and [GitHub releases](https://github.com/awieczork/copilot-workbench/releases) record its history.
+- Skill discovery, package coexistence, and repository pointer selection remain unverified in a client; the owner waived runtime verification on 2026-10-28.
+- The package ships no agents, scoped rules, or Model Context Protocol (MCP) configuration; use the current agent's tools for documentation lookup.
+- The owner maintains the package for personal use; no public support or external contribution workflow is provided.

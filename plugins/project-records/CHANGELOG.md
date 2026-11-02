@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [0.1.1] - 2026-11-02
+
+### Changed
+
+- The package README includes marketplace installation and compatibility guidance.
+
 ## [0.1.0] - 2026-10-29
 
 Runtime support remains unverified under the owner's waiver; static checks do not establish client compatibility.

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [0.4.2] - 2026-11-02
+
+### Changed
+
+- The package README links its skill inventory and condenses installation and setup guidance.
+
 ## [0.4.1] - 2026-11-02
 
 ### Changed

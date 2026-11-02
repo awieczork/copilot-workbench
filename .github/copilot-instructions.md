@@ -53,10 +53,10 @@ Guidance says what is wanted, once, in plain words a capable newcomer reads one 
 
 Keep each fact in the record that owns it, and update that record in the same change:
 
-- [ARCHITECTURE.md](../ARCHITECTURE.md): package design and component boundaries; read it before changing either.
+- [ARCHITECTURE.md](../docs/ARCHITECTURE.md): package design and component boundaries; read it before changing either.
 - [PROJECT-STATUS.md](../PROJECT-STATUS.md): the sole roadmap of current and planned work; read it before continuing staged work.
 - [OPEN-ISSUES.md](../OPEN-ISSUES.md): unresolved decisions, missing inputs, and verified limitations that affect the work.
-- [REFERENCES.md](../REFERENCES.md): external sources behind the design and its product facts, consulted when specifying a new component; recheck the source behind a fact before changing the fact.
+- [REFERENCES.md](../docs/REFERENCES.md): external sources behind the design and its product facts, consulted when specifying a new component; recheck the source behind a fact before changing the fact.
 - [README.md](../README.md): the marketplace package inventory; each package README owns its component inventory.
 
 Never point a tracked file at content under `.github/context/`, because that folder is untracked and its content is absent from every other clone; move the needed facts into the tracked file instead.

@@ -1,22 +1,14 @@
 # agent-team
 
-`agent-team` is a public, owner-maintained Agent Plugins 1.0 package for GitHub Copilot in VS Code, using the Local harness in the editor window.
-It bundles reusable skills, custom agents, scoped rules, and Model Context Protocol (MCP) server configuration for software development and data analysis.
+`agent-team` provides agents, skills, rules, and Model Context Protocol (MCP) tools for software development and data analysis in GitHub Copilot for VS Code.
+Use it with the Local harness in an editor window.
 
-## Publication status
+## Good to know
 
-The package manifest in this checkout declares version `0.4.1`.
-The [versioned notes](CHANGELOG.md) describe this version; [GitHub releases](https://github.com/awieczork/copilot-workbench/releases) record published tags.
-The former `0.2.0` release includes the changelog, open-issues, and project-status rules; `0.3.0` excludes them.
-The catalog serves the full-repository `main` branch independently of release-tag creation.
-The owner confirms that the plugin was tested and considers the former OI-03 outdated.
-The client version, configuration, and test scope were not specified; the test does not establish runtime behavior of later changes.
-Static package checks do not establish client compatibility.
-
-## Maintenance
-
-The owner maintains this plugin for personal use.
-Public access supports installation without repository credentials; this repository does not accept external contributions or provide public support.
+- The [manifest](plugin.json) holds the package version; [release notes](CHANGELOG.md) and [GitHub releases](https://github.com/awieczork/copilot-workbench/releases) record its history.
+- The marketplace serves `main`, so package changes can appear without a new release.
+- The owner has tested the plugin, but did not specify the client version, configuration, or test scope; static checks do not prove runtime compatibility.
+- The owner maintains the plugin for personal use; no public support or external contribution workflow is provided.
 
 ## Requirements
 
@@ -28,24 +20,17 @@ Public access supports installation without repository credentials; this reposit
 
 ## Installation
 
-Manage the marketplace package in the Agent Customizations editor of a VS Code editor window, with the **Local** harness selected in chat.
+Uninstall the original `copilot-workbench` plugin first, so both copies do not load together.
+Use the interface that installed it, including for a copy installed with `/plugin` or the Copilot CLI.
+Do not install `project-records` beside `agent-team` `0.2.0`; its record rules were removed in `0.3.0`.
 
-### Replace the original plugin
+1. In a VS Code editor window, select the **Local** harness and run **Chat: Open Customizations**.
+1. Under **Browse**, select **Configure Marketplaces** and add `awieczork/copilot-workbench` if needed.
+1. Install `agent-team`, review the trust prompt, and confirm it is enabled on the **Plugins** page.
 
-Uninstall the original `copilot-workbench` before installing `agent-team`, so both copies do not load together.
-Run **Chat: Open Customizations**, select **Plugins**, open `copilot-workbench`, and select **Uninstall**.
-The **Plugins** page also lists a copy installed with `/plugin` or the Copilot CLI; uninstall that copy through the interface that installed it.
-
-### Install from the marketplace
-
-1. Run **Chat: Open Customizations**, select **Browse**, open the source menu, and select **Configure Marketplaces**.
-2. Select **Add Marketplace** and enter `awieczork/copilot-workbench`, unless it is already listed.
-3. Return to **Browse**, select that marketplace, and install `agent-team`.
-4. Review the trust prompt, then confirm on the **Plugins** page that `agent-team` is enabled.
-
-When the **Browse** page is not available, select **Plugins** and then **Browse Marketplace**.
-To update, select **Check for and Apply Updates** on the **Plugins** page or run **Chat: Update Plugins**, then start a new session.
-The [VS Code plugin documentation](https://code.visualstudio.com/docs/agent-customization/agent-plugins) describes plugin management and its client requirements.
+When **Browse** is unavailable, select **Plugins**, then **Browse Marketplace**.
+To update, use **Check for and Apply Updates** or **Chat: Update Plugins**, then start a new session.
+See the [VS Code plugin documentation](https://code.visualstudio.com/docs/agent-customization/agent-plugins) for plugin management.
 
 ## Package contents
 
@@ -53,16 +38,16 @@ The [VS Code plugin documentation](https://code.visualstudio.com/docs/agent-cust
 
 | Skill | Purpose |
 | --- | --- |
-| `brief-subagent` | Supplies model selection, self-contained briefs for one-shot delegation, and how to act on the status each worker returns. |
-| `data-analysis` | Frames data questions, profiles and checks evidence, tests interpretations, and describes independent checks. |
-| `handoff-discussion` | Transfers a confirmed `discuss` request to a new `lead` session; only the user invokes it. |
-| `interview-me` | Clarifies the user's intent before work continues; only the user invokes it. |
-| `planning` | Creates, follows, and updates a proportional plan, with a template and task-state workflow. |
-| `redshift` | Runs read-only queries against user-provided Redshift targets, with an MCP-first workflow and a bounded Python fallback. |
-| `run-python` | Runs Python scripts and inline code through `uv`, with or without the project environment. |
-| `seed-task` | Turns the current conversation, such as a forked discussion, into a task folder that an independent session starts from; only the user invokes it. |
-| `sql-server` | Runs read-only SQL Server queries against user-provided targets through saved connections. |
-| `task-context` | Keeps one task's state in a Git-ignored task folder that the task holder maintains, with a result file for a delegated result that must survive the session. |
+| [brief-subagent](skills/brief-subagent/SKILL.md) | Selects models and prepares self-contained delegation briefs. |
+| [data-analysis](skills/data-analysis/SKILL.md) | Frames data questions and checks evidence and interpretations. |
+| [handoff-discussion](skills/handoff-discussion/SKILL.md) | Transfers a confirmed `discuss` request to a new `lead` session; user-invoked. |
+| [interview-me](skills/interview-me/SKILL.md) | Clarifies the user's intent; user-invoked. |
+| [planning](skills/planning/SKILL.md) | Creates and follows a proportional plan. |
+| [redshift](skills/redshift/SKILL.md) | Queries a user-provided Redshift target read-only, with an MCP-first workflow and bounded Python fallback. |
+| [run-python](skills/run-python/SKILL.md) | Runs Python through `uv`, with or without the project environment. |
+| [seed-task](skills/seed-task/SKILL.md) | Saves a conversation as task context for an independent session; user-invoked. |
+| [sql-server](skills/sql-server/SKILL.md) | Queries a user-provided SQL Server target read-only through a saved connection. |
+| [task-context](skills/task-context/SKILL.md) | Keeps temporary task state and delegated results in a Git-ignored folder. |
 
 After confirming a request with `discuss`, run `/agent-team:handoff-discussion`, then select `lead` in a new session and use the start prompt the skill returns.
 
@@ -73,15 +58,15 @@ The lead may work directly and owns acceptance of every result.
 
 | Agent | Kind | Purpose |
 | --- | --- | --- |
-| `lead` | Lead | Delivers, plans, or analyzes work, directly or with workers, and owns the result and acceptance. |
-| `discuss` | Chat | Shapes an unfinished idea into a request for lead without implementing it. |
-| `explorer` | Helper | Searches the workspace for one question and returns locations with findings. |
-| `database-explorer` | Helper | Finds and profiles the SQL Server and Redshift objects and join paths for one data question, drafts and runs read-only queries. |
-| `data-explorer` | Helper | Finds and profiles the local dataset files for one data question and runs the analyses a brief specifies without changing the files. |
-| `researcher` | Helper | Gathers sourced external evidence for one bounded question. |
-| `developer` | Producer | Implements changes to code, tests, configuration, documentation, build, and dependencies. |
-| `reviewer` | Checker | Assesses a finished result against its goal without repairing it. |
-| `challenger` | Helper | Tests one decision or framing with the strongest objection, the cheapest settling check, and a recommendation. |
+| `lead` | Lead | Delivers work directly or with workers and owns the result. |
+| `discuss` | Chat | Shapes an idea into a request without implementing it. |
+| `explorer` | Helper | Finds workspace evidence for one question. |
+| `database-explorer` | Helper | Profiles database objects and join paths and runs read-only queries. |
+| `data-explorer` | Helper | Profiles local datasets and runs analyses without changing the files. |
+| `researcher` | Helper | Gathers sourced external evidence for one question. |
+| `developer` | Producer | Implements changes to code, tests, configuration, documentation, and builds. |
+| `reviewer` | Checker | Assesses a finished result without repairing it. |
+| `challenger` | Helper | Tests a decision or framing and recommends a check. |
 
 ### Rules
 

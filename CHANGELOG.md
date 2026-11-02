@@ -10,7 +10,8 @@
 ### Changed
 
 - Team authoring contracts stay outside package payloads and describe the simplified `agent-team` entry agents, optional workers, model defaults, and Local `#tool:` references.
-- Marketplace installation guidance covers the Local harness in the editor window on Windows and Windows Subsystem for Linux, with installation, updates, and runtime checks in the Agent Customizations editor.
+- Marketplace installation guidance covers the Local harness on Windows and Windows Subsystem for Linux in a separate guide linked from the repository README.
+- Repository documentation groups the architecture and design references under `docs/`.
 - Repository records limit supported development to the Local harness until the Copilot harness and the Agents window run plugins reliably on Windows and Windows Subsystem for Linux.
 - Repository guidance separates local cycle work, verified squash integration, and package publication with explicit permissions.
 - Repository records reflect the owner's `agent-team` test confirmation without specifying the test scope.
