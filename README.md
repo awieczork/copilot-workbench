@@ -8,8 +8,8 @@ Each package has one purpose and bundles the resources it needs without requirin
 
 | Package | Purpose | Publication state |
 | --- | --- | --- |
-| [agent-team](plugins/agent-team/README.md) | Agents for software development and data analysis, with supporting skills, rules, and Model Context Protocol (MCP) configuration. | Version [0.4.0](https://github.com/awieczork/copilot-workbench/releases/tag/agent-team/v0.4.0) is published; the owner reports a plugin test. |
-| [agent-plugin-dev](plugins/agent-plugin-dev/README.md) | Six reusable customization, build, and development lifecycle skills. | Version [0.1.2](https://github.com/awieczork/copilot-workbench/releases/tag/agent-plugin-dev/v0.1.2) is published; runtime support unverified. |
+| [agent-team](plugins/agent-team/README.md) | Agents for software development and data analysis, with supporting skills, rules, and Model Context Protocol (MCP) configuration. | Version [0.4.1](https://github.com/awieczork/copilot-workbench/releases/tag/agent-team/v0.4.1) is published; the owner reports a plugin test. |
+| [agent-plugin-dev](plugins/agent-plugin-dev/README.md) | Six reusable customization, build, and development lifecycle skills. | Version [0.1.3](https://github.com/awieczork/copilot-workbench/releases/tag/agent-plugin-dev/v0.1.3) is published; runtime support unverified. |
 | [project-records](plugins/project-records/README.md) | Three project-record rules and an automatically selectable skill for evidence-based updates. | Version [0.1.0](https://github.com/awieczork/copilot-workbench/releases/tag/project-records/v0.1.0) is published; runtime support unverified. |
 
 The [catalog](.github/plugin/marketplace.json) lists the packages present on this branch.
