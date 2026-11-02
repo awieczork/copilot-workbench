@@ -5,13 +5,13 @@ It bundles reusable skills, custom agents, scoped rules, and Model Context Proto
 
 ## Publication status
 
-Version `0.3.0` is the package manifest version in the `awieczork-tools` marketplace catalog.
+The package manifest in this checkout declares version `0.4.0`.
 The [versioned notes](CHANGELOG.md) describe this version; [GitHub releases](https://github.com/awieczork/copilot-workbench/releases) record published tags.
 The former `0.2.0` release includes the changelog, open-issues, and project-status rules; `0.3.0` excludes them.
 The catalog serves the full-repository `main` branch independently of release-tag creation.
-Agent Host loading of this package's namespaced agents and rules remains unverified; static package checks do not establish client compatibility.
-The owner waived runtime verification on 2026-10-28, not the runtime risk.
-VS Code 1.142.0 did not run namespaced plugin agents or list namespaced agents and rules in the editor ([runtime issue](https://github.com/github/copilot-cli/issues/4655), [editor issue](https://github.com/microsoft/vscode/issues/334153)); this package has not been tested in a later client.
+The owner confirms that the plugin was tested and considers the former OI-03 outdated.
+The client version, configuration, and test scope were not specified; the test does not establish runtime behavior of later changes.
+Static package checks do not establish client compatibility.
 
 ## Maintenance
 
@@ -27,7 +27,7 @@ Public access supports installation without repository credentials; this reposit
 
 ## Installation
 
-The following steps manage the marketplace package; runtime support remains unverified.
+The following steps manage the marketplace package.
 Run each `/plugin` command separately in a VS Code chat session with the **Copilot** harness selected.
 
 ### Replace the original plugin
@@ -69,31 +69,33 @@ The [VS Code plugin documentation](https://code.visualstudio.com/docs/agent-cust
 
 | Skill | Purpose |
 | --- | --- |
-| `brief-subagent` | Supplies self-contained briefs for one-shot delegation and how to act on the status each worker returns. |
+| `brief-subagent` | Supplies model selection, self-contained briefs for one-shot delegation, and how to act on the status each worker returns. |
+| `data-analysis` | Frames data questions, profiles and checks evidence, tests interpretations, and describes independent checks. |
+| `handoff-discussion` | Transfers a confirmed `discuss` request to a new `lead` session; only the user invokes it. |
 | `interview-me` | Clarifies the user's intent before work continues; only the user invokes it. |
+| `planning` | Creates, follows, and updates a proportional plan, with a template and task-state workflow. |
 | `redshift` | Runs read-only queries against user-provided Redshift targets, with an MCP-first workflow and a bounded Python fallback. |
 | `run-python` | Runs Python scripts and inline code through `uv`, with or without the project environment. |
 | `seed-task` | Turns the current conversation, such as a forked discussion, into a task folder that an independent session starts from; only the user invokes it. |
 | `sql-server` | Runs read-only SQL Server queries against user-provided targets through saved connections. |
 | `task-context` | Keeps one task's state in a Git-ignored task folder that the task holder maintains, with a result file for a delegated result that must survive the session. |
 
+After confirming a request with `discuss`, run `/agent-team:handoff-discussion`, then select `lead` in a new session and use the start prompt the skill returns.
+
 ### Agents
 
-The intended runtime behavior is for entry agents to appear in the agent picker and workers to run as subagents of an allowed entry agent or producer.
-Agent Host loading of these packaged agents remains unverified.
+Entry agents are intended to appear in the agent picker; workers run as optional subagents of an allowed entry agent or producer.
+The lead may work directly and owns acceptance of every result.
 
 | Agent | Kind | Purpose |
 | --- | --- | --- |
-| `lead` | Lead | Delivers or plans any work in the workspace by deciding the approach, splitting it into parts for workers, and judging results. |
-| `data-lead` | Lead | Handles work that touches or rests on data: frames the question, has workers run the queries, and owns the interpretation and the conclusion. |
-| `discuss` | Chat | Shapes an unfinished idea into a request for a lead, and edits the documentation the user asks for. |
+| `lead` | Lead | Delivers, plans, or analyzes work, directly or with workers, and owns the result and acceptance. |
+| `discuss` | Chat | Shapes an unfinished idea into a request for lead without implementing it. |
 | `explorer` | Helper | Searches the workspace for one question and returns locations with findings. |
 | `database-explorer` | Helper | Finds and profiles the SQL Server and Redshift objects and join paths for one data question, drafts and runs read-only queries. |
 | `data-explorer` | Helper | Finds and profiles the local dataset files for one data question and runs the analyses a brief specifies without changing the files. |
 | `researcher` | Helper | Gathers sourced external evidence for one bounded question. |
-| `planner` | Producer | Produces an executable plan for a change or an analysis with dependent steps or open design decisions. |
-| `developer` | Producer | Implements a change to code, tests, configuration, documentation, build, dependencies, or CI. |
-| `ui-developer` | Producer | Implements an interface change, checks it in the running app in a browser. |
+| `developer` | Producer | Implements changes to code, tests, configuration, documentation, build, and dependencies. |
 | `reviewer` | Checker | Assesses a finished result against its goal without repairing it. |
 | `challenger` | Helper | Tests one decision or framing with the strongest objection, the cheapest settling check, and a recommendation. |
 

@@ -1,6 +1,6 @@
 ---
 description: "Use when authoring agent-team workers. Defines the existing helper, producer, and checker contracts. Not for entry agents or other packages."
-applyTo: "plugins/agent-team/com.github.copilot/agents/challenger.agent.md,plugins/agent-team/com.github.copilot/agents/data-explorer.agent.md,plugins/agent-team/com.github.copilot/agents/database-explorer.agent.md,plugins/agent-team/com.github.copilot/agents/developer.agent.md,plugins/agent-team/com.github.copilot/agents/explorer.agent.md,plugins/agent-team/com.github.copilot/agents/planner.agent.md,plugins/agent-team/com.github.copilot/agents/researcher.agent.md,plugins/agent-team/com.github.copilot/agents/reviewer.agent.md,plugins/agent-team/com.github.copilot/agents/ui-developer.agent.md"
+applyTo: "plugins/agent-team/com.github.copilot/agents/challenger.agent.md,plugins/agent-team/com.github.copilot/agents/data-explorer.agent.md,plugins/agent-team/com.github.copilot/agents/database-explorer.agent.md,plugins/agent-team/com.github.copilot/agents/developer.agent.md,plugins/agent-team/com.github.copilot/agents/explorer.agent.md,plugins/agent-team/com.github.copilot/agents/researcher.agent.md,plugins/agent-team/com.github.copilot/agents/reviewer.agent.md"
 ---
 
 # Worker contract
@@ -14,7 +14,7 @@ Pick the kind by what the worker returns.
 | Kind | Returns | Writes | Calls a checker |
 | --- | --- | --- | --- |
 | Helper | Evidence | Its result file only, when it can write | No |
-| Producer | A change or a plan | Files in the brief's scope; a planner only its result file | Yes: `reviewer`, or `challenger` for a planner, by "For a producer" below |
+| Producer | A change | Files in the brief's scope | Yes: `reviewer`, by "For a producer" below |
 | Checker | A verdict on another worker's result | Its result file only, when it can write | No |
 
 ## Frontmatter
@@ -58,11 +58,12 @@ When the brief names a result file, write your result there before every return.
 Add these review rules in the role's terms:
 
 - Run one review round with the checker only when the brief marks review `Required`, because the delegating agent decides which results a review is worth.
-- Call the checker through #tool:agent with the delegating agent's goal verbatim; the brief's `Done when`, `Scope`, `Constraints`, and the decisions in its `Context`; and what to check: the changed paths, or for a plan, the decision to test as one falsifiable claim with the paths of its evidence.
+- Load `brief-subagent` to select the checker's model.
+- Call the checker with the delegating agent's goal verbatim; the brief's `Done when`, `Scope`, `Constraints`, and the decisions in its `Context`; and the changed paths to check.
 - Fix each defect or objection the producer accepts, give every defect, objection, and open question a disposition, and report whether the review ran.
 - When the checker returns a status other than `done`, report the review as not run with that status and its cause, and carry its open questions into Open questions and blockers.
 
-For a producer that implements code, add this block unchanged to its Constraints, because both implementing producers need the same limits and gate:
+For a producer that implements code, add this block unchanged to its Constraints, because it defines the implementation limits and gate:
 
 ```markdown
 - Keep every test, assertion, and check as strict as you found it, repair the code instead, and report a test you believe is wrong, because a check weakened to pass proves nothing.

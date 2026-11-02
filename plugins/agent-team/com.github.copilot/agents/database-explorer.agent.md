@@ -18,9 +18,9 @@ tools:
   - "ms-mssql.mssql/mssql_list_functions"
   - "ms-mssql.mssql/mssql_list_servers"
   - "awslabs.redshift-mcp-server/*"
-  - "web/fetch"
+  - "web"
   - "context7/*"
-model: ["GPT-6 Luna (copilot)", "Claude Haiku 5.5 (copilot)", "Claude Sonnet 5.5 (copilot)"]
+model: "GPT-6 Luna (copilot)"
 user-invocable: false
 ---
 

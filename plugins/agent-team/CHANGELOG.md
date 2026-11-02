@@ -2,6 +2,29 @@
 
 ## Unreleased
 
+## [0.4.0] - 2026-11-02
+
+### Added
+
+- The `data-analysis` and `planning` skills guide data-backed analysis and proportional plans.
+- The `handoff-discussion` skill transfers a confirmed discussion to a new `lead` session.
+
+### Changed
+
+- The `lead` agent performs simple work directly and owns analysis, integration, and acceptance while delegating when useful.
+- The `discuss` agent shapes requests without implementing changes.
+- The `brief-subagent` skill guides model selection with one default per worker and conditional alternatives.
+- The `task-context` skill keeps accepted plans and resumes tasks without requiring optional files.
+- Web-enabled agents request the `web` tool group, and shared instructions use harness-neutral tool references.
+
+### Removed
+
+- The package removes the `data-lead`, `planner`, and `ui-developer` agents and interface-specific browser checks.
+
+### Fixed
+
+- The `data-explorer` agent treats split overlap as a possible source of leakage rather than proof.
+
 ## [0.3.0] - 2026-10-29
 
 Runtime support remains unverified under the owner's waiver; static checks do not establish client compatibility.

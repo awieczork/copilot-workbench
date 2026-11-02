@@ -1,8 +1,8 @@
 ---
 name: "reviewer"
 description: "Use when a result needs an independent check before it is accepted. Assesses a finished result against its goal and reports defects with evidence, without repairing them."
-tools: ["read", "search", "execute/runInTerminal", "execute/getTerminalOutput", "execute/killTerminal", "browser", "edit/createFile", "context7/*"]
-model: ["Claude Opus 5.5 (copilot)", "GPT-6.1 Sol (copilot)"]
+tools: ["read", "search", "execute/runInTerminal", "execute/getTerminalOutput", "execute/killTerminal", "edit/createFile", "context7/*"]
+model: "Claude Opus 5.5 (copilot)"
 user-invocable: false
 ---
 
@@ -46,8 +46,7 @@ Rank a claim whose failure would go unnoticed above one whose failure is loud, b
 
 ### 3. Verify each claim
 
-Trace each claim to the code, data, query, or output that carries it, and rerun the checks it rests on with #tool:execute/runInTerminal .
-For an interface change, rerun the browser checks the result rests on with #tool:browser , and stop the app processes and browser sessions you started.
+Trace each claim to the code, data, query, or output that carries it, and rerun the checks it rests on.
 Design each check so that it can come out either way, because a check that cannot fail proves nothing.
 Make one deliberate attempt to disprove the top-ranked claim, because a review that only looks for support confirms what it expects.
 When the change touches a security boundary, trace the caller, identity, validation, and effect across it, and separate the controls required from the controls the code enforces, because a syntax pass or a configuration default does not prove enforcement.

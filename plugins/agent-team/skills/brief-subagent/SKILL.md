@@ -1,6 +1,6 @@
 ---
 name: brief-subagent
-description: "Use when delegating a task to a subagent. Supplies the brief template, the rules that make a one-shot delegation self-contained, and how to act on the returned status. Not for a producer's call to its own checker."
+description: "Use when delegating a task or selecting a model for a subagent. Supplies model selection, a self-contained brief template, and how to act on the returned status. A producer uses only model selection when calling its own checker."
 user-invocable: false
 ---
 
@@ -13,7 +13,13 @@ Delegation is one-shot: the worker starts from the brief and its own instruction
 
 1. State one objective; split independent objectives into separate briefs.
 2. Fill the template below, leaving out each section that has no content and each optional section whose condition below does not hold.
-3. Send the brief, and act on the returned result by "Read the result" below.
+3. Select the model by "Select a model" below, send the brief, and act on the returned result by "Read the result" below.
+
+## Select a model
+
+Use the worker's default for a routine delegation.
+When the check needs independence from its author, such as a review of your change, a challenge, or a recomputation, the default is unavailable, or evidence points to the model as the cause of an insufficient result, read [model selection](references/model-selection.md) before the call.
+A producer calling its own checker uses this section and its own review workflow, not the brief template.
 
 ## Template
 
@@ -66,8 +72,6 @@ Required
 - For a follow-up brief, include the essentials of the earlier result, state what changes and what stays the same, and name what is still missing, because the new worker did not see the earlier run.
 - Write the brief in plain words that a newcomer reads one way, because the worker cannot ask what a shorthand means.
 - When parts that change files run in parallel, add a constraint that names the files the other parts change at the same time and tells the worker to report, not repair, a failure or a change that traces to them, because parallel workers share one working tree and a producer passes its brief's `Constraints` to its reviewer.
-- When a check must be independent of its author, such as `challenger`, a review of a change you wrote, or a recomputation, pass a model of the other family than the author's in the call, because one family shares its blind spots; this is not an escalation.
-
 ## Read the result
 
 Choose the next step from the result's `Status`:

@@ -34,7 +34,7 @@ Ask each question below of every line, section, and file while writing and while
 - [ ] Is an exact path, command, value, or version named only when the repository or official documentation confirms it?
 - [ ] Does the text describe the current state, with dates and history kept out of guidelines, because a dated statement goes wrong silently?
 - [ ] Does each guideline have a scope rather than a claim of priority over other instructions, because VS Code sets no precedence between instructions that load together, and only an agent the user selects may state that the user's explicit instructions win over a skill's?
-- [ ] Is each tool mention in the body written as `#tool:<frontmatter-tool-name>` followed by a space, including before punctuation, because VS Code reads a following `.` or `-` as part of the tool name?
+- [ ] Does each tool mention use the syntax of the intended harness? In Local, `#tool:<tool-name>` is a tool reference; for Copilot or a shared body, name the capability or the documented tool identifier without relying on that Local-only syntax.
 
 Preferred example:
 

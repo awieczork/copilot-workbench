@@ -7,7 +7,7 @@ applyTo: "plugins/agent-team/**"
 
 - Keep workbench policy and the root records out of plugin artifacts, because the plugin runs in other projects.
 - Count every skill and rule as reachable by every agent, including a subagent, through its `description` or `applyTo`, so that an unnamed skill is no gap.
-- Take each tool identifier from the VS Code tools reference or the tool list of the extension or MCP server that contributes it, and each model name from GitHub's supported-models list for VS Code, because VS Code silently ignores a name it does not recognize.
+- Take each tool identifier from the intended harness's documentation or the tool list of the extension or MCP server that contributes it, and each model name from GitHub's supported-models list for VS Code; confirm availability in the session because identifiers and tools can differ by harness.
 - Double-quote string frontmatter values in agents and rules, and keep native booleans such as `user-invocable: false`, because one quoting style keeps a colon in any value from breaking the frontmatter.
 - Give every agent that writes code, a query, or a plan this documentation line unchanged, because it is the principle behind every check of an interface:
 
@@ -37,7 +37,7 @@ When you add, rename, or change the role of a component, keep its connections cu
 
 - A worker sits in the `agents` list and the `Route the work` table of each lead that delegates to it, in the `agents` list and workflow of each chat agent that calls it, and, for a checker, in the `agents` list and review phase of each producer that calls it.
 - A renamed component is renamed wherever another component names it, including `agents`, `handoffs`, and bodies.
-- A lead that receives shaped requests is a `handoffs` target of each chat agent.
+- A chat agent offers the user-invoked `handoff-discussion` skill to transfer a confirmed request to the lead.
 
 ## Subagent line
 

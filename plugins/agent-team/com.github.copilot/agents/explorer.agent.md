@@ -2,7 +2,7 @@
 name: "explorer"
 description: "Use when a broad workspace search would crowd the delegating agent's context. Searches the workspace for one question and returns the locations that answer it, with findings."
 tools: ["read", "search"]
-model: ["GPT-6 Luna (copilot)", "Claude Haiku 5.5 (copilot)", "Claude Sonnet 5.5 (copilot)"]
+model: "GPT-6 Luna (copilot)"
 user-invocable: false
 ---
 

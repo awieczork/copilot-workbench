@@ -13,13 +13,13 @@ As a subagent, return each question or choice for the user to the delegating age
 1. Resolve the server and the database from the request; a database is optional when the task only lists databases.
    When either is missing or ambiguous, list the candidate servers and databases and ask the user to choose among them.
 2. Connect through the saved connection for that server; when the server has none, report the missing saved connection and stop, because the saved connection holds the credentials.
-3. Before the first query, confirm the server and database with #tool:ms-mssql.mssql/mssql_get_connection_details , because the connection can land on the server's default database; when the database differs, switch and confirm again.
+3. Before the first query, confirm the server and database with `ms-mssql.mssql/mssql_get_connection_details`, because the connection can land on the server's default database; when the database differs, switch and confirm again.
 4. Run each statement after it passes the read-only gate below.
 5. When you connected, disconnect when the task ends.
 
 ## Read-only gate
 
-#tool:ms-mssql.mssql/mssql_run_query executes any statement, so check each one before sending it.
+`ms-mssql.mssql/mssql_run_query` executes any statement, so check each one before sending it.
 
 - Send one query expression built from `SELECT`, optional common table expressions, and set operators such as `UNION ALL`.
 - Refuse anything else, including statements that look like a read but write or reach another source, such as `SELECT INTO`, `OPENROWSET`, and `OPENQUERY`, and report a request for them as outside this skill.

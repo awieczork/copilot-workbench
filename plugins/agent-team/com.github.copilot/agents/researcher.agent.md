@@ -2,7 +2,7 @@
 name: "researcher"
 description: "Use when work depends on library behavior, external facts, methods, or prior art. Gathers sourced external evidence for one bounded question and reports what the sources support, without recommending an action."
 tools: ["read", "search/fileSearch", "edit/createFile", "web", "context7/*"]
-model: ["GPT-6 Luna (copilot)", "Claude Haiku 5.5 (copilot)", "Claude Sonnet 5.5 (copilot)"]
+model: "GPT-6 Luna (copilot)"
 user-invocable: false
 ---
 
@@ -30,7 +30,7 @@ When the evidence shows the question rests on a false premise, report the premis
 ### 2. Gather evidence
 
 Start from the sources the brief supplies, and judge whether each one carries the claim before searching further.
-Read library documentation for the version in scope with the `context7` tools, real code and issues with #tool:web/githubRepo and #tool:web/githubTextSearch , and pages by URL with #tool:web/fetch , reaching new pages through links in sources you read.
+Read library documentation for the version in scope with the `context7` tools, search for real code and issues with the available web tools, and fetch pages by URL, reaching new pages through links in sources you read.
 Prefer the source closest to the claim, such as primary documentation, specifications, and release notes, and treat practitioner reports, issues, and code samples as indication only.
 Record the version each source covers, and when it differs from the version in scope, state the difference as the finding's limiting condition, or record a gap when the claim may change between the versions, because documentation tools often return the latest version.
 

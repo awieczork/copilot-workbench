@@ -8,13 +8,13 @@ Each package has one purpose and bundles the resources it needs without requirin
 
 | Package | Purpose | Publication state |
 | --- | --- | --- |
-| [agent-team](plugins/agent-team/README.md) | Agents for software development and data analysis, with supporting skills, rules, and Model Context Protocol (MCP) configuration. | Version [0.3.0](https://github.com/awieczork/copilot-workbench/releases/tag/agent-team/v0.3.0) is published; runtime support unverified. |
+| [agent-team](plugins/agent-team/README.md) | Agents for software development and data analysis, with supporting skills, rules, and Model Context Protocol (MCP) configuration. | Version [0.3.0](https://github.com/awieczork/copilot-workbench/releases/tag/agent-team/v0.3.0) is published; the owner reports a plugin test. |
 | [agent-plugin-dev](plugins/agent-plugin-dev/README.md) | Six reusable customization, build, and development lifecycle skills. | Version [0.1.1](https://github.com/awieczork/copilot-workbench/releases/tag/agent-plugin-dev/v0.1.1) is published; runtime support unverified. |
 | [project-records](plugins/project-records/README.md) | Three project-record rules and an automatically selectable skill for evidence-based updates. | Version [0.1.0](https://github.com/awieczork/copilot-workbench/releases/tag/project-records/v0.1.0) is published; runtime support unverified. |
 
 The [catalog](.github/plugin/marketplace.json) lists the packages present on this branch.
 The `agent-team` README holds its component inventory and runtime requirements.
-It also gives package-specific installation steps with runtime support still unverified; this root guide owns marketplace setup and removal of the original plugin.
+It also gives package-specific installation steps; this root guide owns marketplace setup and removal of the original plugin.
 The development-package README lists its six skills and execution requirements.
 The records-package README owns its three-rule and one-skill inventory.
 
@@ -23,11 +23,10 @@ The records-package README owns its three-rule and one-skill inventory.
 The catalog uses full-repository `main` as its source; a push changes the available package files independently of tag or GitHub release creation.
 The package versions listed above have annotated `<package>/v<version>` tags and public GitHub releases.
 Do not load the new package beside published `agent-team` `0.2.0`, because that version contains the same three rule identities.
-The split requires `agent-team` `0.3.0`, which excludes those rules, rather than an older installed copy.
+The split requires `agent-team` `0.3.0` or newer, rather than an older installed copy.
 The catalog no longer lists the original root Copilot-format `copilot-workbench` package.
-[OI-03](OPEN-ISSUES.md) remains open until the agents and rules pass checks in a real Copilot Agent Host session.
-The owner waived runtime verification on 2026-10-28 and authorized publication without changing the selected format.
-This waiver is not evidence of runtime support; namespaced agent and rule loading, skill discovery, package coexistence, and repository pointer selection remain unverified.
+The owner confirms that the plugin was tested and considers the former OI-03 outdated.
+The client version, configuration, and test scope were not specified; do not infer which configurations or components the test covered.
 See [Project status](PROJECT-STATUS.md) for current work and [Architecture](ARCHITECTURE.md) for package boundaries.
 
 ## Installation
@@ -94,7 +93,7 @@ Run each command separately in chat, not in the terminal:
 ```
 
 Skip the add command if the marketplace is already registered.
-Confirm the source when prompted and check that `agent-team` version `0.3.0` is installed and enabled.
+Confirm the source when prompted and check that the installed `agent-team` version matches the [package manifest on `main`](https://github.com/awieczork/copilot-workbench/blob/main/plugins/agent-team/plugin.json) and is enabled.
 Manage this installation through `/plugin`.
 
 ### 4. Configure Local on Windows
@@ -143,7 +142,7 @@ Workers need not appear in the main agent picker.
 Check required tools and script execution separately; tools supplied by editor extensions can differ in the Agents window.
 A database connection failure is separate from plugin discovery and does not by itself establish an installation failure.
 
-Record results separately for each configuration; keep [OI-03](OPEN-ISSUES.md) open until its editor and runtime closure checks pass.
+Record results separately for each configuration.
 Successful installation alone does not prove runtime support.
 
 ### Updates and optional tools

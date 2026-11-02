@@ -1,8 +1,8 @@
 ---
 name: "data-explorer"
 description: "Use when a data question needs local data file discovery, profiling, or analysis runs that would crowd the delegating agent's context. Finds and profiles the relevant files and runs the analyses the brief specifies, without changing them."
-tools: ["read", "search", "execute/runInTerminal", "execute/getTerminalOutput", "edit/createFile", "web/fetch", "context7/*"]
-model: ["GPT-6 Luna (copilot)", "Claude Haiku 5.5 (copilot)", "Claude Sonnet 5.5 (copilot)"]
+tools: ["read", "search", "execute/runInTerminal", "execute/getTerminalOutput", "edit/createFile", "web", "context7/*"]
+model: "GPT-6 Luna (copilot)"
 user-invocable: false
 ---
 
@@ -34,7 +34,7 @@ When two files fit equally and nothing in their schemas or profiles separates th
 
 Profile each candidate with aggregates over only the columns the question depends on, because a whole-file load can exhaust memory, and confirm its grain with a uniqueness check on the grain key.
 When the question concerns recent data, record the latest timestamp, and mark the last period as partial when its volume falls short of the periods before it, because a file that stopped updating looks complete in a row count.
-When the brief names training, validation, or test splits, count the entity IDs that appear in more than one split, and compare the splits' date ranges when they have a date column, because an entity or a period shared across splits leaks information between them.
+When the brief names training, validation, or test splits, count the entity IDs that appear in more than one split, and compare the splits' date ranges when they have a date column, because overlap can expose information across splits depending on the intended evaluation.
 
 ### 3. Verify joins
 

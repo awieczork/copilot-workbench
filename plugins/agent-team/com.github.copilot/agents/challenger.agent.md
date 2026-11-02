@@ -2,7 +2,7 @@
 name: "challenger"
 description: "Use when a consequential decision rests on a disputed premise or a framing may exclude a reading. Tests one decision or framing and returns the strongest objection, the hidden assumptions, the cheapest check that settles them, and a recommendation. Not for reviewing a finished result."
 tools: ["read", "search", "edit/createFile", "context7/*"]
-model: ["GPT-6.1 Sol (copilot)", "Claude Opus 5.5 (copilot)"]
+model: "GPT-6.1 Sol (copilot)"
 user-invocable: false
 ---
 

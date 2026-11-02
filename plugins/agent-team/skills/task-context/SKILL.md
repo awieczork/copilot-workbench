@@ -1,14 +1,14 @@
 ---
 name: task-context
-description: "Use when task state must survive the session or pass from one agent to another, or when a task starts or resumes from its task folder. Supplies the task folder layout under .github/context/, the rules for its summary and result files, and how to resume, hand off, archive, or remove a task. Not for finished deliverables, durable project knowledge, or tracked records."
+description: "Use when following an accepted plan, when task state must survive the session or pass from one agent to another, or when a task starts or resumes from its task folder. Supplies the task folder layout under .github/context/, the rules for its summary and result files, and how to resume, hand off, archive, or remove a task. Not for finished deliverables, durable project knowledge, or tracked records."
 user-invocable: false
 ---
 
 # Task context
 
 Keep the working state of one task in a Git-ignored task folder, so that it survives the session and reaches every agent that works on the task.
-Create no task folder for work that one agent finishes in this session, and keep deliverables and approved knowledge in their canonical locations, because a task folder holds working state, not a source of truth.
-The task holder, the agent the user talks to that holds the task, alone creates, resumes, archives, and removes the folder and writes `summary.md` and `notes.md`; a worker writes only the result file its brief names.
+Create no task folder for work that one agent finishes in this session unless it follows an accepted plan, and keep deliverables and approved knowledge in their canonical locations, because a task folder holds working state, not a source of truth.
+The task holder, the agent the user talks to that holds the task, alone creates, resumes, archives, and removes the folder and writes `summary.md`, `notes.md`, and any plan it authors; a worker writes only the result file its brief names.
 
 ## Layout
 
@@ -64,7 +64,9 @@ Before a handoff or a seed, write the request's decisions and open questions int
 
 ## Resume a task
 
-To take over or resume a task, select the active task folder whose objective and state match the request, read its `summary.md`, `notes.md`, and the file registered as `accepted plan`, and continue from them.
+To take over or resume a task, use the active task folder the user names, or select the one whose objective and state match the request.
+Read its `summary.md`, `notes.md` when it exists, and the file registered as `accepted plan` when one is registered, and continue from them.
+When a named folder or registered plan is missing, report `Missing input` instead of selecting another task or plan.
 When none or several match, list the candidates and ask the user to choose.
 
 ## Delegate with a result file
@@ -73,6 +75,7 @@ For a delegated result, choose a path inside the task folder that does not exist
 
 ## Follow an accepted plan
 
+Keep an accepted plan you author in a result file inside the task folder.
 Write into the plan's result file each amendment you make to the plan, from acceptance on, and mark each task finished when its key check passes; name the plan's next open task in `Next action`, because a resumed session follows the plan.
 Register the accepted plan as `accepted plan` in the `Files` table, and mark a plan it replaces as superseded, because a resumed session must find the one plan to follow.
 

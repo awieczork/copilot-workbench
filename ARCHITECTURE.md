@@ -33,30 +33,29 @@ Repository records and `.github/` authoring files stay outside package payloads 
 All packages use [Agent Plugins 1.0](https://agent-plugins.org/): each has a root `plugin.json` with the canonical `$schema`, portable `skills/`, optional root `mcp.json`, and Copilot-specific components under `com.github.copilot/`.
 The published releases are `agent-team` `0.3.0`, `agent-plugin-dev` `0.1.1`, and `project-records` `0.1.0`, each with its own versioned changelog notes, annotated namespaced tag, and public GitHub release.
 The catalog serves full-repository `main`, so a push exposes package changes independently of tag or GitHub release creation.
-Use the split with `agent-team` `0.3.0`, because an older installed `0.2.0` still contains the same record-rule identities.
-The owner waived runtime verification on 2026-10-28; the selected Agent Plugins 1.0 format remains unchanged and runtime support stays unverified.
-[OI-03](OPEN-ISSUES.md) remains open: schema and path checks do not prove Agent Host runtime support.
+Use the split with `agent-team` `0.3.0` or newer, because an older installed `0.2.0` still contains the same record-rule identities.
+The owner confirms that the plugin was tested and considers the former OI-03 outdated.
+The client version, configuration, and test scope were not specified; the test does not establish runtime behavior of later changes.
 The canonical [packaging guide](plugins/agent-plugin-dev/skills/build-plugin/references/packaging.md) and checker define static 1.0 checks; they do not prove runtime support.
 
 ## Agents
 
 The user selects an entry agent.
-A lead splits the task into parts for workers, runs the independent parts in parallel, and integrates their results.
-A chat agent delegates its evidence gathering to helper workers.
+A lead performs simple work directly and delegates when parallelism, isolated context, specialist tools, or independent assessment benefits the task.
+A chat agent gathers simple evidence directly and may delegate to helper workers, without implementing the request.
 A worker returns one status with its result to the delegating agent.
-`discuss` hands a shaped request to a lead through a handoff the user confirms.
+After the user confirms a shaped request, `discuss` offers the user-invoked `handoff-discussion` skill to transfer it to a new `lead` session.
 
 | Agent | May call |
 | --- | --- |
-| `data-lead` | Every worker |
 | `lead` | Every worker |
 | `discuss` | `explorer`, `researcher`, `challenger` |
-| `developer`, `ui-developer` | `reviewer` |
-| `planner` | `challenger` |
+| `developer` | `reviewer` |
 
 ## Coordination
 
 Every delegation is one-shot and self-contained, following [`brief-subagent`](plugins/agent-team/skills/brief-subagent/SKILL.md) or, for a producer's call to its checker, the producer's review rules, and the delegating agent treats worker output as evidence while keeping conclusions, integration decisions, and the choice of which results get a review or a kept test.
+Each worker has one default model; `brief-subagent` guides the delegating agent's choice of an alternative, including a producer's call to its checker.
 Every worker returns one status, `done`, `blocked`, `Decision needed`, or `Missing input`, and the delegating agent acts on it as `brief-subagent` describes.
 The task holder, the entry agent the user talks to that holds the task, keeps task state through [`task-context`](plugins/agent-team/skills/task-context/SKILL.md), and a worker writes task state only to the result file its brief names.
 Only entry agents ask the user.
@@ -69,13 +68,15 @@ Leads use strong models and workers the tier that fits their role, as defined in
 | --- | --- | --- |
 | General customization | [`copilot-customization`](plugins/agent-plugin-dev/skills/copilot-customization/SKILL.md) | Artifact choice, metadata, writing guidance, and review in `agent-plugin-dev`. |
 | Plugin development | [`build-plugin`](plugins/agent-plugin-dev/skills/build-plugin/SKILL.md), [`start-dev`](plugins/agent-plugin-dev/skills/start-dev/SKILL.md), [`commit-dev`](plugins/agent-plugin-dev/skills/commit-dev/SKILL.md), [`merge-dev`](plugins/agent-plugin-dev/skills/merge-dev/SKILL.md), [`publish-plugin`](plugins/agent-plugin-dev/skills/publish-plugin/SKILL.md) | Static package checks and explicitly authorized local cycles, commits, integration, and per-package publication. |
-| Coordination | [`brief-subagent`](plugins/agent-team/skills/brief-subagent/SKILL.md), [`task-context`](plugins/agent-team/skills/task-context/SKILL.md), [`interview-me`](plugins/agent-team/skills/interview-me/SKILL.md), [`seed-task`](plugins/agent-team/skills/seed-task/SKILL.md) | Self-contained briefs, temporary state, intent clarification, and seeds for independent sessions. |
+| Coordination | [`brief-subagent`](plugins/agent-team/skills/brief-subagent/SKILL.md), [`task-context`](plugins/agent-team/skills/task-context/SKILL.md), [`interview-me`](plugins/agent-team/skills/interview-me/SKILL.md), [`seed-task`](plugins/agent-team/skills/seed-task/SKILL.md), [`handoff-discussion`](plugins/agent-team/skills/handoff-discussion/SKILL.md) | Self-contained briefs, temporary state, intent clarification, and transfers to independent sessions. |
+| Task methods | [`data-analysis`](plugins/agent-team/skills/data-analysis/SKILL.md), [`planning`](plugins/agent-team/skills/planning/SKILL.md) | Data evidence and interpretation, and proportional plans. |
 | Execution | [`run-python`](plugins/agent-team/skills/run-python/SKILL.md), [`redshift`](plugins/agent-team/skills/redshift/SKILL.md), [`sql-server`](plugins/agent-team/skills/sql-server/SKILL.md) | Runtime selection and bounded, read-only database work. |
 | Scoped rules | [Markdown](plugins/agent-team/com.github.copilot/rules/markdown.instructions.md), [Python](plugins/agent-team/com.github.copilot/rules/python.instructions.md), [SQL](plugins/agent-team/com.github.copilot/rules/sql.instructions.md) | Conventions for Markdown documents, user-run task scripts, and read-only queries. |
 | Record rules | [Changelog](plugins/project-records/com.github.copilot/rules/changelog.instructions.md), [Project status](plugins/project-records/com.github.copilot/rules/project-status.instructions.md), [Open issues](plugins/project-records/com.github.copilot/rules/open-issues.instructions.md) | The content of a project's `CHANGELOG.md`, `PROJECT-STATUS.md`, and `OPEN-ISSUES.md`, owned by `project-records`. |
 | Record maintenance | [update-project-records](plugins/project-records/skills/update-project-records/SKILL.md) | Evidence-based updates after a durable state change or an explicit reconciliation request; reads only the rules for selected records and respects project update permissions. |
 
 General behavior belongs in agents and skills, not in language rules.
+User-interface specialization is outside the current `agent-team` design.
 Record maintenance does not require the team's task-state layout, and automatic skill selection is not a guaranteed post-task hook.
 `interview-me` is a user-only skill for starting an interview with any agent ad hoc; it is independent of `discuss`, which runs its own interview phase, so their overlapping question rules are intended.
 
@@ -89,7 +90,7 @@ The canonical [`build-plugin`](plugins/agent-plugin-dev/skills/build-plugin/SKIL
 Repository `.github/skills/` contains only six discovery pointers to the development package, with matching discovery metadata and one link per file; implementations, scripts, tests, and references stay canonical in that package.
 The scoped [team conventions](.github/instructions/team.instructions.md), [entry contract](.github/instructions/entry-contract.instructions.md), [worker contract](.github/instructions/worker-contract.instructions.md), and [model tiers](.github/instructions/model-tiers.instructions.md) govern only `agent-team` authoring.
 No package depends on those workbench instructions to run.
-The extraction leaves agent roles and delegation contracts unchanged; the three record rules are supplied only by `project-records` in the working tree.
+The three record rules are supplied only by `project-records` in the working tree.
 `copilot-customization` stays plugin-independent.
 Static checks cover package isolation, component identity collisions, and pointer shape; real discovery and co-installed selection remain client-runtime checks.
 
@@ -131,6 +132,7 @@ Each candidate needs an agreed priority and a new specification before implement
 | R rule | Define scoped conventions for R scripts and project code. |
 | Analytical-task skill | Organize one analytical task's durable files and execution record without duplicating temporary task state. |
 | Data-contracts skill | Create and maintain explicit contracts for datasets and their expected properties. |
+| Data explorer consolidation | Reassess merging local-file and database exploration only when shared work justifies the combined tool access. |
 | Mermaid skill | Create and validate diagrams from a newly agreed, bounded diagramming workflow. |
 | Reporting skill | Create and maintain analytical reports with traceable evidence and stated limitations. |
 | Project-instruction skill | Interview the owner and produce project-specific root instructions; first assess overlap with existing customization skills. |

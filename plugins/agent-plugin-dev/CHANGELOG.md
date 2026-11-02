@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [0.1.2] - 2026-11-02
+
+### Changed
+
+- The `copilot-customization` skill describes tool references, model identifiers, and agent configuration by harness.
+
 ## [0.1.1] - 2026-10-29
 
 Runtime support remains unverified under the owner's waiver; static checks do not establish client compatibility.

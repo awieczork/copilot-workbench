@@ -15,7 +15,7 @@ Use the inspiration sources for structure, not as tone or output templates.
 | [Agent Plugins 1.0 manifest schema](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json) and [MCP schema](https://agent-plugins.org/schemas/1.0.0/mcp.schema.json) | Canonical identifiers and JSON Schema validation for both migration packages. |
 
 The 1.0 layout and schema sources were checked on 2026-10-28 for the migration.
-They define static contracts, not evidence that the installed Copilot harness runs namespaced components; OI-03 remains open.
+They define static contracts, not evidence of runtime behavior; the owner confirmed a separate plugin test without specifying its client version or configuration.
 This check does not refresh the separate customization facts below.
 
 ## Development tools
@@ -35,7 +35,7 @@ This check does not refresh the separate customization facts below.
 
 | Resource | Relevance |
 | --- | --- |
-| [Models and pricing for GitHub Copilot](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) | Per-token prices and their context thresholds behind the order of the light ladder in the [model tiers](.github/instructions/model-tiers.instructions.md); last checked on 2026-10-16. |
+| [Models and pricing for GitHub Copilot](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) | Model strengths, per-token prices, and context thresholds behind the defaults in [model tiers](.github/instructions/model-tiers.instructions.md) and alternatives in [`brief-subagent`](plugins/agent-team/skills/brief-subagent/references/model-selection.md); checked on 2026-11-02. |
 
 ## Customization and prompting guidance
 
@@ -48,10 +48,10 @@ Agent and rule locations were rechecked on 2026-10-29 against the [VS Code plugi
 Agent Plugins 1.0 uses `com.github.copilot/agents/` and `com.github.copilot/rules/`; the root `agents/` and `rules/` locations belong to the Copilot format.
 The microsoft/vscode source alone confirms these facts, because the docs do not cover them or state them differently:
 
-- a subagent call takes a per-call `model` and has no reasoning-effort parameter: `src/vs/workbench/contrib/chat/common/tools/builtinTools/runSubagentTool.ts`;
+- a Local subagent call takes a per-call `model` and has no reasoning-effort parameter: `src/vs/workbench/contrib/chat/common/tools/builtinTools/runSubagentTool.ts`;
 - a skill whose `name` differs from its folder loads under the folder name, and a plugin agent without `name` gets a plugin-prefixed id: `promptsServiceImpl.ts`;
 - `applyTo` takes comma-separated patterns and matches a relative pattern at any depth, ignoring case: `computeAutomaticInstructions.ts`;
-- the `web` tool set holds `web/fetch`, `web/githubRepo`, and `web/githubTextSearch`: `extensions/copilot/package.json`.
+- the Local `web` tool set holds `web/fetch`, `web/githubRepo`, and `web/githubTextSearch`: `extensions/copilot/package.json`.
 
 Treat any other claim as stale when current documentation differs.
 
@@ -100,6 +100,7 @@ Read sources in full rather than through a summarizing fetch, because summaries 
 | Resource | Relevance |
 | --- | --- |
 | [Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) | Attention as a finite budget, guidance at the right altitude, and just-in-time context. |
+| [Building agents: when to fold subagents into your main agent loop](https://claude.com/resources/articles/building-agents-when-to-fold-subagents-into-your-main-agent-loop) | Progressive disclosure and keeping subagents for parallelism, context isolation, and independent checks. |
 | [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) | The simplest solution first, with complexity added only when it pays. |
 | [Writing tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents) | Few, well-defined tools with high-signal output. |
 | [12-factor agents](https://humanlayer.dev/blog/12-factor-agents) | Deterministic software with model judgment where it adds value, and small, focused agents. |
@@ -114,8 +115,7 @@ Read sources in full rather than through a summarizing fetch, because summaries 
 | Discuss | [Product Manager](https://github.com/github/awesome-copilot/blob/main/agents/se-product-manager-advisor.agent.md), [Idea Generator](https://github.com/github/awesome-copilot/blob/main/agents/simple-app-idea-generator.agent.md), and [VS Code planning](https://code.visualstudio.com/docs/agents/run/planning). |
 | Explorer and data explorers | [Gem Researcher](https://github.com/github/awesome-copilot/blob/main/agents/gem-researcher.agent.md), [Context Architect](https://github.com/github/awesome-copilot/blob/main/agents/context-architect.agent.md), [Kusto Assistant](https://github.com/github/awesome-copilot/blob/main/agents/kusto-assistant.agent.md), [MongoDB Performance Advisor](https://github.com/github/awesome-copilot/blob/main/agents/mongodb-performance-advisor.agent.md), [Research Harness Engineer](https://github.com/github/awesome-copilot/blob/main/agents/research-harness-engineer.agent.md), and [SQL Code Review](https://github.com/github/awesome-copilot/blob/main/skills/sql-code-review/SKILL.md) for the unmatched-key check. |
 | Researcher | [Context7 Expert](https://github.com/github/awesome-copilot/blob/main/agents/context7.agent.md), [Doublecheck](https://github.com/github/awesome-copilot/blob/main/agents/doublecheck.agent.md), and [Task Researcher](https://github.com/github/awesome-copilot/blob/main/agents/task-researcher.agent.md). |
-| Planner | [Gem Planner](https://github.com/github/awesome-copilot/blob/main/agents/gem-planner.agent.md) and [One-Shot Feature Issue Planner](https://github.com/github/awesome-copilot/blob/main/agents/one-shot-feature-issue-planner.agent.md). |
+| Planning | [Gem Planner](https://github.com/github/awesome-copilot/blob/main/agents/gem-planner.agent.md) and [One-Shot Feature Issue Planner](https://github.com/github/awesome-copilot/blob/main/agents/one-shot-feature-issue-planner.agent.md). |
 | Developer | [Coder](https://gist.github.com/burkeholland/0e68481f96e94bbb98134fa6efd00436), [SWE](https://github.com/github/awesome-copilot/blob/main/agents/swe-subagent.agent.md), and [Gem Implementer](https://github.com/github/awesome-copilot/blob/main/agents/gem-implementer.agent.md). |
-| UI Developer | [Gem Designer](https://github.com/github/awesome-copilot/blob/main/agents/gem-designer.agent.md), [Gem Browser Tester](https://github.com/github/awesome-copilot/blob/main/agents/gem-browser-tester.agent.md), and [DevTools Regression Investigator](https://github.com/github/awesome-copilot/blob/main/agents/devtools-regression-investigator.agent.md). |
 | Reviewer | [Gem Reviewer](https://github.com/github/awesome-copilot/blob/main/agents/gem-reviewer.agent.md), [AI Team QA](https://github.com/github/awesome-copilot/blob/main/agents/ai-team-qa.agent.md), and [QA](https://github.com/github/awesome-copilot/blob/main/agents/qa-subagent.agent.md). |
 | Challenger | [Critical Thinking](https://github.com/github/awesome-copilot/blob/main/agents/critical-thinking.agent.md), [Devil's Advocate](https://github.com/github/awesome-copilot/blob/main/agents/devils-advocate.agent.md), and [rubber duck](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/rubber-duck). |
