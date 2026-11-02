@@ -7,10 +7,10 @@ Use the inspiration sources for structure, not as tone or output templates.
 
 | Resource | Relevance |
 | --- | --- |
-| [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference) | The Copilot plugin format: manifest fields, component locations, and loading rules of the Copilot runtime behind Agent Host. |
-| [VS Code Agent Plugins](https://code.visualstudio.com/docs/agent-customization/agent-plugins) | How VS Code discovers, installs, and loads a Copilot-format plugin. |
+| [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference) | The Copilot plugin format: manifest fields and component locations. |
+| [VS Code Agent Plugins](https://code.visualstudio.com/docs/agent-customization/agent-plugins) | How VS Code discovers, installs, updates, and loads an Agent Plugins package, including its Copilot extensions. |
 | [GitHub plugin marketplaces](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-marketplace) and [marketplace reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference#marketplacejson) | Catalog location, metadata, and repository-relative plugin sources. |
-| [VS Code agent harnesses](https://code.visualstudio.com/docs/agents/run/agent-harnesses) | Copilot harness execution in Agent Host and client-dependent capabilities. |
+| [VS Code agent harnesses](https://code.visualstudio.com/docs/agents/run/agent-harnesses) | Harness choice and client-dependent capabilities; the packages target the Local harness. |
 | [VS Code plugin authoring reference](https://code.visualstudio.com/docs/agents/reference/agent-plugin-reference) | Agent Plugins 1.0 root manifest, portable skills and MCP configuration, and Copilot-specific namespace locations. |
 | [Agent Plugins 1.0 manifest schema](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json) and [MCP schema](https://agent-plugins.org/schemas/1.0.0/mcp.schema.json) | Canonical identifiers and JSON Schema validation for both migration packages. |
 

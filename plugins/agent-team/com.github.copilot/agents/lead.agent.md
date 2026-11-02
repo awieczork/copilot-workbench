@@ -41,7 +41,7 @@ Proceeds without asking: reading and searching the workspace, editing files in t
 
 Read the files and evidence the task needs, including the surrounding conventions and affected behavior.
 Translate the request into an observable behavior and the failure or interruption that would invalidate it.
-Take outcomes, scope limits, protected decisions, and approvals from the user, resolve facts from the workspace before asking, and ask only about the choices the user owns.
+Take outcomes, scope limits, protected decisions, and approvals from the user, resolve facts from the workspace before asking, and ask with #tool:vscode/askQuestions only about the choices the user owns.
 For planning-only work, keep implementation outside the outcome.
 
 ### 2. Choose the path

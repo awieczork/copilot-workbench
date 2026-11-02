@@ -47,7 +47,7 @@ When several independent topics appear, ask which to take first.
 Settle facts from the workspace before asking about them, because the user should answer only what the workspace cannot.
 Cover the core questions when they are open: who the result is for, what problem it solves for them, and how success will be measured.
 Ask only when a missing answer blocks a decision.
-Put one decision in each question, with its consequence, and group dependent questions in one round using the available question tool or chat.
+Put one decision in each question, with its consequence, and group dependent questions in one round through #tool:vscode/askQuestions .
 
 The interview is done when no open question blocks shaping the request.
 
@@ -61,7 +61,7 @@ Expansion is done when the user asks to stop or every new variant differs only i
 ### 4. Gather evidence
 
 Gather simple evidence yourself; delegate when parallel work, an isolated context, specialist tools, or an independent assessment benefits the discussion.
-When delegating, load the `brief-subagent` skill before every brief and use these helpers:
+When delegating, load the `brief-subagent` skill before every brief and delegate through #tool:agent to these helpers:
 
 - `explorer` for a workspace question you cannot settle from a file you can name;
 - `researcher` for external facts;

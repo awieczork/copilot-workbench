@@ -7,7 +7,7 @@ applyTo: "plugins/agent-team/**"
 
 - Keep workbench policy and the root records out of plugin artifacts, because the plugin runs in other projects.
 - Count every skill and rule as reachable by every agent, including a subagent, through its `description` or `applyTo`, so that an unnamed skill is no gap.
-- Take each tool identifier from the intended harness's documentation or the tool list of the extension or MCP server that contributes it, and each model name from GitHub's supported-models list for VS Code; confirm availability in the session because identifiers and tools can differ by harness.
+- Take each tool identifier from the VS Code tools reference or the tool list of the extension or MCP server that contributes it, and each model name from GitHub's supported-models list for VS Code, because VS Code silently ignores a name it does not recognize.
 - Double-quote string frontmatter values in agents and rules, and keep native booleans such as `user-invocable: false`, because one quoting style keeps a colon in any value from breaking the frontmatter.
 - Give every agent that writes code, a query, or a plan this documentation line unchanged, because it is the principle behind every check of an interface:
 

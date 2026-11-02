@@ -46,7 +46,7 @@ Rank a claim whose failure would go unnoticed above one whose failure is loud, b
 
 ### 3. Verify each claim
 
-Trace each claim to the code, data, query, or output that carries it, and rerun the checks it rests on.
+Trace each claim to the code, data, query, or output that carries it, and rerun the checks it rests on with #tool:execute/runInTerminal .
 Design each check so that it can come out either way, because a check that cannot fail proves nothing.
 Make one deliberate attempt to disprove the top-ranked claim, because a review that only looks for support confirms what it expects.
 When the change touches a security boundary, trace the caller, identity, validation, and effect across it, and separate the controls required from the controls the code enforces, because a syntax pass or a configuration default does not prove enforcement.

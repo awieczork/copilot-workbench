@@ -1,11 +1,11 @@
 # agent-team
 
-`agent-team` is a public, owner-maintained Agent Plugins 1.0 package for GitHub Copilot in VS Code, using the Copilot harness in Agent Host.
+`agent-team` is a public, owner-maintained Agent Plugins 1.0 package for GitHub Copilot in VS Code, using the Local harness in the editor window.
 It bundles reusable skills, custom agents, scoped rules, and Model Context Protocol (MCP) server configuration for software development and data analysis.
 
 ## Publication status
 
-The package manifest in this checkout declares version `0.4.0`.
+The package manifest in this checkout declares version `0.4.1`.
 The [versioned notes](CHANGELOG.md) describe this version; [GitHub releases](https://github.com/awieczork/copilot-workbench/releases) record published tags.
 The former `0.2.0` release includes the changelog, open-issues, and project-status rules; `0.3.0` excludes them.
 The catalog serves the full-repository `main` branch independently of release-tag creation.
@@ -20,47 +20,31 @@ Public access supports installation without repository credentials; this reposit
 
 ## Requirements
 
-- VS Code with GitHub Copilot, using the Copilot harness in Agent Host.
+- VS Code with GitHub Copilot, using the Local harness in the editor window.
+- The `chat.subagents.allowInvocationsFromSubagents` setting enabled when `developer` must run its `reviewer` check, because Local blocks subagent calls from subagents by default.
 - `uv` with `uvx` on `PATH` for Python execution and the Redshift MCP server.
 - Node.js with `npx` on `PATH` for the context7 MCP server.
 - The SQL Server extension `ms-mssql.mssql` or the Redshift MCP server, locally configured access, and read-only database permissions for database work.
 
 ## Installation
 
-The following steps manage the marketplace package.
-Run each `/plugin` command separately in a VS Code chat session with the **Copilot** harness selected.
+Manage the marketplace package in the Agent Customizations editor of a VS Code editor window, with the **Local** harness selected in chat.
 
 ### Replace the original plugin
 
 Uninstall the original `copilot-workbench` before installing `agent-team`, so both copies do not load together.
-For an installation made through `/plugin`, run:
-
-```text
-/plugin uninstall copilot-workbench@awieczork-tools
-```
-
-For an installation made through the Extensions view, the Agent Customizations editor, or **Chat: Install Plugin From Source**, uninstall it in the **Agent Plugins - Installed** view or the Agent Customizations editor.
-The editor and `/plugin` use separate plugin inventories; manage an installation through the interface where you installed it.
+Run **Chat: Open Customizations**, select **Plugins**, open `copilot-workbench`, and select **Uninstall**.
+The **Plugins** page also lists a copy installed with `/plugin` or the Copilot CLI; uninstall that copy through the interface that installed it.
 
 ### Install from the marketplace
 
-Register the marketplace if it is not already registered, then refresh it and install the package:
+1. Run **Chat: Open Customizations**, select **Browse**, open the source menu, and select **Configure Marketplaces**.
+2. Select **Add Marketplace** and enter `awieczork/copilot-workbench`, unless it is already listed.
+3. Return to **Browse**, select that marketplace, and install `agent-team`.
+4. Review the trust prompt, then confirm on the **Plugins** page that `agent-team` is enabled.
 
-```text
-/plugin marketplace add awieczork/copilot-workbench
-/plugin marketplace update awieczork-tools
-/plugin install agent-team@awieczork-tools
-/plugin list
-```
-
-To update, refresh the catalog and then update the plugin:
-
-```text
-/plugin marketplace update awieczork-tools
-/plugin update agent-team@awieczork-tools
-```
-
-Manage this installation through `/plugin`.
+When the **Browse** page is not available, select **Plugins** and then **Browse Marketplace**.
+To update, select **Check for and Apply Updates** on the **Plugins** page or run **Chat: Update Plugins**, then start a new session.
 The [VS Code plugin documentation](https://code.visualstudio.com/docs/agent-customization/agent-plugins) describes plugin management and its client requirements.
 
 ## Package contents
@@ -120,11 +104,11 @@ The SQL Server tools and the Redshift fallback runner can accept writes; the ski
 ## Context7 API key
 
 Create an API key in the [Context7 dashboard](https://context7.com/dashboard).
-Set `CONTEXT7_API_KEY` in the environment on the machine that runs the Context7 MCP server, before VS Code and Agent Host start.
+Set `CONTEXT7_API_KEY` in the environment on the machine that runs the Context7 MCP server, before VS Code starts.
 The packaged server reads this variable directly; no change to [mcp.json](mcp.json) is required.
 Keep the real key out of chat and repository files.
 
-Set it in the environment that Agent Host starts from, and fully quit and restart VS Code after a change; for a remote, Windows Subsystem for Linux (WSL), or container session, set it where the MCP server runs.
+Fully quit and restart VS Code after a change; for a remote, Windows Subsystem for Linux (WSL), or container session, set it where the MCP server runs.
 
 ## Database access
 

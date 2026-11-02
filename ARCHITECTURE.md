@@ -1,6 +1,6 @@
 # Architecture
 
-This document gives the high-level design of `copilot-workbench`, a public, owner-maintained marketplace for GitHub Copilot in VS Code with the Copilot harness in Agent Host; each artifact defines its own behavior.
+This document gives the high-level design of `copilot-workbench`, a public, owner-maintained marketplace for GitHub Copilot in VS Code with the Local harness in the editor window; each artifact defines its own behavior.
 
 ## Purpose
 
@@ -31,6 +31,7 @@ Repository records and `.github/` authoring files stay outside package payloads 
 ### Package format
 
 All packages use [Agent Plugins 1.0](https://agent-plugins.org/): each has a root `plugin.json` with the canonical `$schema`, portable `skills/`, optional root `mcp.json`, and Copilot-specific components under `com.github.copilot/`.
+The packages target the Local harness in the VS Code editor window on Windows and Windows Subsystem for Linux (WSL); the Copilot harness and the Agents window stay unsupported while [OI-05](OPEN-ISSUES.md) applies.
 The published releases are `agent-team` `0.4.0`, `agent-plugin-dev` `0.1.2`, and `project-records` `0.1.0`, each with its own versioned changelog notes, annotated namespaced tag, and public GitHub release.
 The catalog serves full-repository `main`, so a push exposes package changes independently of tag or GitHub release creation.
 Use the split with `agent-team` `0.3.0` or newer, because an older installed `0.2.0` still contains the same record-rule identities.
@@ -115,7 +116,7 @@ Branch rules prevent deletion and force pushes on `main`, without required pull 
 The authorized retirement removed only the `develop` selector from ruleset `25154483`; `main` protection is unchanged.
 Secret scanning and secret push protection are enabled.
 GitHub Actions uses read-only token permissions by default and cannot approve pull requests; workflows from all external contributors require owner approval.
-Collaborator-only interaction restrictions also block external pull requests and comments while active ([OI-02](OPEN-ISSUES.md)).
+Collaborator-only interaction restrictions also block external pull requests and comments while active.
 
 Keep repository instructions and discovery pointers under `.github/` tracked in the full repository, because they reproduce the development environment on another machine; reusable authoring tools stay in `agent-plugin-dev`.
 `.github/context/`, editor settings, and credentials remain Git-ignored local state.

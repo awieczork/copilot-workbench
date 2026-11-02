@@ -48,7 +48,7 @@ Where the change crosses a trust boundary, apply the controls that boundary need
 ### 3. Verify
 
 After each independent slice, run the narrowest check that could fail, and repair the slice before starting another.
-Run the checks the brief names, and the tests, build, lint, and type checks the change can affect.
+Run the checks the brief names, and the tests, build, lint, and type checks the change can affect, with #tool:execute .
 Repair every failure your change caused, counting a check that passed before the change and fails after it wherever it fires, and report any other failure with the output that shows it predates the change.
 Read the final diff against each `Done when` criterion.
 Remove leftover debugging statements, secrets, identifying values, and temporary files from the diff and the workspace.
@@ -57,7 +57,7 @@ Remove leftover debugging statements, secrets, identifying values, and temporary
 
 Run one review round with `reviewer` only when the brief marks review `Required`, because the delegating agent decides which results a review is worth.
 Load `brief-subagent` to select the checker's model.
-Call `reviewer` with the delegating agent's goal verbatim; the brief's `Done when`, `Scope`, `Constraints`, and the decisions in its `Context`; and the changed paths.
+Call `reviewer` through #tool:agent with the delegating agent's goal verbatim; the brief's `Done when`, `Scope`, `Constraints`, and the decisions in its `Context`; and the changed paths.
 Fix the defects you accept, rerun the affected checks, give every defect and open question a disposition, and report whether the review ran.
 When `reviewer` returns a status other than `done`, report the review as not run with that status and its cause, and carry its open questions into Open questions and blockers.
 

@@ -64,7 +64,7 @@ After three failed attempts at the same problem, name the assumption that may be
 
 Add the role's domain phases where they run:
 
-1. **Establish the outcome:** state the user's intent, resolve facts from the workspace before asking, and ask only about the choices the user owns.
+1. **Establish the outcome:** state the user's intent, resolve facts from the workspace before asking, and ask with #tool:vscode/askQuestions only about the choices the user owns.
 2. **Choose the path:** open with the proportionality rule "Scale the checks and challenge to the consequence of the work." in the role's terms.
    Do simple work directly, and delegate when parallelism, isolated context, specialist tools, or independent assessment benefits the task; keep decisions, integration, and acceptance checks.
    Load `planning` when the user asks for a plan, dependent steps or consequential decisions need one, or the lead follows or resumes one; load `data-analysis` for data-backed analysis.
@@ -87,8 +87,8 @@ In the delegation phase, add these rules:
 Add the role's own phases between these:
 
 1. **Reflect:** paraphrase the user's idea and invite correction.
-2. **Interview:** settle facts from the workspace first, and ask the user only about decisions that block shaping, using the available question tool or chat.
-3. **Gather evidence:** do simple evidence gathering directly and delegate to the helper workers in `agents` when it benefits the discussion, loading the `brief-subagent` skill before every brief and sending independent briefs in one turn so that they run in parallel.
+2. **Interview:** settle facts from the workspace first, and ask the user only about decisions that block shaping, through #tool:vscode/askQuestions .
+3. **Gather evidence:** do simple evidence gathering directly and delegate through #tool:agent to the helper workers in `agents` when it benefits the discussion, loading the `brief-subagent` skill before every brief and sending independent briefs in one turn so that they run in parallel.
 4. **Shape the request:** write the goal, context, scope and exclusions, confirmed decisions, assumptions, open questions, and constraints.
 5. **Hand off:** after the user confirms the shaped request, offer the user-invoked `handoff-discussion` skill and wait for the user's next request.
 

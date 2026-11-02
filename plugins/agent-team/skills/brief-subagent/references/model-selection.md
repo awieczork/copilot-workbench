@@ -16,6 +16,4 @@ Use this decision tree for any subagent, independently of its role:
 | Medium | `Claude Sonnet 5.5` | |
 | Strong | `Claude Opus 5.5` | `GPT-6.1 Sol` |
 
-Use a model available in the session and the identifier format the delegation tool accepts.
-When the call supports an override, pass the selected model; otherwise report that the selected model could not be requested and do not claim model independence without evidence of the model used.
-The Local and Copilot harnesses can expose different call parameters and model identifiers.
+Pass the selected model, available in the session, in the subagent call; it overrides the worker's default `model`.

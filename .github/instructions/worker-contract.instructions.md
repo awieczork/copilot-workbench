@@ -59,7 +59,7 @@ Add these review rules in the role's terms:
 
 - Run one review round with the checker only when the brief marks review `Required`, because the delegating agent decides which results a review is worth.
 - Load `brief-subagent` to select the checker's model.
-- Call the checker with the delegating agent's goal verbatim; the brief's `Done when`, `Scope`, `Constraints`, and the decisions in its `Context`; and the changed paths to check.
+- Call the checker through #tool:agent with the delegating agent's goal verbatim; the brief's `Done when`, `Scope`, `Constraints`, and the decisions in its `Context`; and the changed paths to check.
 - Fix each defect or objection the producer accepts, give every defect, objection, and open question a disposition, and report whether the review ran.
 - When the checker returns a status other than `done`, report the review as not run with that status and its cause, and carry its open questions into Open questions and blockers.
 

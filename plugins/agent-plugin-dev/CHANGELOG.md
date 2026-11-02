@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [0.1.3] - 2026-11-02
+
+### Changed
+
+- The `copilot-customization` skill describes custom agent fields, tool aliases, and `#tool:` references for the Local harness without per-harness qualifiers.
+
 ## [0.1.2] - 2026-11-02
 
 ### Changed

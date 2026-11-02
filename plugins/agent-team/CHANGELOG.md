@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## [0.4.1] - 2026-11-02
+
+### Changed
+
+- Agents and skills refer to their tools with `#tool:` references for the Local harness in the VS Code editor window.
+- The `brief-subagent` model selection passes the selected model in the subagent call to override the worker's default.
+- The package README describes requirements, installation, and updates for the Local harness, including the setting that lets `developer` call `reviewer`.
+
 ## [0.4.0] - 2026-11-02
 
 ### Added
