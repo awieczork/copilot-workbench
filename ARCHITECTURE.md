@@ -31,7 +31,7 @@ Repository records and `.github/` authoring files stay outside package payloads 
 ### Package format
 
 All packages use [Agent Plugins 1.0](https://agent-plugins.org/): each has a root `plugin.json` with the canonical `$schema`, portable `skills/`, optional root `mcp.json`, and Copilot-specific components under `com.github.copilot/`.
-The published releases are `agent-team` `0.3.0`, `agent-plugin-dev` `0.1.1`, and `project-records` `0.1.0`, each with its own versioned changelog notes, annotated namespaced tag, and public GitHub release.
+The published releases are `agent-team` `0.4.0`, `agent-plugin-dev` `0.1.2`, and `project-records` `0.1.0`, each with its own versioned changelog notes, annotated namespaced tag, and public GitHub release.
 The catalog serves full-repository `main`, so a push exposes package changes independently of tag or GitHub release creation.
 Use the split with `agent-team` `0.3.0` or newer, because an older installed `0.2.0` still contains the same record-rule identities.
 The owner confirms that the plugin was tested and considers the former OI-03 outdated.
