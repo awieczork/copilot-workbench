@@ -84,5 +84,5 @@ Plugin updates can also run automatically when `extensions.autoUpdate` is enable
 
 Install `agent-plugin-dev` only where you need the development tools, from the same marketplace in the Agent Customizations editor.
 The packages do not require each other, and the catalog has no compatibility alias for `copilot-workbench`.
-This workbench uses six repository discovery pointers to the canonical development skills; real-client pointer selection remains unverified.
+This workbench uses matching repository discovery pointers to the canonical plugin authoring and lifecycle skills; real-client pointer selection remains unverified.
 The [VS Code plugin documentation](https://code.visualstudio.com/docs/agent-customization/agent-plugins) describes plugin management and its client requirements.

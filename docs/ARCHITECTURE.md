@@ -46,7 +46,7 @@ Team roles and delegation belong in `agent-team`; record conventions and mainten
 General behavior belongs in agents and skills, not language rules.
 User-interface specialization is outside the current team design.
 
-The workbench's tracked `.github/` files hold repository instructions, four team contracts, and six discovery pointers to the canonical `agent-plugin-dev` skills.
+The workbench's tracked `.github/` files hold repository instructions, four team contracts, and matching discovery pointers to the canonical `agent-plugin-dev` skills.
 The package holds the implementations, scripts, tests, and references; packages do not depend on workbench instructions to run.
 Static checks cover package isolation, component identity collisions, and pointer shape; discovery and co-installed selection require client testing.
 `interview-me` is a user-only skill independent of the `discuss` interview phase.
@@ -63,15 +63,23 @@ A push exposes package changes independently of tags or GitHub releases, so prep
 Use `plugin/<exact-name>` or `repo/<lowercase-kebab-topic>` cycle branches and verified squash integration.
 Creating a cycle requires local `main` to match cached `origin/main`; dirty carry-over needs explicit permission.
 
-Commits use exact scoped paths and normal hooks.
-The squash workflow verifies the recorded base and source, expected tree, and sole parent before pushing `main`; branch cleanup needs named deletion permission and proof of remote absence.
+The lifecycle is user-invoked `start-dev`, `finish-dev`, and optional `publish-plugin`.
+The agent can select `build-plugin` and `copilot-customization` automatically; the user can also invoke them directly.
+An explicit start or resume grants autonomous local commits of checked cycle work on the exact selected branch in the current session.
+The grant ends when the selected branch changes, the cycle closes, or the owner revokes it; a new session requires a new start or resume request.
+Carrying existing dirty work does not by itself authorize committing it.
+Commits use exact scoped paths and normal hooks while preserving unrelated work and staged selections.
+
+`finish-dev` completes checks and release preparation on the cycle, then presents the exact source and effects for approval.
+Integration approval authorizes the local squash commit on `main`, not a push or branch deletion.
+The squash workflow verifies the recorded base and source, expected tree, and sole parent before an explicitly approved `main` push; branch cleanup needs named deletion permission and proof of remote absence.
 Publication selects one catalog package from clean full-repository `main`, uses a `<package>/v<version>` tag and package-specific notes, and requires separate permission for tags, pushes, and releases.
 Versions must increase; `agent-team` also inherits the legacy `v*` version floor.
 The root changelog owns repository changes, and each package owns its history.
 
 Local and remote `develop` are retired; `archive/develop-before-marketplace` preserves their frozen tip.
 The marketplace's full-repository history and legacy tags remain unchanged.
-Commits, pushes, integration, releases, and branch deletion each require explicit authorization.
+Cycle commits use the standing session grant; any commit outside the grant, pushes, integration, history rewrites, releases, and each named branch deletion require explicit authorization for those effects.
 
 The repository is public for installation, not external contributions or public support.
 The owner is its only collaborator; Issues, Projects, Discussions, and Wiki are disabled.

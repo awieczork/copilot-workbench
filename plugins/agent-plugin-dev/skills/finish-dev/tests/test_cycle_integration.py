@@ -10,6 +10,7 @@ from pathlib import Path
 
 BRANCH = "repo/fixture"
 SCRIPT = Path(__file__).parents[1] / "scripts/squash_check.py"
+SCREEN_SCRIPT = Path(__file__).parents[2] / "start-dev/scripts/screen_paths.sh"
 
 
 class GitFixture:
@@ -106,6 +107,16 @@ class GitFixture:
     def verify(self):
         return subprocess.run(
             [sys.executable, str(SCRIPT), self.base, self.source, self.squash],
+            cwd=self.root,
+            check=False,
+            capture_output=True,
+            text=True,
+            env=self.environment,
+        )
+
+    def screen(self):
+        return subprocess.run(
+            ["bash", str(SCREEN_SCRIPT)],
             cwd=self.root,
             check=False,
             capture_output=True,
@@ -233,6 +244,63 @@ class CycleIntegrationTests(unittest.TestCase):
         self.assertEqual(fixture.git("rev-parse", f"refs/heads/{BRANCH}").stdout.strip(), fixture.source)
         self.assertEqual(fixture.bare_git("rev-parse", f"refs/heads/{BRANCH}").stdout.strip(), fixture.source)
 
+    def test_scoped_commit_leaves_unrelated_path_unstaged(self):
+        fixture = self.fixture()
+        fixture.git("switch", BRANCH)
+        fixture.write("cycle-scope.txt", "checked cycle work\n")
+        fixture.write("unrelated.txt", "leave this path alone\n")
+        fixture.git("add", "--", "cycle-scope.txt")
+
+        self.assertEqual(fixture.git("diff", "--cached", "--name-only").stdout, "cycle-scope.txt\n")
+        fixture.git("commit", "-m", "docs: checked cycle work")
+
+        self.assertEqual(fixture.git("show", "HEAD:cycle-scope.txt").stdout, "checked cycle work\n")
+        self.assertEqual(fixture.git("status", "--short").stdout, "?? unrelated.txt\n")
+
+    def test_owner_selected_partial_staging_is_preserved(self):
+        fixture = self.fixture()
+        fixture.git("switch", BRANCH)
+        fixture.write("cycle.txt", "staged selection\n")
+        fixture.git("add", "--", "cycle.txt")
+        fixture.write("cycle.txt", "later unstaged work\n")
+
+        fixture.git("commit", "-m", "docs: commit staged selection")
+
+        self.assertEqual(fixture.git("show", "HEAD:cycle.txt").stdout, "staged selection\n")
+        self.assertEqual(fixture.git("diff", "--cached", "--name-only").stdout, "")
+        self.assertEqual(fixture.git("diff", "--name-only").stdout, "cycle.txt\n")
+        self.assertEqual((fixture.root / "cycle.txt").read_text(encoding="utf-8"), "later unstaged work\n")
+
+    def test_screening_reports_secret_and_large_paths(self):
+        fixture = self.fixture()
+        fixture.write(".env", "fixture only\n")
+        (fixture.root / "large.bin").write_bytes(b"x" * 5_000_001)
+
+        result = fixture.screen()
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.splitlines(), [".env\tsecret", "large.bin\tlarge"])
+
+    def test_cycle_commit_hook_failure_preserves_staged_work(self):
+        fixture = self.fixture()
+        fixture.git("switch", BRANCH)
+        source_tip = fixture.git("rev-parse", "HEAD").stdout.strip()
+        hooks = fixture.root.parent / "cycle-hooks"
+        hooks.mkdir()
+        hook = hooks / "pre-commit"
+        hook.write_text("#!/bin/sh\nexit 1\n", encoding="utf-8")
+        hook.chmod(0o755)
+        fixture.git("config", "core.hooksPath", str(hooks))
+        fixture.write("blocked-cycle.txt", "preserve staged work\n")
+        fixture.git("add", "--", "blocked-cycle.txt")
+
+        result = fixture.git("commit", "-m", "docs: blocked cycle commit", check=False)
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(fixture.git("rev-parse", "HEAD").stdout.strip(), source_tip)
+        self.assertEqual(fixture.git("diff", "--cached", "--name-only").stdout, "blocked-cycle.txt\n")
+        self.assertEqual(fixture.git("rev-parse", f"refs/heads/{BRANCH}").stdout.strip(), source_tip)
+
     def test_hook_failure_retains_commit_and_cycle(self):
         fixture = self.fixture()
         hooks = fixture.root.parent / "hooks"
@@ -248,6 +316,7 @@ class CycleIntegrationTests(unittest.TestCase):
         self.assertEqual(fixture.git("rev-parse", "HEAD").stdout.strip(), fixture.squash)
         self.assertIn("blocked.txt", fixture.git("diff", "--cached", "--name-only").stdout)
         self.assertEqual(fixture.git("rev-parse", f"refs/heads/{BRANCH}").stdout.strip(), fixture.source)
+
 
 if __name__ == "__main__":
     unittest.main()

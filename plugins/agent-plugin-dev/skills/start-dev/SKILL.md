@@ -1,13 +1,22 @@
 ---
 name: start-dev
-description: "Use when the owner explicitly asks to start or resume a plugin or repository-maintenance cycle. Validates the requested branch and local Git state before switching or creating it. Not for committing or merging work."
+description: "Use when the owner explicitly asks to start or resume one plugin or repository-maintenance cycle. Establishes the exact branch and a session-scoped grant for checked local commits within that cycle. Not for integration or remote effects."
 argument-hint: "[plugin|repo] [name]"
+disable-model-invocation: true
 ---
 
 # Start a development cycle
 
-Start or resume exactly one local cycle after the owner resolves any ambiguous name or unsafe working state.
+Start or resume exactly one local cycle and grant bounded commit permission after the owner resolves any ambiguous name or unsafe working state.
 As a subagent, return required owner questions to the delegating agent.
+
+## Commit permission
+
+An explicit user request to start or resume a cycle grants permission for new local commits of complete, checked work within that cycle, on the exact selected branch.
+A branch name or permission to carry existing dirty work does not grant commit permission; a new session needs a new explicit start or resume request.
+The grant ends when the selected branch changes, the cycle closes, or the owner revokes it.
+Never use the grant for `main`, another cycle, pushes, integration, or publication.
+Use the [cycle commit procedure](references/commit.md) for each permitted commit and read the [changelog format](references/changelog.md) when a commit changes release-facing behavior.
 
 ## Procedure
 
@@ -22,10 +31,13 @@ As a subagent, return required owner questions to the delegating agent.
 ## Completion
 
 This procedure changes only local branch selection or creation; it does not create a commit or contact a remote.
+Report the exact cycle scope and the active commit grant, which applies only in the current session.
 Report the verified result:
 
 ```markdown
 - Branch: {exact target}
 - Operation: {already current | resumed | created}
+- Cycle scope: {selected plugin and required repository-level files | named repository-maintenance topic}
 - Carried paths: {explicitly permitted paths | none}
+- Commit permission: {active for checked local commits on this branch in this session}
 ```

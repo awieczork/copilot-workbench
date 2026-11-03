@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## [0.2.0] - 2026-11-03
+
+### Added
+
+- The `finish-dev` skill completes cycle checks and version preparation, then presents exact integration, push, and named branch-cleanup effects for approval.
+
+### Changed
+
+- The user-invoked `start-dev` skill grants checked local commits within the exact cycle branch and scope for the current session, while preserving staged selections and separate effect approvals.
+- The package README identifies user-only lifecycle commands and user-and-agent authoring skills, and describes the complete start, finish, and optional publication workflow.
+
+### Removed
+
+- The `commit-dev` and `merge-dev` skills and commands are replaced by the cycle commit grant and `finish-dev`, with their screening, squash-verification, and cleanup safeguards retained.
+
 ## [0.1.4] - 2026-11-02
 
 ### Changed
