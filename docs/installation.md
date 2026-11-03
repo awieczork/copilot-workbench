@@ -1,7 +1,7 @@
 # Installation
 
-These steps use VS Code `1.144` as the setup baseline; they do not establish runtime compatibility.
-The supported configuration is the **Local** harness in an editor window, on Windows and Windows Subsystem for Linux (WSL).
+The GitHub Copilot steps use VS Code `1.144` as the setup baseline; they do not establish runtime compatibility.
+The supported GitHub Copilot configuration is the **Local** harness in an editor window, on Windows and Windows Subsystem for Linux (WSL).
 Local is a harness name, not a synonym for execution on your own computer.
 No repository clone or manual copying of agents, rules, or skills is required.
 
@@ -86,3 +86,34 @@ Install `agent-plugin-dev` only where you need the development tools, from the s
 The packages do not require each other, and the catalog has no compatibility alias for `copilot-workbench`.
 This workbench uses matching repository discovery pointers to the canonical plugin authoring and lifecycle skills; real-client pointer selection remains unverified.
 The [VS Code plugin documentation](https://code.visualstudio.com/docs/agent-customization/agent-plugins) describes plugin management and its client requirements.
+
+## Claude Code catalog discovery
+
+The separate [Claude Code catalog](../.claude-plugin/marketplace.json) lists the same three packages without changing their payloads.
+This catalog enables registration and listing; it does not establish Claude Code runtime compatibility.
+
+With Claude Code installed, run these commands in your shell:
+
+```bash
+claude --version
+claude plugin marketplace add awieczork/copilot-workbench
+claude plugin list --json --available
+```
+
+Check that the combined installed and available lists contain `agent-team@awieczork-tools`, `agent-plugin-dev@awieczork-tools`, and `project-records@awieczork-tools`.
+Registration does not add the marketplace to Anthropic's official directory.
+
+| Component | Claude Code discovery scope |
+| --- | --- |
+| `skills/` | The existing directories match Claude Code's standard layout; skill behavior remains unverified. |
+| `com.github.copilot/agents/` and `com.github.copilot/rules/` | The catalog does not register these Copilot-specific components for Claude Code. |
+| `mcp.json` | The catalog does not declare these servers, and the filename differs from Claude Code's default `.mcp.json`. |
+
+The catalog omits plugin versions to avoid a second version authority; Claude Code uses source-based versions when neither its manifest nor its entry supplies one.
+The existing root `plugin.json` files remain Agent Plugins 1.0 manifests; the packages have no `.claude-plugin/plugin.json` manifests.
+The marketplace entries supply Claude Code's metadata without adding files to the packages.
+
+To validate a checkout without registering it, run `claude plugin validate .` from the repository root.
+Static checks and successful listing do not prove that skills, tools, or model references work.
+Test skill behavior in a fresh session in a folder outside this workbench, so repository instructions do not mask plugin behavior.
+See Anthropic's [marketplace reference](https://code.claude.com/docs/en/plugins/marketplace-reference) and [manifest reference](https://code.claude.com/docs/en/plugins/manifest-reference) for the catalog and component rules.

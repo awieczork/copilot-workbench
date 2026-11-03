@@ -14,10 +14,23 @@ See each plugin's README for its components and requirements.
 
 ## Install
 
+### GitHub Copilot
+
 In a VS Code editor window, select the **Local** harness and open **Chat: Open Customizations**.
 Under **Browse**, select **Configure Marketplaces**, add `awieczork/copilot-workbench`, and install the plugins you need.
 
 For Windows and Windows Subsystem for Linux (WSL) setup, removal of older plugins, updates, and verification, follow the [installation guide](docs/installation.md).
+
+### Claude Code catalog
+
+In Claude Code, register the separate [discovery catalog](.claude-plugin/marketplace.json):
+
+```text
+/plugin marketplace add awieczork/copilot-workbench
+```
+
+The catalog lists the same packages without changing their payloads; Claude Code runtime compatibility remains unverified.
+See the [discovery scope and checks](docs/installation.md#claude-code-catalog-discovery) before using the packages in Claude Code.
 
 ## Good to know
 

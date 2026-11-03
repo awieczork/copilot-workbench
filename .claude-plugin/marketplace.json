@@ -1,0 +1,24 @@
+{
+    "name": "awieczork-tools",
+    "description": "Discovery catalog for existing Copilot packages; Claude Code runtime compatibility is unverified.",
+    "owner": {
+        "name": "Adam Wieczorkiewicz"
+    },
+    "plugins": [
+        {
+            "name": "agent-team",
+            "source": "./plugins/agent-team",
+            "description": "Reusable skills from agent-team; Copilot agents, rules, and MCP servers are not configured for Claude Code."
+        },
+        {
+            "name": "agent-plugin-dev",
+            "source": "./plugins/agent-plugin-dev",
+            "description": "Copilot plugin authoring and lifecycle skills; Claude Code runtime compatibility is unverified."
+        },
+        {
+            "name": "project-records",
+            "source": "./plugins/project-records",
+            "description": "Project record update skill; Copilot rules do not load automatically in Claude Code."
+        }
+    ]
+}

@@ -15,11 +15,15 @@ Each package contains the resources it needs and does not depend on another pack
 Packages do not contain project datasets, database targets, credentials, or absolute paths.
 Project repositories hold their own customizations, code, and records; credentials, connections, service configuration, and runtime dependencies stay in the local environment.
 
-The [marketplace catalog](../.github/plugin/marketplace.json) lists the packages by repository-relative source without duplicating their versions.
+The [Copilot marketplace catalog](../.github/plugin/marketplace.json) lists the packages by repository-relative source without duplicating their versions.
+A separate [Claude Code discovery catalog](../.claude-plugin/marketplace.json) uses the same marketplace identity and package sources, with entry metadata instead of package-level Claude manifests.
+Both catalogs omit plugin versions; Claude Code uses source-based versions when neither its manifest nor its entry supplies one.
 Packages use [Agent Plugins 1.0](https://agent-plugins.org/): a root `plugin.json`, portable skills and optional MCP configuration, and Copilot-specific components under `com.github.copilot/`.
 The packages target the Local harness in a VS Code editor window on Windows and Windows Subsystem for Linux (WSL).
 The Copilot harness and Agents window remain unsupported while [OI-05](../OPEN-ISSUES.md) applies.
 Static package checks do not prove runtime discovery or support.
+The Claude Code catalog adds registration and listing only, without changing package payloads or establishing runtime compatibility.
+Existing `skills/` directories match Claude Code's standard layout; the catalog does not map Copilot agents, automatic rules, or the team's MCP server configuration into Claude Code.
 
 ## How the team works
 
@@ -52,7 +56,7 @@ Static checks cover package isolation, component identity collisions, and pointe
 `interview-me` is a user-only skill independent of the `discuss` interview phase.
 Record maintenance does not require the team's task-state layout, and automatic skill selection is not a guaranteed post-task hook.
 
-The root [README](../README.md) introduces the marketplace, and the [installation guide](installation.md) owns marketplace setup and verification.
+The root [README](../README.md) introduces the marketplace, and the [installation guide](installation.md) owns Copilot setup and verification and the separate Claude Code catalog registration steps.
 Repository records and `.github/` authoring files stay outside package payloads.
 Temporary task state under `.github/context/`, editor settings, and credentials are Git-ignored.
 
