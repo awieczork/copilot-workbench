@@ -90,7 +90,7 @@ The [VS Code plugin documentation](https://code.visualstudio.com/docs/agent-cust
 ## Claude Code catalog discovery
 
 The separate [Claude Code catalog](../.claude-plugin/marketplace.json) lists the same three packages without changing their payloads.
-This catalog enables registration and listing; it does not establish Claude Code runtime compatibility.
+This catalog enables registration and listing and declares the existing `agent-team` MCP servers; it does not establish Claude Code runtime compatibility.
 
 With Claude Code installed, run these commands in your shell:
 
@@ -102,16 +102,23 @@ claude plugin list --json --available
 
 Check that the combined installed and available lists contain `agent-team@awieczork-tools`, `agent-plugin-dev@awieczork-tools`, and `project-records@awieczork-tools`.
 Registration does not add the marketplace to Anthropic's official directory.
+Marketplace registration does not install or enable the listed plugins.
 
 | Component | Claude Code discovery scope |
 | --- | --- |
 | `skills/` | The existing directories match Claude Code's standard layout; skill behavior remains unverified. |
 | `com.github.copilot/agents/` and `com.github.copilot/rules/` | The catalog does not register these Copilot-specific components for Claude Code. |
-| `mcp.json` | The catalog does not declare these servers, and the filename differs from Claude Code's default `.mcp.json`. |
+| `agent-team` MCP servers | The catalog's `mcpServers` field points to `./mcp.json` within the plugin; native loading and server connections remain unverified. |
 
 The catalog omits plugin versions to avoid a second version authority; Claude Code uses source-based versions when neither its manifest nor its entry supplies one.
 The existing root `plugin.json` files remain Agent Plugins 1.0 manifests; the packages have no `.claude-plugin/plugin.json` manifests.
-The marketplace entries supply Claude Code's metadata without adding files to the packages.
+The marketplace entries supply Claude Code's manifest fields, including the MCP path, without adding files to the packages.
+
+When `agent-team` is enabled, Claude Code can start both bundled MCP servers automatically.
+Before a live check, configure the [agent-team requirements](../plugins/agent-team/README.md#requirements) where Claude Code runs, and enable the plugin only when those processes may start.
+After installing a version that includes the mapping, enable it in a fresh session in a test folder outside this workbench.
+Run `/mcp` and check for `plugin:agent-team:context7` and `plugin:agent-team:awslabs.redshift-mcp-server`.
+Record whether each server is listed separately from whether it connects and exposes tools; a connection failure does not by itself mean discovery failed.
 
 To validate a checkout without registering it, run `claude plugin validate .` from the repository root.
 Static checks and successful listing do not prove that skills, tools, or model references work.

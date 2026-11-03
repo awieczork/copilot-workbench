@@ -19,13 +19,15 @@ This check did not refresh the customization facts below.
 ## Claude Code catalog
 
 - [Marketplace reference](https://code.claude.com/docs/en/plugins/marketplace-reference): `.claude-plugin/marketplace.json`, required catalog fields, repository-relative sources, and entries that serve as manifests when a package has no Claude manifest.
-- [Manifest reference](https://code.claude.com/docs/en/plugins/manifest-reference): optional `.claude-plugin/plugin.json`, default `skills/`, `agents/`, and `.mcp.json` locations, and explicit component paths.
+- [Manifest reference](https://code.claude.com/docs/en/plugins/manifest-reference): optional `.claude-plugin/plugin.json`, default `skills/`, `agents/`, and `.mcp.json` locations, and explicit component paths, including [MCP JSON paths](https://code.claude.com/docs/en/plugins/manifest-reference#mcpservers).
 - [Plugin commands reference](https://code.claude.com/docs/en/plugins/cli-reference): marketplace registration, `plugin list --json --available`, and `plugin validate` checks and limits.
 - [Plugin loading reference](https://code.claude.com/docs/en/plugins/loading): source-based versions when neither a Claude manifest nor its marketplace entry supplies a version.
+- [Plugin MCP lifecycle](https://code.claude.com/docs/en/mcp#plugin-provided-mcp-servers): server definitions and automatic startup when a plugin is enabled.
 
 Checked on 2026-11-03 against Anthropic's documentation and the Context7 index of that documentation.
 The [Claude Code discovery catalog](../.claude-plugin/marketplace.json) reuses the Copilot catalog's identity and package sources without changing package payloads.
-The catalog supplies entry metadata and no component overrides; it does not register Copilot agents, automatic rules, or the team's MCP server configuration.
+The catalog supplies entry manifest fields; `agent-team` sets `mcpServers` to `./mcp.json`, resolved from the plugin root.
+This path registers the existing server configuration without copying it; Copilot agents and automatic rules remain unregistered.
 These sources establish the documented discovery approach, not runtime compatibility; native validation and live discovery have not run in the authoring Linux workspace because Claude Code is unavailable there.
 
 ## Tools and configuration
