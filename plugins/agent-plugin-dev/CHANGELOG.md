@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [0.2.1] - 2026-11-03
+
+### Added
+
+- The `copilot-customization` skill includes a `CLAUDE.md` proxy template that reuses `.github/` project instructions, scoped rules, and skills without duplicating their policy.
+
 ## [0.2.0] - 2026-11-03
 
 ### Added

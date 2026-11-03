@@ -1,6 +1,6 @@
 ---
 name: copilot-customization
-description: "Use when creating, changing, or reviewing a GitHub Copilot customization for VS Code: project instructions, scoped instructions, a custom agent, or an Agent Skill. Supplies the type choice, frontmatter, templates, and writing rules. Not for prompt files, hooks, or MCP server configuration."
+description: "Use when creating, changing, or reviewing a GitHub Copilot customization for VS Code or a CLAUDE.md proxy to .github/ configuration. Supplies the type choice, frontmatter, templates, and writing rules for project instructions, scoped instructions, custom agents, and Agent Skills. Not for prompt files, hooks, or MCP server configuration."
 argument-hint: "[create|review] [project-instructions|instructions|agent|skill] [goal]"
 ---
 
@@ -44,7 +44,7 @@ The review is done when every loaded file was read and every finding fills the t
 
 | Type | Loads | Use for | Reference |
 | --- | --- | --- | --- |
-| Project instructions | On every chat request in the workspace | Guidance that nearly every task needs | [Project instructions](references/project-instructions.md) |
+| Project instructions | On every chat request in the workspace | Guidance that nearly every task needs, including a `CLAUDE.md` proxy to `.github/` configuration | [Project instructions](references/project-instructions.md) |
 | Scoped instructions | When the agent creates or modifies a file that matches `applyTo`, or when the `description` matches the task | Standards for a language, framework, folder, or kind of task | [Scoped instructions](references/instructions.md) |
 | Agent Skill | When the `description` matches the task, or when the user runs it as a slash command | A capability or procedure that only some tasks need, with optional scripts and reference files | [Agent Skills](references/skills.md) |
 | Custom agent | When the user selects it, or when another agent delegates to it | A role that needs its own tools, model, or a context isolated from the conversation | [Custom agents](references/agents.md) |
