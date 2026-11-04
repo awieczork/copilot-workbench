@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## [0.1.2] - 2026-11-04
+
+### Added
+
+- The `project-records` manifest declares the MIT license.
+
+### Changed
+
+- The package README follows the shared components, requirements, install, usage, limits, and version structure, and links to the root installation guidance instead of repeating it.
+
 ## [0.1.1] - 2026-11-02
 
 ### Changed

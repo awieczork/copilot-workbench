@@ -1,7 +1,14 @@
 # Architecture
 
-`copilot-workbench` is the owner's marketplace for GitHub Copilot in VS Code.
-Its [design pillars](../.github/copilot-instructions.md#pillars) favor clear direction, simplicity, and precise wording.
+This repository contains the `awieczork-tools` marketplace packages for GitHub Copilot in VS Code and a discovery catalog for Claude Code.
+
+## Design principles
+
+- **Direction over detail:** give models the goal and approach; specify exact steps only where variation changes the result.
+- **Simple first, lean always:** use the smallest solution and load only the context a task needs.
+- **Every word steers:** state each idea once, in plain and precise language.
+
+The [full design principles](../.github/copilot-instructions.md#pillars) guide package authoring.
 
 ## Packages
 
@@ -15,22 +22,33 @@ Each package contains the resources it needs and does not depend on another pack
 Packages do not contain project datasets, database targets, credentials, or absolute paths.
 Project repositories hold their own customizations, code, and records; credentials, connections, service configuration, and runtime dependencies stay in the local environment.
 
-The [Copilot marketplace catalog](../.github/plugin/marketplace.json) lists the packages by repository-relative source without duplicating their versions.
-A separate [Claude Code discovery catalog](../.claude-plugin/marketplace.json) uses the same marketplace identity and package sources, with entry manifest fields instead of package-level Claude manifests.
-Both catalogs omit plugin versions; Claude Code uses source-based versions when neither its manifest nor its entry supplies one.
-Packages use [Agent Plugins 1.0](https://agent-plugins.org/): a root `plugin.json`, portable skills and optional MCP configuration, and Copilot-specific components under `com.github.copilot/`.
-The packages target the Local harness in a VS Code editor window on Windows and Windows Subsystem for Linux (WSL).
-The Copilot harness and Agents window remain unsupported while [OI-05](../OPEN-ISSUES.md) applies.
+Packages use [Agent Plugins 1.0](https://agent-plugins.org/): a root `plugin.json`, portable skills and optional Model Context Protocol (MCP) server configuration, and Copilot-specific components under `com.github.copilot/`.
+The supported runtime is the **Local harness**, the chat agent runtime selected as **Local** in a VS Code editor window, on Windows and Windows Subsystem for Linux (WSL).
+The Copilot harness and the Agents window do not run the plugins reliably and remain unsupported.
 Static package checks do not prove runtime discovery or support.
-The Claude Code catalog adds registration, listing, and an explicit MCP server path without changing package payloads or establishing runtime compatibility.
-The `agent-team` entry sets `mcpServers` to `./mcp.json`, relative to the plugin root, and reuses the existing server definitions.
-Claude Code can start those servers automatically when the plugin is enabled.
+
+## Catalogs and runtimes
+
+Each **catalog** lists the marketplace's packages and the repository paths from which a client loads them.
+
+| Catalog | Runtime | Entries |
+| --- | --- | --- |
+| [.github/plugin/marketplace.json](../.github/plugin/marketplace.json) | GitHub Copilot | Name, repository-relative source, description copied from `plugin.json`, and license. |
+| [.claude-plugin/marketplace.json](../.claude-plugin/marketplace.json) | Claude Code | The same name and source, with entry manifest fields: description, license, and, for `agent-team`, `mcpServers`. |
+
+Both catalogs use the marketplace identity `awieczork-tools` and omit plugin versions, so each `plugin.json` stays the only version authority.
+Claude Code uses source-based versions when neither its manifest nor its entry supplies one.
+
+The packages have no `.claude-plugin/plugin.json` manifests; the Claude Code catalog entries supply those fields without adding files to the packages.
 Existing `skills/` directories match Claude Code's standard layout; the catalog does not map Copilot agents or automatic rules into Claude Code.
+The `agent-team` entry sets `mcpServers` to `./mcp.json`, relative to the plugin root, and reuses the existing server definitions; Claude Code can start those servers automatically when the plugin is enabled.
+The Claude Code catalog adds registration, listing, and this MCP server path without changing package payloads or establishing runtime compatibility.
 
-## How the team works
+## agent-team design
 
-The user selects an entry agent.
-`lead` performs work directly or delegates to workers; `discuss` gathers evidence and helps shape a request without implementing it.
+An **entry agent** is the agent the user selects for a conversation; a **worker** handles one delegated task.
+`lead` performs work directly or delegates to workers.
+`discuss` gathers evidence and helps shape a request without implementing it.
 After the user confirms a request, `discuss` offers the user-invoked `handoff-discussion` skill for a new `lead` session.
 
 | Agent | May call |
@@ -45,56 +63,42 @@ The task holder keeps temporary task state through [`task-context`](../plugins/a
 Read-only roles rely on instructions because query and execution tools can also write.
 The [entry contract](../.github/instructions/entry-contract.instructions.md), [worker contract](../.github/instructions/worker-contract.instructions.md), and [model tiers](../.github/instructions/model-tiers.instructions.md) define team authoring and model choices.
 
-## Repository and package boundaries
+## Repository layout and boundaries
 
-Packages are authored in this workbench, but project customizations do not join the plugin's team.
+```text
+.claude-plugin/marketplace.json   Claude Code catalog
+.github/plugin/marketplace.json   GitHub Copilot catalog
+.github/                          repository instructions and skill pointers
+docs/                             public documentation and design sources
+plugins/<name>/                   package manifest, components, tests, and documentation
+LICENSE                           MIT license for the repository and plugins
+```
+
+Packages are authored in this repository, but project customizations do not join the plugin's team.
 Team roles and delegation belong in `agent-team`; record conventions and maintenance belong in `project-records`.
 General behavior belongs in agents and skills, not language rules.
 User-interface specialization is outside the current team design.
 
-The workbench's tracked `.github/` files hold repository instructions, four team contracts, and matching discovery pointers to the canonical `agent-plugin-dev` skills.
-The package holds the implementations, scripts, tests, and references; packages do not depend on workbench instructions to run.
+The tracked `.github/` files hold repository instructions, four team contracts, and matching discovery pointers to the canonical `agent-plugin-dev` skills.
+The package holds the implementations, scripts, tests, and references; packages do not depend on this repository's instructions to run.
 Static checks cover package isolation, component identity collisions, and pointer shape; discovery and co-installed selection require client testing.
 `interview-me` is a user-only skill independent of the `discuss` interview phase.
 Record maintenance does not require the team's task-state layout, and automatic skill selection is not a guaranteed post-task hook.
 
-The root [README](../README.md) introduces the marketplace, and the [installation guide](installation.md) owns Copilot setup and verification and the separate Claude Code catalog registration and MCP verification steps.
 Repository records and `.github/` authoring files stay outside package payloads.
-Temporary task state under `.github/context/`, editor settings, and credentials are Git-ignored.
+Local project status and issue records, temporary task state under `.github/context/`, editor settings, and credentials are Git-ignored.
 
-## Development and releases
+## Documentation map
 
-`main` is the full-repository distribution branch and marketplace source.
-A push exposes package changes independently of tags or GitHub releases, so prepare package versions and versioned notes on the cycle before integration.
-Use `plugin/<exact-name>` or `repo/<lowercase-kebab-topic>` cycle branches and verified squash integration.
-Creating a cycle requires local `main` to match cached `origin/main`; dirty carry-over needs explicit permission.
+| Document | Owns |
+| --- | --- |
+| [README](../README.md) | Marketplace introduction, plugin inventory, and quick install. |
+| Each package README | The package's components, requirements, configuration, usage, and limits. |
+| [Installation](installation.md) | Setup, verification, updates, and upgrades for each runtime. |
+| [Development](DEVELOPMENT.md) | Branches, development cycles, releases, and repository settings. |
+| [References](REFERENCES.md) | External sources behind the design and its product facts. |
 
-The lifecycle is user-invoked `start-dev`, `finish-dev`, and optional `publish-plugin`.
-The agent can select `build-plugin` and `copilot-customization` automatically; the user can also invoke them directly.
-An explicit start or resume grants autonomous local commits of checked cycle work on the exact selected branch in the current session.
-The grant ends when the selected branch changes, the cycle closes, or the owner revokes it; a new session requires a new start or resume request.
-Carrying existing dirty work does not by itself authorize committing it.
-Commits use exact scoped paths and normal hooks while preserving unrelated work and staged selections.
-
-`finish-dev` completes checks and release preparation on the cycle, then presents the exact source and effects for approval.
-Integration approval authorizes the local squash commit on `main`, not a push or branch deletion.
-The squash workflow verifies the recorded base and source, expected tree, and sole parent before an explicitly approved `main` push; branch cleanup needs named deletion permission and proof of remote absence.
-Publication selects one catalog package from clean full-repository `main`, uses a `<package>/v<version>` tag and package-specific notes, and requires separate permission for tags, pushes, and releases.
-Versions must increase; `agent-team` also inherits the legacy `v*` version floor.
-The root changelog owns repository changes, and each package owns its history.
-
-Local and remote `develop` are retired; `archive/develop-before-marketplace` preserves their frozen tip.
-The marketplace's full-repository history and legacy tags remain unchanged.
-Cycle commits use the standing session grant; any commit outside the grant, pushes, integration, history rewrites, releases, and each named branch deletion require explicit authorization for those effects.
-
-The repository is public for installation, not external contributions or public support.
-The owner is its only collaborator; Issues, Projects, Discussions, and Wiki are disabled.
-`main` is protected against deletion and force pushes without required pull requests, reviews, or status checks.
-Secret scanning and push protection are enabled; GitHub Actions uses read-only token permissions by default, cannot approve pull requests, and requires owner approval for external-contributor workflows.
-Collaborator-only interaction restrictions block external pull requests and comments while active.
-Public visibility applies to every branch and its history.
-
-## Possible future capabilities
+## Ideas under consideration
 
 These ideas are outside the current design; each needs an agreed priority and specification before implementation.
 

@@ -1,16 +1,17 @@
 # References
 
-These sources inform the design of `copilot-workbench`.
-Use inspiration sources for structure, not as tone or output templates.
+These sources support the design of the plugins in this repository.
+Inspiration sources inform structure, rather than tone or output templates.
+Check dates record the verification already completed; an undated source has no separately recorded check date.
 
 ## Plugin format
 
-- [Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference): Copilot-format fields and component locations.
+- [Copilot command-line interface (CLI) plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference): Copilot-format fields and component locations.
 - [VS Code Agent Plugins](https://code.visualstudio.com/docs/agent-customization/agent-plugins): discovery, installation, updates, and loading.
 - [Plugin marketplaces](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-marketplace) and [marketplace reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference#marketplacejson): catalog metadata and sources.
 - [VS Code agent harnesses](https://code.visualstudio.com/docs/agents/run/agent-harnesses): harness choice and client-dependent capabilities.
 - [VS Code plugin authoring reference](https://code.visualstudio.com/docs/agents/reference/agent-plugin-reference): Agent Plugins 1.0 manifest and component locations.
-- [Manifest schema](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json) and [MCP schema](https://agent-plugins.org/schemas/1.0.0/mcp.schema.json): canonical identifiers and static validation.
+- [Manifest schema](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json) and [Model Context Protocol (MCP) schema](https://agent-plugins.org/schemas/1.0.0/mcp.schema.json): canonical identifiers and static validation.
 
 The 1.0 layout and schema were checked on 2026-10-28 for the migration.
 Static checks do not prove runtime behavior; the owner's separate plugin test did not specify its client version or configuration.
@@ -28,21 +29,23 @@ Checked on 2026-11-03 against Anthropic's documentation and the Context7 index o
 The [Claude Code discovery catalog](../.claude-plugin/marketplace.json) reuses the Copilot catalog's identity and package sources without changing package payloads.
 The catalog supplies entry manifest fields; `agent-team` sets `mcpServers` to `./mcp.json`, resolved from the plugin root.
 This path registers the existing server configuration without copying it; Copilot agents and automatic rules remain unregistered.
-These sources establish the documented discovery approach, not runtime compatibility; native validation and live discovery have not run in the authoring Linux workspace because Claude Code is unavailable there.
+These sources establish the documented discovery approach, not runtime compatibility; at that check, native validation and live discovery had not run because Claude Code was unavailable in the Linux development environment.
 
 ## Tools and configuration
 
 - [PyYAML documentation](https://pyyaml.org/wiki/PyYAMLDocumentation): `safe_load` parses YAML without constructing arbitrary Python objects.
-- [GitHub CLI release creation](https://cli.github.com/manual/gh_release_create) and [release listing](https://cli.github.com/manual/gh_release_list): publication with `--verify-tag` and notes from standard input; a limited release list does not prove complete absence. Checked on 2026-10-28.
+- [GitHub CLI release creation](https://cli.github.com/manual/gh_release_create) and [release listing](https://cli.github.com/manual/gh_release_list): publication with `--verify-tag` and notes from standard input; a limited release list does not prove complete absence.
+	Checked on 2026-10-28.
 - [Context7 MCP setup](https://github.com/upstash/context7/blob/master/packages/mcp/README.md) and [developer guide](https://context7.com/docs/resources/developer): the server reads `CONTEXT7_API_KEY` from its environment.
-- [Models and pricing for GitHub Copilot](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing): model strengths, prices, and context thresholds behind the [model tiers](../.github/instructions/model-tiers.instructions.md) and [`brief-subagent` alternatives](../plugins/agent-team/skills/brief-subagent/references/model-selection.md). Checked on 2026-11-02.
+- [Models and pricing for GitHub Copilot](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing): model strengths, prices, and context thresholds behind the [model tiers](../.github/instructions/model-tiers.instructions.md) and [`brief-subagent` alternatives](../plugins/agent-team/skills/brief-subagent/references/model-selection.md).
+	Checked on 2026-11-02.
 
 ## Customization guidance
 
-The [`copilot-customization`](../plugins/agent-plugin-dev/skills/copilot-customization/SKILL.md) skill ships without its authoring process, so its sources and refresh procedure stay here.
+The [`copilot-customization`](../plugins/agent-plugin-dev/skills/copilot-customization/SKILL.md) skill ships without its authoring process, so this document holds its sources and [reference maintenance procedure](#maintain-the-references).
 Product facts were last checked on 2026-10-10, except for plugin agent and rule locations, rechecked on 2026-10-29 against the [VS Code plugin authoring reference](https://code.visualstudio.com/docs/agents/reference/agent-plugin-reference).
 Agent Plugins 1.0 uses `com.github.copilot/agents/` and `com.github.copilot/rules/`; root `agents/` and `rules/` are Copilot-format locations.
-Treat other claims as stale when current documentation differs.
+Other claims need a new check when current documentation differs.
 
 The microsoft/vscode source alone confirms these facts because documentation omits them or differs:
 
@@ -66,25 +69,6 @@ The microsoft/vscode source alone confirms these facts because documentation omi
 - Awesome Copilot: [creating skills](https://awesome-copilot.github.com/learning-hub/creating-effective-skills/), [defining instructions](https://awesome-copilot.github.com/learning-hub/defining-custom-instructions/), and [building agents](https://awesome-copilot.github.com/learning-hub/building-custom-agents/).
 - OpenAI: [model guide for the GPT-6 family](https://openai.com/index/practical-guide-building-gpt-6/), [rethinking skills and prompts](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra), and [using GPT-6](https://developers.openai.com/api/docs/guides/latest-model).
 
-### Fetch full text
-
-Read sources in full, because summaries can omit fields and qualifiers.
-
-- For a VS Code page, fetch `https://raw.githubusercontent.com/microsoft/vscode-docs/main/docs/<path>.md`, where `<path>` follows `/docs/` in its URL.
-- For an agentskills.io page, append `.md` to its URL.
-- For a GitHub repository file, use `raw.githubusercontent.com`.
-- For a platform.claude.com or developers.openai.com page, append `.md` to its URL.
-- For an Awesome Copilot Learning Hub page, fetch `https://raw.githubusercontent.com/github/awesome-copilot/main/website/src/content/docs/learning-hub/<page>.md`, where `<page>` follows `/learning-hub/` in its URL.
-- For an openai.com page, ask the owner for a local copy because automated fetches are blocked.
-
-### Refresh product facts
-
-1. Check the primary VS Code pages and Agent Skills specification for changed fields, defaults, locations, and experimental labels.
-1. Compare the VS Code built-in `agent-customization` skill for fields the public docs do not list yet.
-1. Recheck each source-only fact above in microsoft/vscode.
-1. Update product facts only from primary sources, and writing guidance only when evidence shows a changed behavior or credible failure.
-1. Update the date under Customization guidance.
-
 ## Agent and context engineering
 
 - [Effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): context as a finite budget.
@@ -105,3 +89,26 @@ Read sources in full, because summaries can omit fields and qualifiers.
 - Developer: [Coder](https://gist.github.com/burkeholland/0e68481f96e94bbb98134fa6efd00436), [SWE](https://github.com/github/awesome-copilot/blob/main/agents/swe-subagent.agent.md), and [Gem Implementer](https://github.com/github/awesome-copilot/blob/main/agents/gem-implementer.agent.md).
 - Reviewer: [Gem Reviewer](https://github.com/github/awesome-copilot/blob/main/agents/gem-reviewer.agent.md), [AI Team QA](https://github.com/github/awesome-copilot/blob/main/agents/ai-team-qa.agent.md), and [QA](https://github.com/github/awesome-copilot/blob/main/agents/qa-subagent.agent.md).
 - Challenger: [Critical Thinking](https://github.com/github/awesome-copilot/blob/main/agents/critical-thinking.agent.md), [Devil's Advocate](https://github.com/github/awesome-copilot/blob/main/agents/devils-advocate.agent.md), and [rubber duck](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/rubber-duck).
+
+## Maintain the references
+
+### Fetch full text
+
+Full source text preserves fields and qualifiers that summaries can omit.
+
+| Source | Full-text location |
+| --- | --- |
+| VS Code documentation | `https://raw.githubusercontent.com/microsoft/vscode-docs/main/docs/<path>.md`, where `<path>` follows `/docs/` in the page URL. |
+| agentskills.io | The page URL with `.md` appended. |
+| GitHub repository file | The corresponding `raw.githubusercontent.com` URL. |
+| platform.claude.com or developers.openai.com | The page URL with `.md` appended. |
+| Awesome Copilot Learning Hub | `https://raw.githubusercontent.com/github/awesome-copilot/main/website/src/content/docs/learning-hub/<page>.md`, where `<page>` follows `/learning-hub/` in the page URL. |
+| openai.com | A local copy of the page, because automated fetches are blocked. |
+
+### Refresh product facts
+
+1. Compare the primary VS Code pages and Agent Skills specification for changed fields, defaults, locations, and experimental labels.
+1. Compare the VS Code built-in `agent-customization` skill for fields not yet listed in the public documentation.
+1. Check each source-only fact above against microsoft/vscode.
+1. Revise product facts from primary sources, and writing guidance when evidence shows changed behavior or a credible failure.
+1. Record the check date under the affected topic; for customization facts, update the date under Customization guidance.

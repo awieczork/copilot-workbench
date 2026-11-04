@@ -1,6 +1,6 @@
 {
     "name": "awieczork-tools",
-    "description": "Discovery catalog for existing Copilot packages; Claude Code runtime compatibility is unverified.",
+    "description": "Agent plugins for GitHub Copilot in VS Code, listed for Claude Code; Claude Code runtime compatibility is unverified.",
     "owner": {
         "name": "Adam Wieczorkiewicz"
     },
@@ -8,18 +8,21 @@
         {
             "name": "agent-team",
             "source": "./plugins/agent-team",
-            "description": "Reusable skills and MCP server configuration from agent-team; Copilot agents and rules are not configured for Claude Code, and runtime compatibility is unverified.",
+            "license": "MIT",
+            "description": "Skills and MCP servers for software development and data analysis; the Copilot agents and rules do not load in Claude Code.",
             "mcpServers": "./mcp.json"
         },
         {
             "name": "agent-plugin-dev",
             "source": "./plugins/agent-plugin-dev",
-            "description": "Copilot plugin authoring and lifecycle skills; Claude Code runtime compatibility is unverified."
+            "license": "MIT",
+            "description": "Skills for authoring, checking, and releasing GitHub Copilot plugins."
         },
         {
             "name": "project-records",
             "source": "./plugins/project-records",
-            "description": "Project record update skill; Copilot rules do not load automatically in Claude Code."
+            "license": "MIT",
+            "description": "A skill that maintains project status, open issues, and changelogs; the Copilot rules do not load in Claude Code."
         }
     ]
 }

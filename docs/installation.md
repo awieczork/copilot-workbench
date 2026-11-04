@@ -1,11 +1,16 @@
 # Installation
 
-The GitHub Copilot steps use VS Code `1.144` as the setup baseline; they do not establish runtime compatibility.
-The supported GitHub Copilot configuration is the **Local** harness in an editor window, on Windows and Windows Subsystem for Linux (WSL).
-Local is a harness name, not a synonym for execution on your own computer.
+This guide installs the `awieczork-tools` plugins in GitHub Copilot for VS Code and registers the catalog in Claude Code.
 No repository clone or manual copying of agents, rules, or skills is required.
 
-## 1. Prepare Windows and WSL
+## GitHub Copilot in VS Code
+
+The steps use VS Code `1.144` as the setup baseline; they do not establish runtime compatibility.
+The **Local harness** is the chat agent runtime selected as **Local** in a VS Code editor window.
+The supported configuration uses this harness on Windows and Windows Subsystem for Linux (WSL).
+Local is a harness name, not a synonym for execution on your own computer.
+
+### 1. Prepare Windows and WSL
 
 Install VS Code on Windows, sign in to GitHub Copilot, and confirm that a chat session with the **Local** harness can start.
 If Local is not available, check the experimental `chat.editor.localAgent.enabled` setting; organization policy can restrict the choice.
@@ -26,18 +31,9 @@ uvx --version
 These checks confirm terminal access only.
 After changing tools or environment variables, fully quit and restart VS Code; restart the WSL server as needed to pick up its environment.
 
-## 2. Remove the original plugin if present
+### 2. Install on Windows
 
-For a new installation, skip this step.
-Otherwise, uninstall `copilot-workbench` before installing `agent-team`, so both copies do not load together.
-Run **Chat: Open Customizations**, select **Plugins**, open `copilot-workbench`, and select **Uninstall**.
-The **Plugins** page also lists a copy installed with `/plugin` or the Copilot CLI; uninstall that copy through the interface that installed it.
-Check both Windows and WSL contexts for old copies.
-
-Do not load `project-records` beside `agent-team` `0.2.0`, because that version contains the same three rule identities.
-The split requires `agent-team` `0.3.0` or newer.
-
-## 3. Install on Windows
+If you used the original `copilot-workbench` plugin, first follow [Upgrade from copilot-workbench](#upgrade-from-copilot-workbench).
 
 Open a Windows folder in an editor window without a WSL connection, and select the **Local** harness in a new chat.
 Install through the Agent Customizations editor:
@@ -49,48 +45,50 @@ Install through the Agent Customizations editor:
 
 When the **Browse** page is not available, select **Plugins** and then **Browse Marketplace**.
 Check that the installed `agent-team` version matches the [package manifest on `main`](https://github.com/awieczork/copilot-workbench/blob/main/plugins/agent-team/plugin.json).
-Listing a plugin alone does not establish that its agents, rules, or tools work.
 
-## 4. Configure WSL
+Install `agent-plugin-dev` and `project-records` the same way, only where you need them.
+The packages do not require each other.
+
+### 3. Configure WSL
 
 Open a project folder in the Linux home directory from a WSL terminal with `code .`.
 Confirm that the editor's lower-left remote indicator identifies the intended WSL distribution.
-In that WSL-connected window, inspect the **Plugins** page first, and repeat step 3 only when `agent-team` is not available there.
+In that WSL-connected window, inspect the **Plugins** page first, and repeat step 2 only when `agent-team` is not available there.
 
 Do not assume that a Windows installation, executable, or credential is available to the WSL host.
 Do not copy plugin installation directories between systems.
 Configure tools, environment variables, and service access where their processes run.
-The [agent-team requirements](../plugins/agent-team/README.md#requirements), [Context7 setup](../plugins/agent-team/README.md#context7-api-key), and [database access](../plugins/agent-team/README.md#database-access) describe the package-specific configuration.
+The [agent-team requirements](../plugins/agent-team/README.md#requirements) and [configuration](../plugins/agent-team/README.md#configuration) describe the package-specific setup.
 Keep keys and credentials out of chat and tracked files.
-Bundled MCP servers can start when the plugin is enabled; configure their access before testing them.
+Bundled Model Context Protocol (MCP) servers can start when the plugin is enabled; configure their access before testing them.
 
-## 5. Verify both environments
+### 4. Verify both environments
 
-In each of Windows and WSL, start a new **Local** session in a test folder outside this workbench, so repository customizations do not mask plugin discovery.
-Check the installed source and version, agent and rule discovery in Agent Customizations, and skill availability in a fresh session.
-Select `lead` and ask it to delegate a read-only folder inspection to `explorer`, without edits or external services; confirm that the delegation actually runs.
+In each of Windows and WSL, start a new **Local** session in a test folder outside this repository, so repository customizations do not mask plugin discovery.
+
+1. Check the installed source and version, and agent and rule discovery in Agent Customizations.
+1. Check skill availability in a fresh session.
+1. Select `lead` and ask it to delegate a read-only folder inspection to `explorer`, without edits or external services; confirm that the delegation actually runs.
+1. Check required tools and script execution separately.
+
 Workers need not appear in the main agent picker.
-Check required tools and script execution separately.
 A database connection failure is separate from plugin discovery and does not by itself establish an installation failure.
-
 Record results separately for Windows and WSL.
-Successful installation alone does not prove runtime support.
 
-## Updates and optional tools
+### Updates
 
 Use **Check for and Apply Updates** on the **Plugins** page or **Chat: Update Plugins**.
 Start a fresh session and check the version and behavior after updating.
 Plugin updates can also run automatically when `extensions.autoUpdate` is enabled; do not assume installations stay pinned between checks.
 
-Install `agent-plugin-dev` only where you need the development tools, from the same marketplace in the Agent Customizations editor.
-The packages do not require each other, and the catalog has no compatibility alias for `copilot-workbench`.
-This workbench uses matching repository discovery pointers to the canonical plugin authoring and lifecycle skills; real-client pointer selection remains unverified.
 The [VS Code plugin documentation](https://code.visualstudio.com/docs/agent-customization/agent-plugins) describes plugin management and its client requirements.
 
-## Claude Code catalog discovery
+## Claude Code
 
 The separate [Claude Code catalog](../.claude-plugin/marketplace.json) lists the same three packages without changing their payloads.
-This catalog enables registration and listing and declares the existing `agent-team` MCP servers; it does not establish Claude Code runtime compatibility.
+It enables registration and listing and declares the existing `agent-team` MCP servers; it does not establish Claude Code runtime compatibility.
+
+### Register and install
 
 With Claude Code installed, run these commands in your shell:
 
@@ -101,26 +99,39 @@ claude plugin list --json --available
 ```
 
 Check that the combined installed and available lists contain `agent-team@awieczork-tools`, `agent-plugin-dev@awieczork-tools`, and `project-records@awieczork-tools`.
-Registration does not add the marketplace to Anthropic's official directory.
-Marketplace registration does not install or enable the listed plugins.
+Marketplace registration does not install or enable the listed plugins, and it does not add the marketplace to Anthropic's official directory.
+Install a plugin with `/plugin install <plugin>@awieczork-tools`.
 
-| Component | Claude Code discovery scope |
+### What Claude Code loads
+
+| Component | Claude Code scope |
 | --- | --- |
 | `skills/` | The existing directories match Claude Code's standard layout; skill behavior remains unverified. |
 | `com.github.copilot/agents/` and `com.github.copilot/rules/` | The catalog does not register these Copilot-specific components for Claude Code. |
 | `agent-team` MCP servers | The catalog's `mcpServers` field points to `./mcp.json` within the plugin; native loading and server connections remain unverified. |
 
-The catalog omits plugin versions to avoid a second version authority; Claude Code uses source-based versions when neither its manifest nor its entry supplies one.
-The existing root `plugin.json` files remain Agent Plugins 1.0 manifests; the packages have no `.claude-plugin/plugin.json` manifests.
-The marketplace entries supply Claude Code's manifest fields, including the MCP path, without adding files to the packages.
+### Verify
 
 When `agent-team` is enabled, Claude Code can start both bundled MCP servers automatically.
 Before a live check, configure the [agent-team requirements](../plugins/agent-team/README.md#requirements) where Claude Code runs, and enable the plugin only when those processes may start.
-After installing a version that includes the mapping, enable it in a fresh session in a test folder outside this workbench.
-Run `/mcp` and check for `plugin:agent-team:context7` and `plugin:agent-team:awslabs.redshift-mcp-server`.
-Record whether each server is listed separately from whether it connects and exposes tools; a connection failure does not by itself mean discovery failed.
+
+1. Enable the plugin in a fresh session in a test folder outside this repository, so repository instructions do not mask plugin behavior.
+1. Run `/mcp` and check for `plugin:agent-team:context7` and `plugin:agent-team:awslabs.redshift-mcp-server`.
+1. Record whether each server is listed separately from whether it connects and exposes tools; a connection failure does not by itself mean discovery failed.
+1. Test skill behavior in the same session.
 
 To validate a checkout without registering it, run `claude plugin validate .` from the repository root.
 Static checks and successful listing do not prove that skills, tools, or model references work.
-Test skill behavior in a fresh session in a folder outside this workbench, so repository instructions do not mask plugin behavior.
-See Anthropic's [marketplace reference](https://code.claude.com/docs/en/plugins/marketplace-reference) and [manifest reference](https://code.claude.com/docs/en/plugins/manifest-reference) for the catalog and component rules.
+The [architecture](ARCHITECTURE.md#catalogs-and-runtimes) explains how the catalog maps the packages without Claude Code manifests.
+
+## Upgrade from copilot-workbench
+
+The original single plugin was named `copilot-workbench`; `agent-team` replaces it, and the catalog has no compatibility alias.
+For a new installation, skip this section.
+
+1. Run **Chat: Open Customizations**, select **Plugins**, open `copilot-workbench`, and select **Uninstall**, so both copies do not load together.
+1. Uninstall a copy installed with `/plugin` or the Copilot command-line interface (CLI) through the interface that installed it; the **Plugins** page also lists such copies.
+1. Check both Windows and WSL contexts for old copies.
+
+Do not load `project-records` beside `agent-team` `0.2.0`, because that version contains the same three rule identities.
+The split requires `agent-team` `0.3.0` or newer.
