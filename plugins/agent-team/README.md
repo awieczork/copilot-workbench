@@ -34,6 +34,7 @@ Entry agents appear in the agent picker; workers run as optional subagents of an
 | [seed-task](skills/seed-task/SKILL.md) | Saves a conversation as task context for an independent session; user-invoked. |
 | [sql-server](skills/sql-server/SKILL.md) | Queries a user-provided SQL Server target read-only through a saved connection. |
 | [task-context](skills/task-context/SKILL.md) | Keeps temporary task state and delegated results in a Git-ignored folder. |
+| [tidy-tasks](skills/tidy-tasks/SKILL.md) | Archives finished task folders and removes archived ones older than seven days; user-invoked. |
 
 ### Rules
 

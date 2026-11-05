@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## [0.4.4] - 2026-11-05
+
+### Added
+
+- The `tidy-tasks` skill archives finished task folders and removes archived folders older than seven days after the user approves the list.
+
+### Changed
+
+- The `task-context` skill records the archive date in the summary of an archived task.
+- The `task-context` skill lets a session other than the task holder archive or remove a task folder with the user's approval.
+
 ## [0.4.3] - 2026-11-04
 
 ### Added

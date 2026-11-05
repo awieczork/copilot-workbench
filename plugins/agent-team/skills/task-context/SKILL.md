@@ -8,7 +8,7 @@ user-invocable: false
 
 Keep the working state of one task in a Git-ignored task folder, so that it survives the session and reaches every agent that works on the task.
 Create no task folder for work that one agent finishes in this session unless it follows an accepted plan, and keep deliverables and approved knowledge in their canonical locations, because a task folder holds working state, not a source of truth.
-The task holder, the agent the user talks to that holds the task, alone creates, resumes, archives, and removes the folder and writes `summary.md`, `notes.md`, and any plan it authors; a worker writes only the result file its brief names.
+The task holder, the agent the user talks to that holds the task, alone creates and resumes the folder and writes `summary.md`, `notes.md`, and any plan it authors; the task holder, or another session with the user's approval, archives or removes the folder; a worker writes only the result file its brief names.
 
 ## Layout
 
@@ -90,4 +90,5 @@ Register the accepted plan as `accepted plan` in the `Files` table, and mark a p
 - Leave a finished or abandoned task folder in `active/` until the user asks to archive or remove it.
 - Before archiving or removing a folder, move each decision and open question that outlives the task into the record that owns it.
 - To archive, move the folder to `archive/` with its name unchanged; when the destination exists, add a numeric suffix as for a new folder.
+  Add `Archived: {YYYY-MM-DD}` below `Next action` in its summary, because the folder date records creation, not archiving.
 - Before removing a folder, list its contents and get the user's confirmation of the exact path.
