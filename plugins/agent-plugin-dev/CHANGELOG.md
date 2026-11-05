@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## [0.3.0] - 2026-11-05
+
+### Changed
+
+- The `publish-plugin` versioned-notes format defines the release preparation of each package a cycle changes, with a version greater than the package's version on the integration base and every existing tag of that package.
+
+### Removed
+
+- The `start-dev` and `finish-dev` skills move to the `project-workflow` package as generic `start-dev` and `end-dev` skills.
+
 ## [0.2.2] - 2026-11-04
 
 ### Added

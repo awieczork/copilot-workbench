@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Print one "{path}<TAB>{secret|large}" line for each changed path that needs the owner's decision.
+# Print one "{path}<TAB>{secret|large}" line for each changed path that needs the user's decision.
 # Run from the repository root; candidates are staged, unstaged, and untracked paths.
 set -euo pipefail
 { git ls-files -mo --exclude-standard -z; git diff --cached --name-only -z; } | sort -zu |

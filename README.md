@@ -13,7 +13,7 @@ Model Context Protocol (MCP) servers provide external tools to agents.
 | --- | --- | --- | --- |
 | [agent-team](plugins/agent-team/README.md) | Agents and tools for software development and data analysis. | Agents, skills, rules, MCP servers | Skills, MCP servers |
 | [agent-plugin-dev](plugins/agent-plugin-dev/README.md) | Authoring, checking, and release of plugins. | Skills | Skills |
-| [project-records](plugins/project-records/README.md) | Maintenance of project status, open issues, and changelogs. | Rules, skill | Skill |
+| [project-workflow](plugins/project-workflow/README.md) | Maintenance of project status, open issues, and changelogs, and a gated branch development cycle. | Rules, skills | Skills |
 
 Each plugin includes what it needs and does not require the others.
 Each plugin README lists its components, requirements, and limits.

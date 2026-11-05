@@ -19,10 +19,10 @@
             "description": "Skills for authoring, checking, and releasing GitHub Copilot plugins."
         },
         {
-            "name": "project-records",
-            "source": "./plugins/project-records",
+            "name": "project-workflow",
+            "source": "./plugins/project-workflow",
             "license": "MIT",
-            "description": "A skill that maintains project status, open issues, and changelogs; the Copilot rules do not load in Claude Code."
+            "description": "Skills that maintain project status, open issues, and changelogs and run a gated branch development cycle; the Copilot rules do not load in Claude Code."
         }
     ]
 }

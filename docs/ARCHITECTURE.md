@@ -15,8 +15,8 @@ The [full design principles](../.github/copilot-instructions.md#pillars) guide p
 | Package | Purpose |
 | --- | --- |
 | [agent-team](../plugins/agent-team/README.md) | Agents, skills, rules, and tools for data science, scientific exploration, and hobby software projects. Python is the general-purpose stack; projects can use other technologies. |
-| [agent-plugin-dev](../plugins/agent-plugin-dev/README.md) | Reusable skills for customization, plugin checks, and the development lifecycle. |
-| [project-records](../plugins/project-records/README.md) | Project-record rules and evidence-based updates, independent of any agent team. |
+| [agent-plugin-dev](../plugins/agent-plugin-dev/README.md) | Reusable skills for customization, plugin checks, and plugin releases. |
+| [project-workflow](../plugins/project-workflow/README.md) | Project-record rules, evidence-based record updates, and a gated branch development cycle for any Git project, independent of any agent team. |
 
 Each package contains the resources it needs and does not depend on another package.
 Packages do not contain project datasets, database targets, credentials, or absolute paths.
@@ -75,11 +75,12 @@ LICENSE                           MIT license for the repository and plugins
 ```
 
 Packages are authored in this repository, but project customizations do not join the plugin's team.
-Team roles and delegation belong in `agent-team`; record conventions and maintenance belong in `project-records`.
+Team roles and delegation belong in `agent-team`; record conventions, record maintenance, and the development cycle belong in `project-workflow`.
+The development cycle reads project-specific kinds, scope, integration branch, and release preparation from project instructions; plugin versions and versioned notes stay in `agent-plugin-dev`.
 General behavior belongs in agents and skills, not language rules.
 User-interface specialization is outside the current team design.
 
-The tracked `.github/` files hold repository instructions, four team contracts, and matching discovery pointers to the canonical `agent-plugin-dev` skills.
+The tracked `.github/` files hold repository instructions, four team contracts, and matching discovery pointers to the canonical `agent-plugin-dev` and `project-workflow` skills.
 The package holds the implementations, scripts, tests, and references; packages do not depend on this repository's instructions to run.
 Static checks cover package isolation, component identity collisions, and pointer shape; discovery and co-installed selection require client testing.
 `interview-me` is a user-only skill independent of the `discuss` interview phase.

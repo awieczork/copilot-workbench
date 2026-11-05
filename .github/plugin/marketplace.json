@@ -14,13 +14,13 @@
             "name": "agent-plugin-dev",
             "source": "./plugins/agent-plugin-dev",
             "license": "MIT",
-            "description": "Owner-maintained plugin authoring, validation, and development lifecycle skills."
+            "description": "Owner-maintained plugin authoring, validation, and release skills."
         },
         {
-            "name": "project-records",
-            "source": "./plugins/project-records",
+            "name": "project-workflow",
+            "source": "./plugins/project-workflow",
             "license": "MIT",
-            "description": "Project status, open issues, and changelog conventions with coordinated, evidence-based record updates."
+            "description": "Project status, open issues, and changelog conventions with evidence-based record updates, and a gated branch development cycle."
         }
     ]
 }

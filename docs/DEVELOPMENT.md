@@ -1,7 +1,7 @@
 # Development
 
 This repository contains the source and checks for the `awieczork-tools` marketplace packages.
-The [agent-plugin-dev workflow](../plugins/agent-plugin-dev/README.md#usage) provides the development and release commands.
+The [project-workflow development cycle](../plugins/project-workflow/README.md#development-cycle) provides the cycle commands, and the [agent-plugin-dev workflow](../plugins/agent-plugin-dev/README.md#usage) provides the authoring and release commands.
 
 ## Branch model
 
@@ -16,15 +16,15 @@ Local and remote `develop` are retired.
 
 ## Development workflow
 
-Installed skill commands use the `agent-plugin-dev:` prefix.
+Installed skill commands use their package prefix, such as `project-workflow:` or `agent-plugin-dev:`.
 
-1. Start or resume one cycle with `/agent-plugin-dev:start-dev plugin <name>` or `/agent-plugin-dev:start-dev repo <topic>`.
+1. Start or resume one cycle with `/project-workflow:start-dev plugin <name>` or `/project-workflow:start-dev repo <topic>`.
 1. Make and check the changes on that cycle branch.
 	The `build-plugin` and `copilot-customization` skills support package authoring and review; the agent can select them, or the user can invoke them directly.
-1. Run `/agent-plugin-dev:finish-dev` to check and review the cycle, prepare package versions and notes, and integrate the completed work into `main`.
+1. Run `/project-workflow:end-dev` to check and review the cycle, prepare package versions and notes, and integrate the completed work into `main`.
 1. Optionally run `/agent-plugin-dev:publish-plugin <name>` to check and publish one package already on `main`.
 
-The [package README](../plugins/agent-plugin-dev/README.md) describes the commands, requirements, and limits.
+Each package README describes its commands, requirements, and limits.
 
 ## Versions and releases
 
@@ -58,7 +58,7 @@ When changing a checker or lifecycle helper, run its tests:
 
 ```bash
 uv run --no-project --with pyyaml python -m unittest discover -s plugins/agent-plugin-dev/skills/build-plugin/tests
-uv run --no-project python -m unittest discover -s plugins/agent-plugin-dev/skills/finish-dev/tests
+uv run --no-project python -m unittest discover -s plugins/project-workflow/skills/end-dev/tests
 uv run --no-project python -m unittest discover -s plugins/agent-plugin-dev/skills/publish-plugin/tests
 ```
 

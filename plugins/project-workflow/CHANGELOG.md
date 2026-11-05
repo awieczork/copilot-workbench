@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## [0.2.0] - 2026-11-05
+
+### Added
+
+- The user-invoked `start-dev` skill starts or resumes a `<kind>/<topic>` cycle branch in any Git project and grants checked local commits within its scope for the current session; project instructions can set the cycle kinds, scope, integration branch, and commit message format.
+- The user-invoked `end-dev` skill completes cycle checks and any release preparation that project instructions define, then presents exact squash integration, push, and named branch-cleanup effects for approval.
+
+### Changed
+
+- The `project-records` package is renamed `project-workflow`, with the same rules and `update-project-records` skill.
+
 ## [0.1.2] - 2026-11-04
 
 ### Added

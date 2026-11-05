@@ -1,8 +1,8 @@
 {
     "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
     "name": "agent-plugin-dev",
-    "version": "0.2.2",
-    "description": "Owner-maintained plugin authoring, validation, and development lifecycle skills.",
+    "version": "0.3.0",
+    "description": "Owner-maintained plugin authoring, validation, and release skills.",
     "repository": "https://github.com/awieczork/copilot-workbench",
     "license": "MIT",
     "author": {

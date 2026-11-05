@@ -46,7 +46,7 @@ Install through the Agent Customizations editor:
 When the **Browse** page is not available, select **Plugins** and then **Browse Marketplace**.
 Check that the installed `agent-team` version matches the [package manifest on `main`](https://github.com/awieczork/copilot-workbench/blob/main/plugins/agent-team/plugin.json).
 
-Install `agent-plugin-dev` and `project-records` the same way, only where you need them.
+Install `agent-plugin-dev` and `project-workflow` the same way, only where you need them.
 The packages do not require each other.
 
 ### 3. Configure WSL
@@ -98,7 +98,7 @@ claude plugin marketplace add awieczork/copilot-workbench
 claude plugin list --json --available
 ```
 
-Check that the combined installed and available lists contain `agent-team@awieczork-tools`, `agent-plugin-dev@awieczork-tools`, and `project-records@awieczork-tools`.
+Check that the combined installed and available lists contain `agent-team@awieczork-tools`, `agent-plugin-dev@awieczork-tools`, and `project-workflow@awieczork-tools`.
 Marketplace registration does not install or enable the listed plugins, and it does not add the marketplace to Anthropic's official directory.
 Install a plugin with `/plugin install <plugin>@awieczork-tools`.
 
@@ -133,5 +133,10 @@ For a new installation, skip this section.
 1. Uninstall a copy installed with `/plugin` or the Copilot command-line interface (CLI) through the interface that installed it; the **Plugins** page also lists such copies.
 1. Check both Windows and WSL contexts for old copies.
 
-Do not load `project-records` beside `agent-team` `0.2.0`, because that version contains the same three rule identities.
+Do not load `project-workflow` beside `agent-team` `0.2.0`, because that version contains the same three rule identities.
 The split requires `agent-team` `0.3.0` or newer.
+
+## Upgrade from project-records
+
+`project-workflow` replaces `project-records` and contains its rules and record skill; the catalog has no compatibility alias.
+Uninstall `project-records` before you install `project-workflow`, so the same rule and skill identities do not load twice.
