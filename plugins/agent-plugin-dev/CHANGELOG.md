@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [0.3.1] - 2026-11-09
+
+### Changed
+
+- The `copilot-customization` skill names the customization files it covers and takes precedence over the built-in `agent-customization` skill for those files.
+
 ## [0.3.0] - 2026-11-05
 
 ### Changed
