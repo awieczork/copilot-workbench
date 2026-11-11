@@ -628,9 +628,12 @@ class PackageChecker:
         for package_name, package_root in self.packages:
             for target in (package_root / "skills").glob("*/SKILL.md"):
                 canonical_skills[target.resolve()] = target
+        canonical_names = {target.parent.name for target in canonical_skills.values()}
         represented = set()
         pointer_names = set()
         for folder in directory.iterdir():
+            if folder.name not in canonical_names:
+                continue
             pointer = folder / "SKILL.md"
             if not folder.is_dir() or folder.is_symlink() or pointer.is_symlink() or set(folder.iterdir()) != {pointer}:
                 self.fail(folder, "repository skill must contain only its pointer SKILL.md")

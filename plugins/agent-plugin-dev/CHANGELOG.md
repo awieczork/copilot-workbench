@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [0.3.2] - 2026-11-11
+
+### Fixed
+
+- The `build-plugin` checker treats a `.github/skills/` folder as a pointer only when its name matches a catalog package skill and skips every other local repository skill.
+
 ## [0.3.1] - 2026-11-09
 
 ### Changed

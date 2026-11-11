@@ -84,6 +84,35 @@ class PackageCheckerTests(unittest.TestCase):
         pointer.write_text(header + "\n[Bad](../../../../outside.md)\n")
         self.assertTrue(any("pointer target" in error for error in self.errors()))
 
+    def test_local_repository_skill_is_not_a_pointer(self):
+        package = self.write_package("plugin-one")
+        skill = package / "skills/example/SKILL.md"
+        skill.parent.mkdir(parents=True)
+        header = "---\nname: example\ndescription: Example skill\n---\n"
+        skill.write_text(header + "\n# Example\n")
+        self.write_catalog([self.entry("plugin-one")])
+        local = self.root / ".github/skills/design-skill"
+        (local / "assets").mkdir(parents=True)
+        (local / "assets/template.md").write_text("# Template\n")
+        (local / "SKILL.md").write_text(
+            "---\nname: design-skill\ndescription: Local skill\n---\n\n# Design\n\nSteps.\n"
+        )
+        self.assertEqual(self.errors(), [])
+
+    def test_name_matching_local_skill_must_follow_pointer_rules(self):
+        package = self.write_package("plugin-one")
+        skill = package / "skills/example/SKILL.md"
+        skill.parent.mkdir(parents=True)
+        header = "---\nname: example\ndescription: Example skill\n---\n"
+        skill.write_text(header + "\n# Example\n")
+        self.write_catalog([self.entry("plugin-one")])
+        local = self.root / ".github/skills/example/SKILL.md"
+        local.parent.mkdir(parents=True)
+        local.write_text(header + "\n# Example\n\nA full local procedure.\n")
+        self.assertTrue(any("exactly one" in error for error in self.errors()))
+        (local.parent / "assets").mkdir()
+        self.assertTrue(any("only its pointer" in error for error in self.errors()))
+
     def test_duplicate_component_identities_are_rejected(self):
         for name in ("plugin-one", "plugin-two"):
             package = self.write_package(name)

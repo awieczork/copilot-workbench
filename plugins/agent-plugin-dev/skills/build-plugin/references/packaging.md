@@ -52,7 +52,8 @@ The checker requires a non-empty `plugins` array and checks manifest field types
 For `mcp.json`, it checks the canonical schema identifier, required and allowed fields, JSON types, reserved environment keys, and local command and working-directory containment.
 It uses the Python standard library and a declared PyYAML dependency for frontmatter and provides a bounded list of path-specific errors.
 It rejects duplicate cross-package skill, agent, rule, and MCP server identities.
-When repository skills are present, each must contain only frontmatter and one relative link to its matching canonical package skill, with matching discovery metadata.
+A repository skill under `.github/skills/` is a pointer when its folder name matches a catalog package skill, so a local skill with that name must follow the pointer rules; the checker skips every other repository skill.
+Each pointer must contain only frontmatter and one relative link to its matching canonical package skill, with matching discovery metadata.
 All skills in a represented package need pointers; isolated package fixtures need no repository pointers.
 It is a local scaffold checker, not a complete semantic implementation of the specification and not a client installation or runtime test.
 It does not verify URL semantics, remote service behavior, client-specific component behavior, or installation compatibility.
